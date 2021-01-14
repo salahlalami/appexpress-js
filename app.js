@@ -3,17 +3,16 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const MongoContact = require("connect-mongo")(session);
 const path = require("path");
-const ejs = require("ejs");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const promisify = require("es6-promisify");
 const flash = require("connect-flash");
-const expressValidator = require("express-validator");
+// const expressValidator = require("express-validator");
 const router = require("./routes/index");
 const helpers = require("./helpers");
 const errorHandlers = require("./handlers/errorHandlers");
 const settingsApp = require("./middlewares/settingsApp");
-const auth = require("./middlewares/auth");
+// const auth = require("./middlewares/auth");
 
 // create our Express app
 const app = express();

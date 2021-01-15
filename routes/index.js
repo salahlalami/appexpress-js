@@ -83,40 +83,40 @@ const validateBody = require("../Helpers/validateBody");
 //   .post(checkUser)
 //   .put(checkUser)
 //   .delete(checkUser);
-
+router.get("/login", appController.login);
 router.get("/", appController.dashboard);
 
-router.route("/login").post(authController.login);
+router.route("/login").post(authController.login, authController.redirect);
 router.route("/logout").post(authController.logout);
 
-router.route("/register").post(authController.register);
+// router.route("/register").post(authController.register);
 // router.route("/register").post(userController.register);
 
 router.get("/profile", userController.getProfile);
 
 // users crud starts here
 
-router
-  .route("/users")
-  .post(
-    createUser,
-    validateBody,
-    permissionMiddleware("employees-create"),
-    userController.createUser
-  )
-  .delete(
-    deleteUser,
-    validateBody,
-    permissionMiddleware("employees-delete"),
-    userController.deleteUser
-  )
-  .put(
-    updateUser,
-    validateBody,
-    permissionMiddleware("employees-update"),
-    userController.updateUser
-  )
-  .get(permissionMiddleware("employees-read"), userController.getAllUsers);
+// router
+//   .route("/users")
+//   .post(
+//     createUser,
+//     validateBody,
+//     permissionMiddleware("employees-create"),
+//     userController.createUser
+//   )
+//   .delete(
+//     deleteUser,
+//     validateBody,
+//     permissionMiddleware("employees-delete"),
+//     userController.deleteUser
+//   )
+//   .put(
+//     updateUser,
+//     validateBody,
+//     permissionMiddleware("employees-update"),
+//     userController.updateUser
+//   )
+//   .get(permissionMiddleware("employees-read"), userController.getAllUsers);
 //list of users ends here
 
 // Account Pages_______________________________________________________________________

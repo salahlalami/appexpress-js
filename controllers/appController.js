@@ -1,3 +1,7 @@
+exports.login = (req, res) => {
+  res.render("login", { title: "Login" });
+};
+
 exports.dashboard = (req, res) => {
   res.render("index", {
     title: "Cedimed app",

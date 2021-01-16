@@ -22,7 +22,9 @@ exports.catchErrors = (fn) => {
   If we hit a route that is not found, we mark it as 404 and pass it along to the next error handler to display
 */
 exports.notFound = (req, res, next) => {
-  return res.status(404).send ("Not Found")
+  res.render("errors/404", {
+    title: "404",
+  });
 };
 
 /*
@@ -54,15 +56,19 @@ exports.developmentErrors = (err, req, res, next) => {
       "<mark>$&</mark>"
     ),
   };
-  res.status(err.status || 500);
-  res.format({
-    // Based on the `Accept` http header
-    "text/html": () => {
-      res.send({
-        "error": errorDetails
-      })
-    }, // Form Submit, Reload the page
-    "application/json": () => res.json(errorDetails), // Ajax call, send JSON back
+  // res.status(err.status || 500);
+  // res.format({
+  //   // Based on the `Accept` http header
+  //   "text/html": () => {
+  //     res.send({
+  //       "error": errorDetails
+  //     })
+  //   }, // Form Submit, Reload the page
+  //   "application/json": () => res.json(errorDetails), // Ajax call, send JSON back
+  // });
+  res.render("errors/500", {
+    title: "500",
+    error: err.message,
   });
 };
 
@@ -72,9 +78,12 @@ exports.developmentErrors = (err, req, res, next) => {
   No stacktraces are leaked to user
 */
 exports.productionErrors = (err, req, res, next) => {
-  res.status(err.status || 500);
-  res.render("error", {
-    message: err.message,
-    error: {},
+  // res.status(err.status || 500);
+  // res.render("error", {
+  //   message: err.message,
+  //   error: {},
+  // });
+  res.render("500", {
+    title: "500",
   });
 };

@@ -9,10 +9,14 @@ const promisify = require("es6-promisify");
 const flash = require("connect-flash");
 // const expressValidator = require("express-validator");
 const router = require("./routes/index");
+const apiRouter = require("./routes/api");
 const helpers = require("./helpers");
 const errorHandlers = require("./handlers/errorHandlers");
 const settingsApp = require("./middlewares/settingsApp");
-// const auth = require("./middlewares/auth");
+const passport = require("passport");
+const { checkAuth } = require("./controllers/authController");
+
+require("./handlers/passport")(passport); // pass passport for configuration
 
 // create our Express app
 const app = express();
@@ -45,23 +49,13 @@ app.use(
   })
 );
 
+// // Passport JS is what we use to handle our logins
+app.use(passport.initialize());
+app.use(passport.session());
+
 // // The flash middleware let's us use req.flash('error', 'Shit!'), which will then pass that message to the next page the user requests
 app.use(flash());
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-//   res.header("Access-Control-Expose-Headers", "Content-Length");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Accept, Authorization, Content-Type, X-Requested-With, Range"
-//   );
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   } else {
-//     return next();
-//   }
-// });
+
 // pass variables to our templates + all requests
 app.use((req, res, next) => {
   res.locals.h = helpers;
@@ -82,6 +76,23 @@ app.use(settingsApp);
 
 // After allllll that above middleware, we finally handle our own routes!
 app.use(router);
+// Here our API Routes
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Accept, Authorization, Content-Type, X-Requested-With, Range"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  } else {
+    return next();
+  }
+});
+app.use("/api", checkAuth, apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

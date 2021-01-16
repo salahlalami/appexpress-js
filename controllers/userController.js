@@ -4,14 +4,6 @@ const promisify = require("es6-promisify");
 const UserController = require("./userController");
 require("dotenv").config({ path: ".variables.env" });
 
-// exports.loginForm = (req, res) => {
-//   res.render("login", { title: "Login" });
-// };
-
-// exports.registerForm = (req, res) => {
-//   res.render("register", { title: "Register" });
-// };
-
 const userFromRequest = (request) => {
   if (UserController.isValidUser(request)) {
     return new User(request.body);

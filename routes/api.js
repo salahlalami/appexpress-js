@@ -76,7 +76,7 @@ const updateUser = require("../validators/updateUser");
 const deleteUser = require("../validators/deleteUser");
 const validateBody = require("../Helpers/validateBody");
 
-router.route("/logout").post(authController.logout);
+router.route("/logout").get(authController.logout);
 
 // router.route("/register").post(authController.register);
 // router.route("/register").post(userController.register);

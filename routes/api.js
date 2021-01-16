@@ -82,7 +82,7 @@ router.route("/logout").get(authController.logout);
 // router.route("/register").post(userController.register);
 
 router.get("/profile", catchErrors(userController.getProfile));
-
+router.route("/users").get(catchErrors(userController.getAll));
 // users crud starts here
 
 // router

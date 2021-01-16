@@ -1,13 +1,96 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
-const promisify = require("es6-promisify");
-const UserController = require("./userController");
+// const promisify = require("es6-promisify");
+// const UserController = require("./userController");
 require("dotenv").config({ path: ".variables.env" });
+var objectLodash = require("lodash/fp/object");
+
+exports.getAll = async (req, res) => {
+  const page = req.params.page || 1;
+  const limit = parseInt(req.params.items) || 10;
+  const skip = page * limit - limit;
+  try {
+    //  Query the database for a list of all results
+    const resultsPromise = User.aggregate([
+      {
+        $match: {
+          removed: false,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          enabled: 1,
+          email: 1,
+          name: 1,
+          surname: 1,
+          photo: 1,
+          accountType: 1,
+          dashboardType: 1,
+          doctor: 1,
+          employee: 1,
+        },
+      },
+    ])
+      .skip(skip)
+      .limit(limit)
+      .sort({ created: "desc" });
+    // Counting the total documents
+    const countPromise = User.count();
+    // Resolving both promises
+    const [result, count] = await Promise.all([resultsPromise, countPromise]);
+
+    const pages = Math.ceil(count / limit);
+
+    // Getting Pagination Object
+    const pagination = { page, pages, count };
+
+    res.status(200).json({
+      success: true,
+      result,
+      pagination,
+      message: "Successfully found all documents",
+    });
+  } catch {
+    res
+      .status(500)
+      .json({ success: false, result: [], message: "Oops there is an Error" });
+  }
+};
+
+exports.profile = async (req, res) => {
+  try {
+    //  Query the database for a list of all results
+
+    let result = {
+      _id: req.user._id,
+      enabled: req.user.enabled,
+      email: req.user.email,
+      name: req.user.name,
+      surname: req.user.surname,
+      photo: req.user.photo,
+      accountType: req.user.accountType,
+      dashboardType: req.user.dashboardType,
+      doctor: req.user.doctor,
+      employee: req.user.employee,
+    };
+
+    res.status(200).json({
+      success: true,
+      result,
+      message: "Successfully found all documents",
+    });
+  } catch {
+    res
+      .status(500)
+      .json({ success: false, result: [], message: "Oops there is an Error" });
+  }
+};
 
 const userFromRequest = (request) => {
-  if (UserController.isValidUser(request)) {
-    return new User(request.body);
-  }
+  // if (UserController.isValidUser(request)) {
+  //   return new User(request.body);
+  // }
   return null;
 };
 
@@ -173,9 +256,27 @@ exports.deleteUser = async (req, res, next) => {
   return res.send(await tmp_data.save());
 };
 
-exports.getProfile = async (req, res, next) => {
+exports.profile = async (req, res, next) => {
   // let tmp_data = await User.findOne({ _id : req.user._id }).select(['name','email','_id'])
+  // Calculating total pages
+  // let result = [];
+  // tmpData.forEach((element) => {
+  //   var obj = JSON.parse(JSON.stringify(element));
 
+  //   result.push(
+  //     objectLodash.pick(obj, [
+  //       "
+  //       "email",
+  //       "name",
+  //       "surname",
+  //       "photo",
+  //       "accountType",
+  //       "dashboardType",
+  //       "doctor",
+  //       "employee",
+  //     ])
+  //   );
+  // });
   let tmp_data = await User.aggregate([
     {
       $match: {

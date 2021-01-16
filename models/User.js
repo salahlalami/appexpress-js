@@ -55,10 +55,6 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  isLoggedIn: {
-    type: Boolean,
-    default: false,
-  },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   permissions: [{ type: mongoose.Schema.ObjectId, ref: "Permission" }],

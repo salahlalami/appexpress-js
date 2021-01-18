@@ -83,7 +83,8 @@ exports.productionErrors = (err, req, res, next) => {
   //   message: err.message,
   //   error: {},
   // });
-  res.render("500", {
+  res.render("errors/500", {
     title: "500",
+    error: err.message,
   });
 };

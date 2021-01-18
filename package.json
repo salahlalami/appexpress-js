@@ -37,6 +37,7 @@
     "jimp": "0.2.27",
     "jsonwebtoken": "^8.5.1",
     "juice": "7.0.0",
+    "lodash": "^4.17.20",
     "moment": "^2.26.0",
     "mongo-seeding": "^3.4.1",
     "mongoose": "^5.9.10",

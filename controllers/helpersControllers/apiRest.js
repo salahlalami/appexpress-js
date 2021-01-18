@@ -12,24 +12,24 @@ exports.read = async (Model, req, res) => {
     const result = await Model.findOne({ _id: req.params.id });
     // If no results found, return document not found
     if (!result) {
-      res.status(404).json({
-        success: 0,
-        data: null,
+      return res.status(404).json({
+        success: false,
+        result: null,
         message: "No document found by this id: " + req.params.id,
       });
     } else {
       // Return success resposne
-      res.status(200).json({
-        success: 1,
-        data: result,
+      return res.status(200).json({
+        success: true,
+        result,
         message: "we found this document by this id: " + req.params.id,
       });
     }
   } catch {
     // Server Error
-    res.status(500).json({
-      success: 0,
-      data: null,
+    return res.status(500).json({
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }
@@ -47,25 +47,24 @@ exports.create = async (Model, req, res) => {
     const result = await new Model(req.body).save();
 
     // Returning successfull response
-    res.status(200).json({
-      success: 1,
-      data: result,
+    return res.status(200).json({
+      success: true,
+      result,
       message: "Successfully Created the document in Model ",
     });
   } catch (err) {
-    console.log(err);
     // If err is thrown by Mongoose due to required validations
     if (err.name == "ValidationError") {
-      res.status(400).json({
-        success: 0,
-        data: null,
+      return res.status(400).json({
+        success: false,
+        result: null,
         message: "Required fields are not supplied",
       });
     } else {
       // Server Error
-      res.status(500).json({
-        success: 0,
-        data: null,
+      return res.status(500).json({
+        success: false,
+        result: null,
         message: "Oops there is an Error",
       });
     }
@@ -90,24 +89,24 @@ exports.update = async (Model, req, res) => {
       }
     ).exec();
 
-    res.status(200).json({
-      success: 1,
-      data: result,
+    return res.status(200).json({
+      success: true,
+      result,
       message: "we update this document by this id: " + req.params.id,
     });
   } catch (err) {
     // If err is thrown by Mongoose due to required validations
     if (err.name == "ValidationError") {
-      res.status(400).json({
-        success: 0,
-        data: null,
+      return res.status(400).json({
+        success: false,
+        result: null,
         message: "Required fields are not supplied",
       });
     } else {
       // Server Error
-      res.status(500).json({
-        success: 0,
-        data: null,
+      return res.status(500).json({
+        success: false,
+        result: null,
         message: "Oops there is an Error",
       });
     }
@@ -126,22 +125,22 @@ exports.delete = async (Model, req, res) => {
     const result = await Model.findOneAndDelete({ _id: req.params.id }).exec();
     // If no results found, return document not found
     if (!result) {
-      res.status(404).json({
-        success: 0,
-        data: null,
+      return res.status(404).json({
+        success: false,
+        result: null,
         message: "No document found by this id: " + req.params.id,
       });
     } else {
-      res.status(200).json({
-        success: 1,
-        data: result,
+      return res.status(200).json({
+        success: true,
+        result,
         message: "Successfully Deleted the document by id: " + req.params.id,
       });
     }
   } catch {
-    res.status(500).json({
-      success: 0,
-      data: null,
+    return res.status(500).json({
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }
@@ -153,9 +152,9 @@ exports.delete = async (Model, req, res) => {
  *  @returns {Object} Results with pagination
  */
 
-exports.getAll = async (Model, req, res) => {
-  const page = req.params.page || 1;
-  const limit = parseInt(req.params.items) || 10;
+exports.list = async (Model, req, res) => {
+  const page = req.query.page || 1;
+  const limit = parseInt(req.query.items) || 10;
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
@@ -167,23 +166,23 @@ exports.getAll = async (Model, req, res) => {
     // Counting the total documents
     const countPromise = Model.count();
     // Resolving both promises
-    const [data, count] = await Promise.all([resultsPromise, countPromise]);
+    const [result, count] = await Promise.all([resultsPromise, countPromise]);
     // Calculating total pages
     const pages = Math.ceil(count / limit);
 
     // Getting Pagination Object
     const pagination = { page, pages, count };
 
-    res.status(200).json({
-      success: 1,
-      data,
+    return res.status(200).json({
+      success: true,
+      result,
       pagination,
       message: "Successfully found all documents",
     });
   } catch {
-    res
+    return res
       .status(500)
-      .json({ success: 0, data: [], message: "Oops there is an Error" });
+      .json({ success: false, result: [], message: "Oops there is an Error" });
   }
 };
 
@@ -195,6 +194,16 @@ exports.getAll = async (Model, req, res) => {
 
 exports.search = async (Model, req, res) => {
   // console.log(req.query.fields)
+  if (req.query.q === undefined || req.query.q === "" || req.query.q === " ") {
+    return res
+      .status(202)
+      .json({
+        success: false,
+        result: [],
+        message: "No document found by this request",
+      })
+      .end();
+  }
   const fieldsArray = req.query.fields
     ? req.query.fields.split(",")
     : ["name", "surname", "birthday"];
@@ -229,48 +238,60 @@ exports.search = async (Model, req, res) => {
     let results = await Model.find(fields).sort({ name: "asc" }).limit(10);
 
     if (results.length >= 1) {
-      res.status(200).json({
-        success: 1,
-        data: results,
+      return res.status(200).json({
+        success: true,
+        result: results,
         message: "Successfully found all documents",
       });
     } else {
-      res
+      return res
         .status(202)
         .json({
-          success: 0,
-          data: [],
+          success: false,
+          result: [],
           message: "No document found by this request",
         })
         .end();
     }
   } catch {
-    res
-      .status(500)
-      .json({ success: 0, data: null, message: "Oops there is an Error" });
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: "Oops there is an Error",
+    });
   }
 };
 
 /**
  *  Getting documents with filters
- *  @param {Object} req.params
+ *  @param {Object} req.query
  *  @returns {Array} List of Documents
  */
 
 exports.getByFilter = async (Model, req, res) => {
   try {
-    const filter = req.params.filter;
-    const result = await Model.find().where(filter).equals(req.params.equal);
-    res.status(200).json({
-      success: 1,
-      data: result,
+    if (req.query.filter === undefined || req.query.equal === undefined) {
+      return res.status(403).json({
+        success: false,
+        result: null,
+        message: "filter not provided correctly",
+      });
+    }
+    const result = await Model.find()
+      .where(req.query.filter)
+      .equals(req.query.equal);
+    return res.status(200).json({
+      success: true,
+      result,
       message:
         "Successfully found all documents where equal to : " + req.params.equal,
     });
   } catch {
-    res
-      .status(500)
-      .json({ success: 0, data: null, message: "Oops there is an Error" });
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: "Oops there is an Error",
+    });
   }
 };
 
@@ -293,22 +314,22 @@ exports.getFilterbyDate = async (Model, req, res) => {
       .equals(day);
 
     if (result.length == 0) {
-      res.status(400).json({
-        success: 0,
-        data: [],
+      return res.status(400).json({
+        success: false,
+        result: [],
         message: "Date not found for this api",
       });
     }
 
-    res.status(200).json({
-      success: 1,
-      data: result,
+    return res.status(200).json({
+      success: true,
+      result,
       message: "Successfully found all documents where equal to : " + equal,
     });
   } catch (error) {
-    res.status(500).json({
-      success: 0,
-      data: null,
+    return res.status(500).json({
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }

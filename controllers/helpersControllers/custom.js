@@ -115,33 +115,33 @@ exports.generatePDF = (
   }
 };
 
-exports.oldPDF = (
-  modelName,
-  info = { filename: "PDF File", format: "A5" }
-) => async (req, res) => {
-  const Model = mongoose.model(modelName);
-  try {
-    const result = await Model.findOne({ _id: req.params.id });
-    const html = ejs.renderFile("views/pdf/" + modelName + ".ejs", {
-      model: result,
-    });
-    pdf.create(html, { format: info.format }).toStream(function (err, stream) {
-      res.setHeader(
-        "Content-disposition",
-        'inline; filename="' + info.filename + '.pdf"'
-      );
-      res.setHeader("Content-type", "application/pdf");
-      res.status(200);
-      stream.pipe(res);
-    });
-    // res.status(200).json({ model: result }).end();
-  } catch (e) {
-    console.log(e);
+// exports.oldPDF = (
+//   modelName,
+//   info = { filename: "PDF File", format: "A5" }
+// ) => async (req, res) => {
+//   const Model = mongoose.model(modelName);
+//   try {
+//     const result = await Model.findOne({ _id: req.params.id });
+//     const html = ejs.renderFile("views/pdf/" + modelName + ".ejs", {
+//       model: result,
+//     });
+//     pdf.create(html, { format: info.format }).toStream(function (err, stream) {
+//       res.setHeader(
+//         "Content-disposition",
+//         'inline; filename="' + info.filename + '.pdf"'
+//       );
+//       res.setHeader("Content-type", "application/pdf");
+//       res.status(200);
+//       stream.pipe(res);
+//     });
+//     // res.status(200).json({ model: result }).end();
+//   } catch (e) {
+//     console.log(e);
 
-    const error = "Oops there is error";
-    res.status(403).json(error).end();
-  }
-};
+//     const error = "Oops there is error";
+//     res.status(403).json(error).end();
+//   }
+// };
 
 /*
  * Pdf Generate New Method

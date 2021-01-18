@@ -1,7 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const mongoose = require("mongoose");
-const MongoContact = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo")(session);
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -45,7 +45,7 @@ app.use(
     key: process.env.KEY,
     resave: false,
     saveUninitialized: false,
-    Contact: new MongoContact({ mongooseConnection: mongoose.connection }),
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 );
 
@@ -74,25 +74,32 @@ app.use((req, res, next) => {
 // Load custom or default menu
 app.use(settingsApp);
 
+// app.use(function (req, res, next) {
+//   if (req.url.slice(-1) === "/" && req.path.length > 1) {
+//     // req.path = req.path.slice(0, -1);
+//     req.url = req.url.slice(0, -1);
+//   }
+//   next();
+// });
 // After allllll that above middleware, we finally handle our own routes!
 app.use(router);
 // Here our API Routes
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header("Access-Control-Expose-Headers", "Content-Length");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Accept, Authorization, Content-Type, X-Requested-With, Range"
-  );
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  } else {
-    return next();
-  }
-});
-app.use("/api", checkAuth, apiRouter);
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
+//   res.header("Access-Control-Expose-Headers", "Content-Length");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Accept, Authorization, Content-Type, X-Requested-With, Range"
+//   );
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   } else {
+//     return next();
+//   }
+// });
+app.use("/api", apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

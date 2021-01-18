@@ -69,50 +69,29 @@ const permissionController = require("../controllers/permissionController");
 const permissionMiddleware = require("../middlewares/permissionMiddleware");
 // const settingMiddleware = require("../middlewares/settingMiddleware");
 
-//checking if user is logged it or not !!
-
-const createUser = require("../validators/createUser");
-const updateUser = require("../validators/updateUser");
-const deleteUser = require("../validators/deleteUser");
-const validateBody = require("../Helpers/validateBody");
-
-router.route("/logout").get(authController.logout);
-
-// router.route("/register").post(authController.register);
-// router.route("/register").post(userController.register);
-
-router.get("/profile", catchErrors(userController.getProfile));
-
-// users crud starts here
-
-// router
-//   .route("/users")
-//   .post(
-//     createUser,
-//     validateBody,
-//     permissionMiddleware("employees-create"),
-//     userController.createUser
-//   )
-//   .delete(
-//     deleteUser,
-//     validateBody,
-//     permissionMiddleware("employees-delete"),
-//     userController.deleteUser
-//   )
-//   .put(
-//     updateUser,
-//     validateBody,
-//     permissionMiddleware("employees-update"),
-//     userController.updateUser
-//   )
-//   .get(permissionMiddleware("employees-read"), userController.getAllUsers);
+router.route("/user/create").post(catchErrors(userController.create));
+router.route("/user/read/:id").get(catchErrors(userController.read));
+router.route("/user/update/:id").patch(catchErrors(userController.update));
+router.route("/user/delete/:id").delete(catchErrors(userController.delete));
+router.route("/user/search").get(catchErrors(userController.search));
+router.route("/user/list").get(catchErrors(userController.list));
+router.route("/user/profile").get(catchErrors(userController.profile));
+router
+  .route("/user/password-update/:id")
+  .patch(catchErrors(userController.updatePassword));
 //list of users ends here
-
-// Account Pages_______________________________________________________________________
-
-// Render Pages_______________________________________________________________________
-
-//______________________________________________________________________________________
+// //_______________________________________API for patients_____________________
+router.route("/patient/create").post(catchErrors(patientController.create));
+router.route("/patient/read/:id").get(catchErrors(patientController.read));
+router
+  .route("/patient/update/:id")
+  .patch(catchErrors(patientController.update));
+router
+  .route("/patient/delete/:id")
+  .delete(catchErrors(patientController.delete));
+router.route("/patient/search").get(catchErrors(patientController.search));
+router.route("/patient/list").get(catchErrors(patientController.list));
+router.route("/patient/filter").get(catchErrors(patientController.getByFilter));
 
 //___________________________________API for Doctors______________________________
 router
@@ -122,30 +101,12 @@ router
 router
   .route("/doctor/:id")
   .get(catchErrors(doctorController.read))
-  .put(catchErrors(doctorController.update))
+  .patch(catchErrors(doctorController.update))
   .delete(catchErrors(doctorController.delete));
 router.route("/doctor/search").get(catchErrors(doctorController.search));
 router
   .route("/doctor/find/:filter/:equal")
   .get(catchErrors(doctorController.getByFilter));
-
-//_________________________________________________________________________________________;
-// // Download pdf file
-router.route("/public/download/:pdfname?").get(appController.download);
-
-// //_________________________________________________________________API for patients_____________________
-router
-  .route("/patient")
-  .post(catchErrors(patientController.create))
-  .get(catchErrors(patientController.getAll));
-router
-  .route("/patient/:id")
-  .put(catchErrors(patientController.update))
-  .delete(catchErrors(patientController.delete));
-router.route("/patient/search").get(catchErrors(patientController.search));
-router
-  .route("/patient/find/:filter/:equal")
-  .get(catchErrors(patientController.getByFilter));
 
 // //______________________________________________________________________________________________________
 
@@ -156,7 +117,7 @@ router
   .get(catchErrors(employeeController.getAll));
 router
   .route("/employee/:id")
-  .put(catchErrors(employeeController.update))
+  .patch(catchErrors(employeeController.update))
   .delete(catchErrors(employeeController.delete));
 router.route("/employee/search").get(catchErrors(employeeController.search));
 router
@@ -172,7 +133,7 @@ router
   .get(catchErrors(departmentController.getAll));
 router
   .route("/department/:id")
-  .put(catchErrors(departmentController.update))
+  .patch(catchErrors(departmentController.update))
   .delete(catchErrors(departmentController.delete));
 router
   .route("/department/search")
@@ -190,7 +151,7 @@ router
   .get(catchErrors(specialtyController.getAll));
 router
   .route("/specialty/:id")
-  .put(catchErrors(specialtyController.update))
+  .patch(catchErrors(specialtyController.update))
   .delete(catchErrors(specialtyController.delete));
 router.route("/specialty/search").get(catchErrors(specialtyController.search));
 router
@@ -206,7 +167,7 @@ router
   .get(catchErrors(positionController.getAll));
 router
   .route("/position/:id")
-  .put(catchErrors(positionController.update))
+  .patch(catchErrors(positionController.update))
   .delete(catchErrors(positionController.delete));
 router.route("/position/search").get(catchErrors(positionController.search));
 router
@@ -222,7 +183,7 @@ router
   .get(catchErrors(appointmentController.getAll));
 router
   .route("/appointment/:id")
-  .put(catchErrors(appointmentController.update))
+  .patch(catchErrors(appointmentController.update))
   .delete(catchErrors(appointmentController.delete));
 router
   .route("/appointment/search")
@@ -251,7 +212,7 @@ router
   .get(catchErrors(medicamentController.getAll));
 router
   .route("/medicament/:id")
-  .put(catchErrors(medicamentController.update))
+  .patch(catchErrors(medicamentController.update))
   .delete(catchErrors(medicamentController.delete));
 router
   .route("/medicament/search")
@@ -294,7 +255,7 @@ router
   .get(catchErrors(consultationController.getAll));
 router
   .route("/consultation/:id")
-  .put(catchErrors(consultationController.update))
+  .patch(catchErrors(consultationController.update))
   .delete(catchErrors(consultationController.delete));
 router
   .route("/consultation/search")
@@ -319,7 +280,7 @@ router
 //   .get(catchErrors(laboratoryConsultation.getAll));
 // router
 //   .route("/laboratoryConsultation/:id")
-//   .put(catchErrors(laboratoryConsultation.update))
+//   .patch(catchErrors(laboratoryConsultation.update))
 //   .delete(catchErrors(laboratoryConsultation.delete));
 // router
 //   .route("/laboratoryConsultation/search")
@@ -347,7 +308,7 @@ router
   .get(catchErrors(currencyController.getAll));
 router
   .route("/currency/:id")
-  .put(catchErrors(currencyController.update))
+  .patch(catchErrors(currencyController.update))
   .delete(catchErrors(currencyController.delete));
 router.route("/currency/search").get(catchErrors(currencyController.search));
 router
@@ -364,7 +325,7 @@ router
   .get(catchErrors(prescriptionController.getAll));
 router
   .route("/prescription/:id")
-  .put(catchErrors(prescriptionController.update))
+  .patch(catchErrors(prescriptionController.update))
   .delete(catchErrors(prescriptionController.delete));
 router
   .route("/prescription/search")
@@ -387,7 +348,7 @@ router
   .get(catchErrors(paymentModeController.getAll));
 router
   .route("/paymentMode/:id")
-  .put(catchErrors(paymentModeController.update))
+  .patch(catchErrors(paymentModeController.update))
   .delete(catchErrors(paymentModeController.delete));
 router
   .route("/paymentMode/search")
@@ -404,7 +365,7 @@ router
   .get(catchErrors(paymentController.getAll));
 router
   .route("/payment/:id")
-  .put(catchErrors(paymentController.update))
+  .patch(catchErrors(paymentController.update))
   .delete(catchErrors(paymentController.delete));
 router.route("/payment/search").get(catchErrors(paymentController.search));
 router
@@ -425,7 +386,7 @@ router
   .get(catchErrors(analysisController.getAll));
 router
   .route("/analysis/:id")
-  .put(catchErrors(analysisController.update))
+  .patch(catchErrors(analysisController.update))
   .delete(catchErrors(analysisController.delete));
 router.route("/analysis/search").get(catchErrors(analysisController.search));
 router
@@ -446,7 +407,7 @@ router
   .get(catchErrors(analysisTypeController.getAll));
 router
   .route("/analysisType/:id")
-  .put(catchErrors(analysisTypeController.update))
+  .patch(catchErrors(analysisTypeController.update))
   .delete(catchErrors(analysisTypeController.delete));
 router
   .route("/analysisType/search")
@@ -464,7 +425,7 @@ router
   .get(catchErrors(mriScanController.getAll));
 router
   .route("/mriScan/:id")
-  .put(catchErrors(mriScanController.update))
+  .patch(catchErrors(mriScanController.update))
   .delete(catchErrors(mriScanController.delete));
 router.route("/mriScan/search").get(catchErrors(mriScanController.search));
 router
@@ -481,7 +442,7 @@ router
   .get(catchErrors(mriScanTypeController.getAll));
 router
   .route("/mriScanType/:id")
-  .put(catchErrors(mriScanTypeController.update))
+  .patch(catchErrors(mriScanTypeController.update))
   .delete(catchErrors(mriScanTypeController.delete));
 router
   .route("/mriScanType/search")
@@ -499,7 +460,7 @@ router
   .get(catchErrors(clientController.getAll));
 router
   .route("/client/:id")
-  .put(catchErrors(clientController.update))
+  .patch(catchErrors(clientController.update))
   .delete(catchErrors(clientController.delete));
 router.route("/client/search").get(catchErrors(clientController.search));
 router
@@ -516,7 +477,7 @@ router
 //   .get(catchErrors(invoiceController.getAll));
 // router
 //   .route("/invoice/:id")
-//   .put(catchErrors(invoiceController.update))
+//   .patch(catchErrors(invoiceController.update))
 //   .delete(catchErrors(invoiceController.delete));
 // router.route("/invoice/search").get(catchErrors(invoiceController.search));
 // router
@@ -536,7 +497,7 @@ router
   .get(catchErrors(itemController.getAll));
 router
   .route("/item/:id")
-  .put(catchErrors(itemController.update))
+  .patch(catchErrors(itemController.update))
   .delete(catchErrors(itemController.delete));
 router.route("/item/search").get(catchErrors(itemController.search));
 router
@@ -552,7 +513,7 @@ router
   .get(catchErrors(quoteController.getAll));
 router
   .route("/quote/:id")
-  .put(catchErrors(quoteController.update))
+  .patch(catchErrors(quoteController.update))
   .delete(catchErrors(quoteController.delete));
 router.route("/quote/search").get(catchErrors(quoteController.search));
 router
@@ -570,7 +531,7 @@ router
   .get(catchErrors(supplierController.getAll));
 router
   .route("/supplier/:id")
-  .put(catchErrors(supplierController.update))
+  .patch(catchErrors(supplierController.update))
   .delete(catchErrors(supplierController.delete));
 router.route("/supplier/search").get(catchErrors(supplierController.search));
 router
@@ -586,7 +547,7 @@ router
   .get(catchErrors(orderFormController.getAll));
 router
   .route("/orderForm/:id")
-  .put(catchErrors(orderFormController.update))
+  .patch(catchErrors(orderFormController.update))
   .delete(catchErrors(orderFormController.delete));
 router.route("/orderForm/search").get(catchErrors(orderFormController.search));
 router
@@ -606,7 +567,7 @@ router
   .get(catchErrors(expenseController.getAll));
 router
   .route("/expense/:id")
-  .put(catchErrors(expenseController.update))
+  .patch(catchErrors(expenseController.update))
   .delete(catchErrors(expenseController.delete));
 router.route("/expense/search").get(catchErrors(expenseController.search));
 router
@@ -621,7 +582,7 @@ router
   .get(catchErrors(expenseCategoryController.getAll));
 router
   .route("/expenseCategory/:id")
-  .put(catchErrors(expenseCategoryController.update))
+  .patch(catchErrors(expenseCategoryController.update))
   .delete(catchErrors(expenseCategoryController.delete));
 router
   .route("/expenseCategory/search")
@@ -639,7 +600,7 @@ router
   .get(catchErrors(clientPaymentController.getAll));
 router
   .route("/clientPayment/:id")
-  .put(catchErrors(clientPaymentController.update))
+  .patch(catchErrors(clientPaymentController.update))
   .delete(catchErrors(clientPaymentController.delete));
 router
   .route("/clientPayment/search")
@@ -659,7 +620,7 @@ router
   .get(catchErrors(consultationTypeController.getAll));
 router
   .route("/consultationType/:id")
-  .put(catchErrors(consultationTypeController.update))
+  .patch(catchErrors(consultationTypeController.update))
   .delete(catchErrors(consultationTypeController.delete));
 router
   .route("/consultationType/search")
@@ -675,7 +636,7 @@ router
   .get(catchErrors(settingGlobalController.getAll));
 router
   .route("/settingGlobal/:id")
-  .put(catchErrors(settingGlobalController.update))
+  .patch(catchErrors(settingGlobalController.update))
   .delete(catchErrors(settingGlobalController.delete));
 router
   .route("/settingGlobal/search")
@@ -693,7 +654,7 @@ router
   .get(catchErrors(settingMedicalController.getAll));
 router
   .route("/settingMedical/:id")
-  .put(catchErrors(settingMedicalController.update))
+  .patch(catchErrors(settingMedicalController.update))
   .delete(catchErrors(settingMedicalController.delete));
 router
   .route("/settingMedical/search")
@@ -711,7 +672,7 @@ router
   .get(catchErrors(settingCommercialController.getAll));
 router
   .route("/settingCommercial/:id")
-  .put(catchErrors(settingCommercialController.update))
+  .patch(catchErrors(settingCommercialController.update))
   .delete(catchErrors(settingCommercialController.delete));
 router
   .route("/settingCommercial/search")
@@ -729,7 +690,7 @@ router
   .get(catchErrors(taskController.getAll));
 router
   .route("/task/:id")
-  .put(catchErrors(taskController.update))
+  .patch(catchErrors(taskController.update))
   .delete(catchErrors(taskController.delete));
 router.route("/task/search").get(catchErrors(taskController.search));
 router
@@ -743,7 +704,7 @@ router
   .get(catchErrors(customMenuController.getAll));
 router
   .route("/customMenu/:id")
-  .put(catchErrors(customMenuController.update))
+  .patch(catchErrors(customMenuController.update))
   .delete(catchErrors(customMenuController.delete));
 router
   .route("/customMenu/search")

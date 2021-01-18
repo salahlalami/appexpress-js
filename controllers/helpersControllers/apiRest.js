@@ -268,7 +268,7 @@ exports.search = async (Model, req, res) => {
  *  @returns {Array} List of Documents
  */
 
-exports.getByFilter = async (Model, req, res) => {
+exports.filter = async (Model, req, res) => {
   try {
     if (req.query.filter === undefined || req.query.equal === undefined) {
       return res.status(403).json({

@@ -99,7 +99,7 @@ app.use(router);
 //     return next();
 //   }
 // });
-app.use("/api", apiRouter);
+app.use("/api", checkAuth, apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

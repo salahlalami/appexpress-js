@@ -7,9 +7,8 @@ const { catchErrors } = require("../handlers/errorHandlers");
 const router = express.Router();
 
 const userController = require("../controllers/userController");
-const authController = require("../controllers/authController");
-
-const appController = require("../controllers/appController");
+const roleController = require("../controllers/roleController");
+const permissionController = require("../controllers/permissionController");
 
 const patientController = require("../controllers/patientController");
 const employeeController = require("../controllers/employeeController");
@@ -30,7 +29,7 @@ const analysisTypeController = require("../controllers/analysisTypeController");
 const mriScanController = require("../controllers/mriScanController");
 const mriScanTypeController = require("../controllers/mriScanTypeController");
 const clientController = require("../controllers/clientController");
-// const invoiceController = require("../controllers/invoiceController");
+const invoiceController = require("../controllers/invoiceController");
 const itemController = require("../controllers/itemController");
 const quoteController = require("../controllers/quoteController");
 const supplierController = require("../controllers/supplierController");
@@ -45,31 +44,30 @@ const settingCommercialController = require("../controllers/settingCommercialCon
 const settingMedicalController = require("../controllers/settingMedicalController");
 const settingGlobalController = require("../controllers/settingGlobalController");
 const taskController = require("../controllers/taskController");
-const recordAudioController = require("../controllers/recordAudioController");
 const customMenuController = require("../controllers/customMenuController");
-
-const uploadController = require("../controllers/uploadController");
-
-//multer object creation
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-var upload = multer({ storage: storage });
-
-const roleController = require("../controllers/roleController");
-const permissionController = require("../controllers/permissionController");
 
 // Middlewares_______________________________________________________________________
 const permissionMiddleware = require("../middlewares/permissionMiddleware");
 // const settingMiddleware = require("../middlewares/settingMiddleware");
 
-router.route("/user/create").post(catchErrors(userController.create));
+// //_______________________________ User management_______________________________
+
+var userPhotoStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads/user");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const userPhotoUpload = multer({ storage: userPhotoStorage });
+
+router
+  .route("/user/create")
+  .post(
+    [userPhotoUpload.single("photo"), setFilePathToBody],
+    catchErrors(userController.create)
+  );
 router.route("/user/read/:id").get(catchErrors(userController.read));
 router.route("/user/update/:id").patch(catchErrors(userController.update));
 router.route("/user/delete/:id").delete(catchErrors(userController.delete));
@@ -77,9 +75,49 @@ router.route("/user/search").get(catchErrors(userController.search));
 router.route("/user/list").get(catchErrors(userController.list));
 router.route("/user/profile").get(catchErrors(userController.profile));
 router
+  .route("/user/photo")
+  .post(
+    [userPhotoUpload.single("photo"), setFilePathToBody],
+    catchErrors(userController.photo)
+  );
+router
   .route("/user/password-update/:id")
   .patch(catchErrors(userController.updatePassword));
 //list of users ends here
+
+// //____________________________ role management_______________________________
+
+router.route("/role/create").post(catchErrors(roleController.create));
+router.route("/role/read/:id").get(catchErrors(roleController.read));
+router.route("/role/update/:id").patch(catchErrors(roleController.update));
+router.route("/role/delete/:id").delete(catchErrors(roleController.delete));
+router.route("/role/search").get(catchErrors(roleController.search));
+router.route("/role/list").get(catchErrors(roleController.list));
+router.route("/role/filter").get(catchErrors(roleController.filter));
+
+// //_________________________________________________________________ permissions management_______________________________
+// // this route is used to get get the list of the users that we can give permissions to
+
+router
+  .route("/permission/create")
+  .post(catchErrors(permissionController.create));
+router
+  .route("/permission/read/:id")
+  .get(catchErrors(permissionController.read));
+router
+  .route("/permission/update/:id")
+  .patch(catchErrors(permissionController.update));
+router
+  .route("/permission/delete/:id")
+  .delete(catchErrors(permissionController.delete));
+router
+  .route("/permission/search")
+  .get(catchErrors(permissionController.search));
+router.route("/permission/list").get(catchErrors(permissionController.list));
+router
+  .route("/permission/filter")
+  .get(catchErrors(permissionController.filter));
+
 // //_______________________________________API for patients_____________________
 router.route("/patient/create").post(catchErrors(patientController.create));
 router.route("/patient/read/:id").get(catchErrors(patientController.read));
@@ -91,106 +129,110 @@ router
   .delete(catchErrors(patientController.delete));
 router.route("/patient/search").get(catchErrors(patientController.search));
 router.route("/patient/list").get(catchErrors(patientController.list));
-router.route("/patient/filter").get(catchErrors(patientController.getByFilter));
+router.route("/patient/filter").get(catchErrors(patientController.filter));
 
 //___________________________________API for Doctors______________________________
-router
-  .route("/doctor")
-  .post(catchErrors(doctorController.create))
-  .get(catchErrors(doctorController.getAll));
-router
-  .route("/doctor/:id")
-  .get(catchErrors(doctorController.read))
-  .patch(catchErrors(doctorController.update))
-  .delete(catchErrors(doctorController.delete));
+router.route("/doctor/create").post(catchErrors(doctorController.create));
+router.route("/doctor/read/:id").get(catchErrors(doctorController.read));
+router.route("/doctor/update/:id").patch(catchErrors(doctorController.update));
+router.route("/doctor/delete/:id").delete(catchErrors(doctorController.delete));
 router.route("/doctor/search").get(catchErrors(doctorController.search));
-router
-  .route("/doctor/find/:filter/:equal")
-  .get(catchErrors(doctorController.getByFilter));
+router.route("/doctor/list").get(catchErrors(doctorController.list));
+router.route("/doctor/filter").get(catchErrors(doctorController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for employees_____________________
+router.route("/employee/create").post(catchErrors(employeeController.create));
+router.route("/employee/read/:id").get(catchErrors(employeeController.read));
 router
-  .route("/employee")
-  .post(catchErrors(employeeController.create))
-  .get(catchErrors(employeeController.getAll));
+  .route("/employee/update/:id")
+  .patch(catchErrors(employeeController.update));
 router
-  .route("/employee/:id")
-  .patch(catchErrors(employeeController.update))
+  .route("/employee/delete/:id")
   .delete(catchErrors(employeeController.delete));
 router.route("/employee/search").get(catchErrors(employeeController.search));
-router
-  .route("/employee/find/:filter/:equal")
-  .get(catchErrors(employeeController.getByFilter));
+router.route("/employee/list").get(catchErrors(employeeController.list));
+router.route("/employee/filter").get(catchErrors(employeeController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for departements_____________________
 router
-  .route("/department")
-  .post(catchErrors(departmentController.create))
-  .get(catchErrors(departmentController.getAll));
+  .route("/department/create")
+  .post(catchErrors(departmentController.create));
 router
-  .route("/department/:id")
-  .patch(catchErrors(departmentController.update))
+  .route("/department/read/:id")
+  .get(catchErrors(departmentController.read));
+router
+  .route("/department/update/:id")
+  .patch(catchErrors(departmentController.update));
+router
+  .route("/department/delete/:id")
   .delete(catchErrors(departmentController.delete));
 router
   .route("/department/search")
   .get(catchErrors(departmentController.search));
+router.route("/department/list").get(catchErrors(departmentController.list));
 router
-  .route("/department/find/:filter/:equal")
-  .get(catchErrors(departmentController.getByFilter));
+  .route("/department/filter")
+  .get(catchErrors(departmentController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for speciality_____________________
+
+router.route("/specialty/create").post(catchErrors(specialtyController.create));
+router.route("/specialty/read/:id").get(catchErrors(specialtyController.read));
 router
-  .route("/specialty")
-  .post(catchErrors(specialtyController.create))
-  .get(catchErrors(specialtyController.getAll));
+  .route("/specialty/update/:id")
+  .patch(catchErrors(specialtyController.update));
 router
-  .route("/specialty/:id")
-  .patch(catchErrors(specialtyController.update))
+  .route("/specialty/delete/:id")
   .delete(catchErrors(specialtyController.delete));
 router.route("/specialty/search").get(catchErrors(specialtyController.search));
-router
-  .route("/specialty/find/:filter/:equal")
-  .get(catchErrors(specialtyController.getByFilter));
+router.route("/specialty/list").get(catchErrors(specialtyController.list));
+router.route("/specialty/filter").get(catchErrors(specialtyController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for position_____________________
+
+router.route("/position/create").post(catchErrors(positionController.create));
+router.route("/position/read/:id").get(catchErrors(positionController.read));
 router
-  .route("/position")
-  .post(catchErrors(positionController.create))
-  .get(catchErrors(positionController.getAll));
+  .route("/position/update/:id")
+  .patch(catchErrors(positionController.update));
 router
-  .route("/position/:id")
-  .patch(catchErrors(positionController.update))
+  .route("/position/delete/:id")
   .delete(catchErrors(positionController.delete));
 router.route("/position/search").get(catchErrors(positionController.search));
-router
-  .route("/position/find/:filter/:equal")
-  .get(catchErrors(positionController.getByFilter));
+router.route("/position/list").get(catchErrors(positionController.list));
+router.route("/position/filter").get(catchErrors(positionController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for appointement_________________
+
 router
-  .route("/appointment")
-  .post(catchErrors(appointmentController.create))
-  .get(catchErrors(appointmentController.getAll));
+  .route("/appointment/create")
+  .post(catchErrors(appointmentController.create));
 router
-  .route("/appointment/:id")
-  .patch(catchErrors(appointmentController.update))
+  .route("/appointment/read/:id")
+  .get(catchErrors(appointmentController.read));
+router
+  .route("/appointment/update/:id")
+  .patch(catchErrors(appointmentController.update));
+router
+  .route("/appointment/delete/:id")
   .delete(catchErrors(appointmentController.delete));
 router
   .route("/appointment/search")
   .get(catchErrors(appointmentController.search));
+router.route("/appointment/list").get(catchErrors(appointmentController.list));
 router
-  .route("/appointment/find/:filter/:equal")
-  .get(catchErrors(appointmentController.getByFilter));
+  .route("/appointment/filter")
+  .get(catchErrors(appointmentController.filter));
 
 router
   .route("/appointment/count/:status")
@@ -205,25 +247,30 @@ router
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for medicament____________________
-
 router
-  .route("/medicament")
-  .post(catchErrors(medicamentController.create))
-  .get(catchErrors(medicamentController.getAll));
+  .route("/medicament/create")
+  .post(catchErrors(medicamentController.create));
 router
-  .route("/medicament/:id")
-  .patch(catchErrors(medicamentController.update))
+  .route("/medicament/read/:id")
+  .get(catchErrors(medicamentController.read));
+router
+  .route("/medicament/update/:id")
+  .patch(catchErrors(medicamentController.update));
+router
+  .route("/medicament/delete/:id")
   .delete(catchErrors(medicamentController.delete));
 router
   .route("/medicament/search")
   .get(catchErrors(medicamentController.search));
+router.route("/medicament/list").get(catchErrors(medicamentController.list));
 router
-  .route("/medicament/find/:filter/:equal")
-  .get(catchErrors(medicamentController.getByFilter));
+  .route("/medicament/filter")
+  .get(catchErrors(medicamentController.filter));
 
 // //______________________________________________________________________________________________________
 
-// //_________________________________________________________________API for consultation__________________
+// //_______________________________ API for consultation audio recording __________________________________
+
 var consultationAudioStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/uploads/consultation");
@@ -236,33 +283,50 @@ var consultationAudioStorage = multer.diskStorage({
 const consultationAudioUpload = multer({ storage: consultationAudioStorage });
 
 router
-  .route("/consultation-recording")
-  .post(
-    [consultationAudioUpload.single("audioFile"), setFilePathToBody],
-    catchErrors(consultationRecordingController.create)
-  );
+  .route("/audiorecording/create")
+  .post(catchErrors(consultationRecordingController.create));
 router
-  .route("/consultation-recording/:id")
-  .delete(catchErrors(consultationRecordingController.delete))
+  .route("/audiorecording/read/:id")
   .get(catchErrors(consultationRecordingController.read));
 router
-  .route("/consultation-recording/find/:filter/:equal")
-  .get(catchErrors(consultationRecordingController.getByFilter));
+  .route("/audiorecording/update/:id")
+  .patch(catchErrors(consultationRecordingController.update));
+router
+  .route("/audiorecording/delete/:id")
+  .delete(catchErrors(consultationRecordingController.delete));
+router
+  .route("/audiorecording/search")
+  .get(catchErrors(consultationRecordingController.search));
+router
+  .route("/audiorecording/list")
+  .get(catchErrors(consultationRecordingController.list));
+router
+  .route("/audiorecording/filter")
+  .get(catchErrors(consultationRecordingController.filter));
 
+// //_______________________________ API for consultation __________________________________
 router
-  .route("/consultation")
-  .post(catchErrors(consultationController.create))
-  .get(catchErrors(consultationController.getAll));
+  .route("/consultation/create")
+  .post(catchErrors(consultationController.create));
 router
-  .route("/consultation/:id")
-  .patch(catchErrors(consultationController.update))
+  .route("/consultation/read/:id")
+  .get(catchErrors(consultationController.read));
+router
+  .route("/consultation/update/:id")
+  .patch(catchErrors(consultationController.update));
+router
+  .route("/consultation/delete/:id")
   .delete(catchErrors(consultationController.delete));
 router
   .route("/consultation/search")
   .get(catchErrors(consultationController.search));
 router
-  .route("/consultation/find/:filter/:equal")
-  .get(catchErrors(consultationController.getByFilter));
+  .route("/consultation/list")
+  .get(catchErrors(consultationController.list));
+router
+  .route("/consultation/filter")
+  .get(catchErrors(consultationController.filter));
+
 router
   .route("/consultation/unpaid/count/:doctorid?")
   .get(catchErrors(consultationController.getUnpaidConsultationCount));
@@ -272,7 +336,7 @@ router
 
 // //______________________________________________________________________________________________________
 
-// //_________________________________________________________________API for Laboratory consultation__________________
+// //________________________________ API for Laboratory consultation _____________________________________
 
 // router
 //   .route("/laboratoryConsultation")
@@ -287,7 +351,7 @@ router
 //   .get(catchErrors(laboratoryConsultation.search));
 // router
 //   .route("/laboratoryConsultation/find/:filter/:equal")
-//   .get(catchErrors(laboratoryConsultation.getByFilter));
+//   .get(catchErrors(laboratoryConsultation.filter));
 
 // router.get(
 //   "/api/laboratoryConsultation/unpaid/count/:doctorid?",
@@ -302,37 +366,43 @@ router
 
 // //_________________________________________________________________API for currency ____________________
 
+router.route("/currency/create").post(catchErrors(currencyController.create));
+router.route("/currency/read/:id").get(catchErrors(currencyController.read));
 router
-  .route("/currency")
-  .post(catchErrors(currencyController.create))
-  .get(catchErrors(currencyController.getAll));
+  .route("/currency/update/:id")
+  .patch(catchErrors(currencyController.update));
 router
-  .route("/currency/:id")
-  .patch(catchErrors(currencyController.update))
+  .route("/currency/delete/:id")
   .delete(catchErrors(currencyController.delete));
 router.route("/currency/search").get(catchErrors(currencyController.search));
-router
-  .route("/currency/find/:filter/:equal")
-  .get(catchErrors(currencyController.getByFilter));
+router.route("/currency/list").get(catchErrors(currencyController.list));
+router.route("/currency/filter").get(catchErrors(currencyController.filter));
 
 // //______________________________________________________________________________________________________
 
-// //_________________________________________________________________API for preinscription_______________
+// //___________________________________________ API for preinscription ___________________________________
 
 router
-  .route("/prescription")
-  .post(catchErrors(prescriptionController.create))
-  .get(catchErrors(prescriptionController.getAll));
+  .route("/prescription/create")
+  .post(catchErrors(prescriptionController.create));
 router
-  .route("/prescription/:id")
-  .patch(catchErrors(prescriptionController.update))
+  .route("/prescription/read/:id")
+  .get(catchErrors(prescriptionController.read));
+router
+  .route("/prescription/update/:id")
+  .patch(catchErrors(prescriptionController.update));
+router
+  .route("/prescription/delete/:id")
   .delete(catchErrors(prescriptionController.delete));
 router
   .route("/prescription/search")
   .get(catchErrors(prescriptionController.search));
 router
-  .route("/prescription/find/:filter/:equal")
-  .get(catchErrors(prescriptionController.getByFilter));
+  .route("/prescription/list")
+  .get(catchErrors(prescriptionController.list));
+router
+  .route("/prescription/filter")
+  .get(catchErrors(prescriptionController.filter));
 
 router
   .route("/prescription/pdf/:id")
@@ -341,36 +411,39 @@ router
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for payment mode_____________________
-
 router
-  .route("/paymentMode")
-  .post(catchErrors(paymentModeController.create))
-  .get(catchErrors(paymentModeController.getAll));
+  .route("/paymentMode/create")
+  .post(catchErrors(paymentModeController.create));
 router
-  .route("/paymentMode/:id")
-  .patch(catchErrors(paymentModeController.update))
+  .route("/paymentMode/read/:id")
+  .get(catchErrors(paymentModeController.read));
+router
+  .route("/paymentMode/update/:id")
+  .patch(catchErrors(paymentModeController.update));
+router
+  .route("/paymentMode/delete/:id")
   .delete(catchErrors(paymentModeController.delete));
 router
   .route("/paymentMode/search")
   .get(catchErrors(paymentModeController.search));
+router.route("/paymentMode/list").get(catchErrors(paymentModeController.list));
 router
-  .route("/paymentMode/find/:filter/:equal")
-  .get(catchErrors(paymentModeController.getByFilter));
+  .route("/paymentMode/filter")
+  .get(catchErrors(paymentModeController.filter));
 
 // //_________________________________________________________________API for payement_____________________
 
+router.route("/payment/create").post(catchErrors(paymentController.create));
+router.route("/payment/read/:id").get(catchErrors(paymentController.read));
 router
-  .route("/payment")
-  .post(catchErrors(paymentController.create))
-  .get(catchErrors(paymentController.getAll));
+  .route("/payment/update/:id")
+  .patch(catchErrors(paymentController.update));
 router
-  .route("/payment/:id")
-  .patch(catchErrors(paymentController.update))
+  .route("/payment/delete/:id")
   .delete(catchErrors(paymentController.delete));
 router.route("/payment/search").get(catchErrors(paymentController.search));
-router
-  .route("/payment/find/:filter/:equal")
-  .get(catchErrors(paymentController.getByFilter));
+router.route("/payment/list").get(catchErrors(paymentController.list));
+router.route("/payment/filter").get(catchErrors(paymentController.filter));
 
 router
   .route("/payment/pdf/:id")
@@ -380,18 +453,17 @@ router
 
 // //_________________________________________________________________API for analysis_____________________
 
+router.route("/analysis/create").post(catchErrors(analysisController.create));
+router.route("/analysis/read/:id").get(catchErrors(analysisController.read));
 router
-  .route("/analysis")
-  .post(catchErrors(analysisController.create))
-  .get(catchErrors(analysisController.getAll));
+  .route("/analysis/update/:id")
+  .patch(catchErrors(analysisController.update));
 router
-  .route("/analysis/:id")
-  .patch(catchErrors(analysisController.update))
+  .route("/analysis/delete/:id")
   .delete(catchErrors(analysisController.delete));
 router.route("/analysis/search").get(catchErrors(analysisController.search));
-router
-  .route("/analysis/find/:filter/:equal")
-  .get(catchErrors(analysisController.getByFilter));
+router.route("/analysis/list").get(catchErrors(analysisController.list));
+router.route("/analysis/filter").get(catchErrors(analysisController.filter));
 
 router
   .route("/analysis/pdf/:id")
@@ -402,157 +474,152 @@ router
 // //_________________________________________________________________API for analysis type_________________
 
 router
-  .route("/analysisType")
-  .post(catchErrors(analysisTypeController.create))
-  .get(catchErrors(analysisTypeController.getAll));
+  .route("/analysisType/create")
+  .post(catchErrors(analysisTypeController.create));
 router
-  .route("/analysisType/:id")
-  .patch(catchErrors(analysisTypeController.update))
+  .route("/analysisType/read/:id")
+  .get(catchErrors(analysisTypeController.read));
+router
+  .route("/analysisType/update/:id")
+  .patch(catchErrors(analysisTypeController.update));
+router
+  .route("/analysisType/delete/:id")
   .delete(catchErrors(analysisTypeController.delete));
 router
   .route("/analysisType/search")
   .get(catchErrors(analysisTypeController.search));
 router
-  .route("/analysisType/find/:filter/:equal")
-  .get(catchErrors(analysisTypeController.getByFilter));
+  .route("/analysisType/list")
+  .get(catchErrors(analysisTypeController.list));
+router
+  .route("/analysisType/filter")
+  .get(catchErrors(analysisTypeController.filter));
 
 // //______________________________________________________________________________________________________
 
-// //_________________________________________________________________API for IRM SCANS_____________________
+// //____________________________________________ API for IRM SCANS _______________________________________
+
+router.route("/mriScan/create").post(catchErrors(mriScanController.create));
+router.route("/mriScan/read/:id").get(catchErrors(mriScanController.read));
 router
-  .route("/mriScan")
-  .post(catchErrors(mriScanController.create))
-  .get(catchErrors(mriScanController.getAll));
+  .route("/mriScan/update/:id")
+  .patch(catchErrors(mriScanController.update));
 router
-  .route("/mriScan/:id")
-  .patch(catchErrors(mriScanController.update))
+  .route("/mriScan/delete/:id")
   .delete(catchErrors(mriScanController.delete));
 router.route("/mriScan/search").get(catchErrors(mriScanController.search));
-router
-  .route("/mriScan/find/:filter/:equal")
-  .get(catchErrors(mriScanController.getByFilter));
+router.route("/mriScan/list").get(catchErrors(mriScanController.list));
+router.route("/mriScan/filter").get(catchErrors(mriScanController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for IRM Scan types________________
 
 router
-  .route("/mriScanType")
-  .post(catchErrors(mriScanTypeController.create))
-  .get(catchErrors(mriScanTypeController.getAll));
+  .route("/mriScanType/create")
+  .post(catchErrors(mriScanTypeController.create));
 router
-  .route("/mriScanType/:id")
-  .patch(catchErrors(mriScanTypeController.update))
+  .route("/mriScanType/read/:id")
+  .get(catchErrors(mriScanTypeController.read));
+router
+  .route("/mriScanType/update/:id")
+  .patch(catchErrors(mriScanTypeController.update));
+router
+  .route("/mriScanType/delete/:id")
   .delete(catchErrors(mriScanTypeController.delete));
 router
   .route("/mriScanType/search")
   .get(catchErrors(mriScanTypeController.search));
+router.route("/mriScanType/list").get(catchErrors(mriScanTypeController.list));
 router
-  .route("/mriScanType/find/:filter/:equal")
-  .get(catchErrors(mriScanTypeController.getByFilter));
+  .route("/mriScanType/filter")
+  .get(catchErrors(mriScanTypeController.filter));
 
 // //______________________________________________________________________________________________________
 
-// //_________________________________________________________________API for clients_______________________
-router
-  .route("/client")
-  .post(catchErrors(clientController.create))
-  .get(catchErrors(clientController.getAll));
-router
-  .route("/client/:id")
-  .patch(catchErrors(clientController.update))
-  .delete(catchErrors(clientController.delete));
+// //_____________________________________ API for clients __________________________________________________
+router.route("/client/create").post(catchErrors(clientController.create));
+router.route("/client/read/:id").get(catchErrors(clientController.read));
+router.route("/client/update/:id").patch(catchErrors(clientController.update));
+router.route("/client/delete/:id").delete(catchErrors(clientController.delete));
 router.route("/client/search").get(catchErrors(clientController.search));
-router
-  .route("/client/find/:filter/:equal")
-  .get(catchErrors(clientController.getByFilter));
+router.route("/client/list").get(catchErrors(clientController.list));
+router.route("/client/filter").get(catchErrors(clientController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for invoices_____________________
+router.route("/invoice/create").post(catchErrors(invoiceController.create));
+router.route("/invoice/read/:id").get(catchErrors(invoiceController.read));
+router
+  .route("/invoice/update/:id")
+  .patch(catchErrors(invoiceController.update));
+router
+  .route("/invoice/delete/:id")
+  .delete(catchErrors(invoiceController.delete));
+router.route("/invoice/search").get(catchErrors(invoiceController.search));
+router.route("/invoice/list").get(catchErrors(invoiceController.list));
+router.route("/invoice/filter").get(catchErrors(invoiceController.filter));
 
-// router
-//   .route("/invoice")
-//   .post(catchErrors(invoiceController.create))
-//   .get(catchErrors(invoiceController.getAll));
-// router
-//   .route("/invoice/:id")
-//   .patch(catchErrors(invoiceController.update))
-//   .delete(catchErrors(invoiceController.delete));
-// router.route("/invoice/search").get(catchErrors(invoiceController.search));
-// router
-//   .route("/invoice/find/:filter/:equal")
-//   .get(catchErrors(invoiceController.getByFilter));
-
-// router
-//   .route("/invoice/pdf/:id")
-//   .get(catchErrors(invoiceController.generatePDF));
+router
+  .route("/invoice/pdf/:id")
+  .get(catchErrors(invoiceController.generatePDF));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for items_____________________
-router
-  .route("/item")
-  .post(catchErrors(itemController.create))
-  .get(catchErrors(itemController.getAll));
-router
-  .route("/item/:id")
-  .patch(catchErrors(itemController.update))
-  .delete(catchErrors(itemController.delete));
+router.route("/item/create").post(catchErrors(itemController.create));
+router.route("/item/read/:id").get(catchErrors(itemController.read));
+router.route("/item/update/:id").patch(catchErrors(itemController.update));
+router.route("/item/delete/:id").delete(catchErrors(itemController.delete));
 router.route("/item/search").get(catchErrors(itemController.search));
-router
-  .route("/item/find/:filter/:equal")
-  .get(catchErrors(itemController.getByFilter));
+router.route("/item/list").get(catchErrors(itemController.list));
+router.route("/item/filter").get(catchErrors(itemController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for Quotes_____________________
-router
-  .route("/quote")
-  .post(catchErrors(quoteController.create))
-  .get(catchErrors(quoteController.getAll));
-router
-  .route("/quote/:id")
-  .patch(catchErrors(quoteController.update))
-  .delete(catchErrors(quoteController.delete));
+
+router.route("/quote/create").post(catchErrors(quoteController.create));
+router.route("/quote/read/:id").get(catchErrors(quoteController.read));
+router.route("/quote/update/:id").patch(catchErrors(quoteController.update));
+router.route("/quote/delete/:id").delete(catchErrors(quoteController.delete));
 router.route("/quote/search").get(catchErrors(quoteController.search));
-router
-  .route("/quote/find/:filter/:equal")
-  .get(catchErrors(quoteController.getByFilter));
+router.route("/quote/list").get(catchErrors(quoteController.list));
+router.route("/quote/filter").get(catchErrors(quoteController.filter));
 
 router.route("/quote/pdf/:id").get(catchErrors(quoteController.generatePDF));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for suppliers_____________________
+router.route("/supplier/create").post(catchErrors(supplierController.create));
+router.route("/supplier/read/:id").get(catchErrors(supplierController.read));
 router
-  .route("/supplier")
-  .post(catchErrors(supplierController.create))
-  .get(catchErrors(supplierController.getAll));
+  .route("/supplier/update/:id")
+  .patch(catchErrors(supplierController.update));
 router
-  .route("/supplier/:id")
-  .patch(catchErrors(supplierController.update))
+  .route("/supplier/delete/:id")
   .delete(catchErrors(supplierController.delete));
 router.route("/supplier/search").get(catchErrors(supplierController.search));
-router
-  .route("/supplier/find/:filter/:equal")
-  .get(catchErrors(supplierController.getByFilter));
+router.route("/supplier/list").get(catchErrors(supplierController.list));
+router.route("/supplier/filter").get(catchErrors(supplierController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for order Forms_____________________
+
+router.route("/orderForm/create").post(catchErrors(orderFormController.create));
+router.route("/orderForm/read/:id").get(catchErrors(orderFormController.read));
 router
-  .route("/orderForm")
-  .post(catchErrors(orderFormController.create))
-  .get(catchErrors(orderFormController.getAll));
+  .route("/orderForm/update/:id")
+  .patch(catchErrors(orderFormController.update));
 router
-  .route("/orderForm/:id")
-  .patch(catchErrors(orderFormController.update))
+  .route("/orderForm/delete/:id")
   .delete(catchErrors(orderFormController.delete));
 router.route("/orderForm/search").get(catchErrors(orderFormController.search));
-router
-  .route("/orderForm/find/:filter/:equal")
-  .get(catchErrors(orderFormController.getByFilter));
+router.route("/orderForm/list").get(catchErrors(orderFormController.list));
+router.route("/orderForm/filter").get(catchErrors(orderFormController.filter));
 
 router
   .route("/orderForm/pdf/:id")
@@ -561,200 +628,208 @@ router
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for expenses_____________________
+
+router.route("/expense/create").post(catchErrors(expenseController.create));
+router.route("/expense/read/:id").get(catchErrors(expenseController.read));
 router
-  .route("/expense")
-  .post(catchErrors(expenseController.create))
-  .get(catchErrors(expenseController.getAll));
+  .route("/expense/update/:id")
+  .patch(catchErrors(expenseController.update));
 router
-  .route("/expense/:id")
-  .patch(catchErrors(expenseController.update))
+  .route("/expense/delete/:id")
   .delete(catchErrors(expenseController.delete));
 router.route("/expense/search").get(catchErrors(expenseController.search));
-router
-  .route("/expense/find/:filter/:equal")
-  .get(catchErrors(expenseController.getByFilter));
+router.route("/expense/list").get(catchErrors(expenseController.list));
+router.route("/expense/filter").get(catchErrors(expenseController.filter));
+
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for expense categories________________
+
 router
-  .route("/expenseCategory")
-  .post(catchErrors(expenseCategoryController.create))
-  .get(catchErrors(expenseCategoryController.getAll));
+  .route("/expensecategory/create")
+  .post(catchErrors(expenseCategoryController.create));
 router
-  .route("/expenseCategory/:id")
-  .patch(catchErrors(expenseCategoryController.update))
+  .route("/expensecategory/read/:id")
+  .get(catchErrors(expenseCategoryController.read));
+router
+  .route("/expensecategory/update/:id")
+  .patch(catchErrors(expenseCategoryController.update));
+router
+  .route("/expensecategory/delete/:id")
   .delete(catchErrors(expenseCategoryController.delete));
 router
-  .route("/expenseCategory/search")
+  .route("/expensecategory/search")
   .get(catchErrors(expenseCategoryController.search));
 router
-  .route("/expenseCategory/find/:filter/:equal")
-  .get(catchErrors(expenseCategoryController.getByFilter));
+  .route("/expensecategory/list")
+  .get(catchErrors(expenseCategoryController.list));
+router
+  .route("/expensecategory/filter")
+  .get(catchErrors(expenseCategoryController.filter));
 
 // //______________________________________________________________________________________________________
 
 // //_________________________________________________________________API for client payments_________________
-router
-  .route("/clientPayment")
-  .post(catchErrors(clientPaymentController.create))
-  .get(catchErrors(clientPaymentController.getAll));
-router
-  .route("/clientPayment/:id")
-  .patch(catchErrors(clientPaymentController.update))
-  .delete(catchErrors(clientPaymentController.delete));
-router
-  .route("/clientPayment/search")
-  .get(catchErrors(clientPaymentController.search));
-router
-  .route("/clientPayment/find/:filter/:equal")
-  .get(catchErrors(clientPaymentController.getByFilter));
 
 router
-  .route("/clientPayment/pdf/:id")
+  .route("/clientpayment/create")
+  .post(catchErrors(clientPaymentController.create));
+router
+  .route("/clientpayment/read/:id")
+  .get(catchErrors(clientPaymentController.read));
+router
+  .route("/clientpayment/update/:id")
+  .patch(catchErrors(clientPaymentController.update));
+router
+  .route("/clientpayment/delete/:id")
+  .delete(catchErrors(clientPaymentController.delete));
+router
+  .route("/clientpayment/search")
+  .get(catchErrors(clientPaymentController.search));
+router
+  .route("/clientpayment/list")
+  .get(catchErrors(clientPaymentController.list));
+router
+  .route("/clientpayment/filter")
+  .get(catchErrors(clientPaymentController.filter));
+router
+  .route("/clientpayment/pdf/:id")
   .get(catchErrors(clientPaymentController.generatePDF));
 
 // //_________________________________________________________________API for consultation type_________________
+
 router
-  .route("/consultationType")
-  .post(catchErrors(consultationTypeController.create))
-  .get(catchErrors(consultationTypeController.getAll));
+  .route("/consultationtype/create")
+  .post(catchErrors(consultationTypeController.create));
 router
-  .route("/consultationType/:id")
-  .patch(catchErrors(consultationTypeController.update))
+  .route("/consultationtype/read/:id")
+  .get(catchErrors(consultationTypeController.read));
+router
+  .route("/consultationtype/update/:id")
+  .patch(catchErrors(consultationTypeController.update));
+router
+  .route("/consultationtype/delete/:id")
   .delete(catchErrors(consultationTypeController.delete));
 router
-  .route("/consultationType/search")
+  .route("/consultationtype/search")
   .get(catchErrors(consultationTypeController.search));
 router
-  .route("/consultationType/find/:filter/:equal")
-  .get(catchErrors(consultationTypeController.getByFilter));
+  .route("/consultationtype/list")
+  .get(catchErrors(consultationTypeController.list));
+router
+  .route("/consultationtype/filter")
+  .get(catchErrors(consultationTypeController.filter));
 
 // //_________________________________________________________________API for Global Setting _________________
+
 router
-  .route("/settingGlobal")
-  .post(catchErrors(settingGlobalController.create))
-  .get(catchErrors(settingGlobalController.getAll));
+  .route("/settingGlobal/create")
+  .post(catchErrors(settingGlobalController.create));
 router
-  .route("/settingGlobal/:id")
-  .patch(catchErrors(settingGlobalController.update))
+  .route("/settingGlobal/read/:id")
+  .get(catchErrors(settingGlobalController.read));
+router
+  .route("/settingGlobal/update/:id")
+  .patch(catchErrors(settingGlobalController.update));
+router
+  .route("/settingGlobal/delete/:id")
   .delete(catchErrors(settingGlobalController.delete));
 router
   .route("/settingGlobal/search")
   .get(catchErrors(settingGlobalController.search));
 router
-  .route("/settingGlobal/find/:filter/:equal")
-  .get(catchErrors(settingGlobalController.getByFilter));
+  .route("/settingGlobal/list")
+  .get(catchErrors(settingGlobalController.list));
+router
+  .route("/settingGlobal/filter")
+  .get(catchErrors(settingGlobalController.filter));
 
 // //_____________________________________________________________________________________________________________________________________________________________________________
 
 // //_________________________________________________________________API for Medical Setting _________________
 router
-  .route("/settingMedical")
-  .post(catchErrors(settingMedicalController.create))
-  .get(catchErrors(settingMedicalController.getAll));
+  .route("/settingMedical/create")
+  .post(catchErrors(settingMedicalController.create));
 router
-  .route("/settingMedical/:id")
-  .patch(catchErrors(settingMedicalController.update))
+  .route("/settingMedical/read/:id")
+  .get(catchErrors(settingMedicalController.read));
+router
+  .route("/settingMedical/update/:id")
+  .patch(catchErrors(settingMedicalController.update));
+router
+  .route("/settingMedical/delete/:id")
   .delete(catchErrors(settingMedicalController.delete));
 router
   .route("/settingMedical/search")
   .get(catchErrors(settingMedicalController.search));
 router
-  .route("/settingMedical/find/:filter/:equal")
-  .get(catchErrors(settingMedicalController.getByFilter));
+  .route("/settingMedical/list")
+  .get(catchErrors(settingMedicalController.list));
+router
+  .route("/settingMedical/filter")
+  .get(catchErrors(settingMedicalController.filter));
 
 // //_____________________________________________________________________________________________________________________________________________________________________________
 
 // //_________________________________________________________________API for Commercial Setting _________________
+
 router
-  .route("/settingCommercial")
-  .post(catchErrors(settingCommercialController.create))
-  .get(catchErrors(settingCommercialController.getAll));
+  .route("/settingCommercial/create")
+  .post(catchErrors(settingCommercialController.create));
 router
-  .route("/settingCommercial/:id")
-  .patch(catchErrors(settingCommercialController.update))
+  .route("/settingCommercial/read/:id")
+  .get(catchErrors(settingCommercialController.read));
+router
+  .route("/settingCommercial/update/:id")
+  .patch(catchErrors(settingCommercialController.update));
+router
+  .route("/settingCommercial/delete/:id")
   .delete(catchErrors(settingCommercialController.delete));
 router
   .route("/settingCommercial/search")
   .get(catchErrors(settingCommercialController.search));
 router
-  .route("/settingCommercial/find/:filter/:equal")
-  .get(catchErrors(settingCommercialController.getByFilter));
+  .route("/settingCommercial/list")
+  .get(catchErrors(settingCommercialController.list));
+router
+  .route("/settingCommercial/filter")
+  .get(catchErrors(settingCommercialController.filter));
 
 // //_____________________________________________________________________________________________________________________________________________________________________________
 
 // //_________________________________________________________________API for Task Setting _________________
-router
-  .route("/task")
-  .post(catchErrors(taskController.create))
-  .get(catchErrors(taskController.getAll));
-router
-  .route("/task/:id")
-  .patch(catchErrors(taskController.update))
-  .delete(catchErrors(taskController.delete));
+
+router.route("/task/create").post(catchErrors(taskController.create));
+router.route("/task/read/:id").get(catchErrors(taskController.read));
+router.route("/task/update/:id").patch(catchErrors(taskController.update));
+router.route("/task/delete/:id").delete(catchErrors(taskController.delete));
 router.route("/task/search").get(catchErrors(taskController.search));
-router
-  .route("/task/find/:filter/:equal")
-  .get(catchErrors(taskController.getByFilter));
+router.route("/task/list").get(catchErrors(taskController.list));
+router.route("/task/filter").get(catchErrors(taskController.filter));
 
 // //_________________________________________________________________API for Custom Menu _________________
 router
-  .route("/customMenu")
-  .post(catchErrors(customMenuController.create))
-  .get(catchErrors(customMenuController.getAll));
+  .route("/customMenu/create")
+  .post(catchErrors(customMenuController.create));
 router
-  .route("/customMenu/:id")
-  .patch(catchErrors(customMenuController.update))
+  .route("/customMenu/read/:id")
+  .get(catchErrors(customMenuController.read));
+router
+  .route("/customMenu/update/:id")
+  .patch(catchErrors(customMenuController.update));
+router
+  .route("/customMenu/delete/:id")
   .delete(catchErrors(customMenuController.delete));
 router
   .route("/customMenu/search")
   .get(catchErrors(customMenuController.search));
+router.route("/customMenu/list").get(catchErrors(customMenuController.list));
 router
-  .route("/customMenu/find/:filter/:equal")
-  .get(catchErrors(customMenuController.getByFilter));
+  .route("/customMenu/filter")
+  .get(catchErrors(customMenuController.filter));
 
 // //_____________________________________________________________________________________________________________________________________________________________________________
 
-// //_________________________________________________________________ account management_______________________________
-
-// router.post("/login", authController.login, function (req, res) {
-//   let user = JSON.parse(JSON.stringify(req.user));
-
-//   if (req.body.remember) {
-//     req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
-//   } else {
-//     req.session.cookie.expires = false; // Cookie expires at end of session
-//   }
-
-//   switch (user.dashbaordType) {
-//     case "admin":
-//       return res.redirect("/admindashboard");
-//     // break;
-//     case "doctor":
-//       return res.redirect("/dootordashboard");
-//     // break;
-//     case "secritary":
-//       return res.redirect("/secritarydashboard");
-//     // sbreak;
-//     default:
-//       return res.redirect("/profile");
-//   }
-// });
-
-// var userPhotoStorage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "public/uploads/user");
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
-// const userPhotoUpload = multer({ storage: userPhotoStorage });
-// router.post(
-//   "/account",
-//   [userPhotoUpload.single("photo"), setFilePathToBody],
-//   catchErrors(userController.updateAccount)
-// );
 // router.post("/account/forgot", catchErrors(authController.forgot));
 // router.get("/account/reset/:token", catchErrors(authController.reset));
 // router.post(
@@ -770,20 +845,6 @@ router
 //   res.send("File upload sucessfully.");
 // });
 
-// //_________________________________________________________________ role management_______________________________
-router.get(
-  "/roles",
-  permissionMiddleware("admin-create"),
-  roleController.getUserWithRoles
-);
-router.post(
-  "/roles",
-  permissionMiddleware("admin-create"),
-  roleController.setUpUserWithRole
-);
-
-// //_________________________________________________________________ permissions management_______________________________
-// // this route is used to get get the list of the users that we can give permissions to
 // router.get(
 //   "/permissions/users",
 //   permissionMiddleware("employees-read"),

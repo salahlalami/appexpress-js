@@ -60,6 +60,15 @@ exports.isLoggedIn = (req, res, next) => {
   }
 };
 
+exports.alreadyLoggedIn = (req, res, next) => {
+  // first check if the user is authenticated
+  if (req.isAuthenticated()) {
+    req.flash("info", "you are already LoggedIn");
+    res.redirect("/"); // carry on! They are logged in!
+  } else {
+    next();
+  }
+};
 exports.forgot = async (req, res) => {
   // 1. See if a user with that email exists
   const user = await User.findOne({ email: req.body.email });

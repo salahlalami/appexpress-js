@@ -6,9 +6,12 @@ const authController = require("../controllers/authController");
 
 const appController = require("../controllers/appController");
 const { catchErrors } = require("../handlers/errorHandlers");
-const { isLoggedIn, checkAuth } = require("../controllers/authController");
+const {
+  isLoggedIn,
+  alreadyLoggedIn,
+} = require("../controllers/authController");
 
-router.route("/login").get(appController.login);
+router.route("/login").get(alreadyLoggedIn, appController.login);
 router
   .route("/logout")
   .post(isLoggedIn, catchErrors(authController.logout))

@@ -40,6 +40,11 @@ exports.createCRUDController = (modelName, filter = []) => {
       apiRest.filter(Model, req, res);
     };
   }
+  if (!filter.includes("status")) {
+    crudMethods.status = async (req, res) => {
+      apiRest.status(Model, req, res);
+    };
+  }
   if (!filter.includes("getFilterbyDate")) {
     crudMethods.getFilterbyDate = async (req, res) => {
       apiRest.getFilterbyDate(Model, req, res);

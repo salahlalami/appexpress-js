@@ -9,7 +9,7 @@ const moment = require("moment");
 exports.read = async (Model, req, res) => {
   try {
     // Find document by id
-    const result = await Model.findOne({ _id: req.params.id });
+    const result = await Model.findOne({ _id: req.params.id, removed: false });
     // If no results found, return document not found
     if (!result) {
       return res.status(404).json({
@@ -81,7 +81,7 @@ exports.update = async (Model, req, res) => {
   try {
     // Find document by id and updates with the required fields
     const result = await Model.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.id, removed: false },
       req.body,
       {
         new: true, // return the new result instead of the old one
@@ -122,7 +122,17 @@ exports.update = async (Model, req, res) => {
 exports.delete = async (Model, req, res) => {
   try {
     // Find the document by id and delete it
-    const result = await Model.findOneAndDelete({ _id: req.params.id }).exec();
+    let updates = {
+      removed: true,
+    };
+    // Find the document by id and delete it
+    const result = await Model.findOneAndUpdate(
+      { _id: req.params.id, removed: false },
+      { $set: updates },
+      {
+        new: true, // return the new result instead of the old one
+      }
+    ).exec();
     // If no results found, return document not found
     if (!result) {
       return res.status(404).json({
@@ -158,13 +168,13 @@ exports.list = async (Model, req, res) => {
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = Model.find()
+    const resultsPromise = Model.find({ removed: false })
       .skip(skip)
       .limit(limit)
       .sort({ created: "desc" })
       .populate();
     // Counting the total documents
-    const countPromise = Model.count();
+    const countPromise = Model.count({ removed: false });
     // Resolving both promises
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
     // Calculating total pages
@@ -172,13 +182,21 @@ exports.list = async (Model, req, res) => {
 
     // Getting Pagination Object
     const pagination = { page, pages, count };
-
-    return res.status(200).json({
-      success: true,
-      result,
-      pagination,
-      message: "Successfully found all documents",
-    });
+    if (count > 0) {
+      return res.status(200).json({
+        success: true,
+        result,
+        pagination,
+        message: "Successfully found all documents",
+      });
+    } else {
+      return res.status(203).json({
+        success: false,
+        result: [],
+        pagination,
+        message: "Collection is Empty",
+      });
+    }
   } catch {
     return res
       .status(500)
@@ -235,7 +253,10 @@ exports.search = async (Model, req, res) => {
   }
   // console.log(fields)
   try {
-    let results = await Model.find(fields).sort({ name: "asc" }).limit(10);
+    let results = await Model.find(fields)
+      .where("removed", false)
+      .sort({ name: "asc" })
+      .limit(10);
 
     if (results.length >= 1) {
       return res.status(200).json({
@@ -277,7 +298,7 @@ exports.filter = async (Model, req, res) => {
         message: "filter not provided correctly",
       });
     }
-    const result = await Model.find()
+    const result = await Model.find({ removed: false })
       .where(req.query.filter)
       .equals(req.query.equal);
     return res.status(200).json({
@@ -294,7 +315,54 @@ exports.filter = async (Model, req, res) => {
     });
   }
 };
-
+exports.status = async (Model, req, res) => {
+  try {
+    if (req.query.enabled == "true" || req.query.enabled == "false") {
+      let updates = {
+        enabled: req.query.enabled,
+      };
+      // Find the document by id and delete it
+      const result = await Model.findOneAndUpdate(
+        { _id: req.params.id, removed: false },
+        { $set: updates },
+        {
+          new: true, // return the new result instead of the old one
+        }
+      ).exec();
+      // If no results found, return document not found
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          result: null,
+          message: "No document found by this id: " + req.params.id,
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          result,
+          message:
+            "Successfully update status of this document by id: " +
+            req.params.id,
+        });
+      }
+    } else {
+      return res
+        .status(202)
+        .json({
+          success: false,
+          result: [],
+          message: "couldn't change user status by this request",
+        })
+        .end();
+    }
+  } catch {
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: "Oops there is an Error",
+    });
+  }
+};
 exports.getFilterbyDate = async (Model, req, res) => {
   try {
     const { filter, equal, date } = req.params;
@@ -307,7 +375,7 @@ exports.getFilterbyDate = async (Model, req, res) => {
       day = moment(date, "DD-MM-YYYY").format("DD/MM/YYYY");
     }
 
-    const result = await Model.find()
+    const result = await Model.find({ removed: false })
       .where(filter)
       .equals(equal)
       .where("date")

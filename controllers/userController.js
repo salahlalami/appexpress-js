@@ -40,19 +40,21 @@ exports.list = async (req, res) => {
 
     // Getting Pagination Object
     const pagination = { page, pages, count };
-    if (!result || result.length < 1) {
-      return res.status(404).json({
+    if (count > 0) {
+      return res.status(200).json({
+        success: true,
+        result,
+        pagination,
+        message: "Successfully found all documents",
+      });
+    } else {
+      return res.status(203).json({
         success: false,
         result: [],
-        message: "couldn't found  any documents",
+        pagination,
+        message: "Collection is Empty",
       });
     }
-    return res.status(200).json({
-      success: true,
-      result,
-      pagination,
-      message: "Successfully found all documents",
-    });
   } catch {
     return res
       .status(500)
@@ -105,7 +107,7 @@ exports.photo = async (req, res) => {
     };
 
     const tmpResult = await User.findOneAndUpdate(
-      { _id: req.user._id },
+      { _id: req.user._id, removed: false },
       { $set: updates },
       { new: true, runValidators: true, context: "query" }
     );
@@ -336,7 +338,7 @@ exports.updatePassword = async (req, res) => {
 
     // Find document by id and updates with the required fields
     const result = await User.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.id, removed: false },
       { $set: updates },
       {
         new: true, // return the new result instead of the old one
@@ -411,6 +413,54 @@ exports.delete = async (req, res) => {
   }
 };
 
+exports.status = async (req, res) => {
+  try {
+    if (req.query.enabled == "true" || req.query.enabled == "false") {
+      let updates = {
+        enabled: req.query.enabled,
+      };
+      // Find the document by id and delete it
+      const result = await User.findOneAndUpdate(
+        { _id: req.params.id, removed: false },
+        { $set: updates },
+        {
+          new: true, // return the new result instead of the old one
+        }
+      ).exec();
+      // If no results found, return document not found
+      if (!result) {
+        return res.status(404).json({
+          success: false,
+          result: null,
+          message: "No document found by this id: " + req.params.id,
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          result,
+          message:
+            "Successfully update status of this document by id: " +
+            req.params.id,
+        });
+      }
+    } else {
+      return res
+        .status(202)
+        .json({
+          success: false,
+          result: [],
+          message: "couldn't change user status by this request",
+        })
+        .end();
+    }
+  } catch {
+    return res.status(500).json({
+      success: false,
+      result: null,
+      message: "Oops there is an Error",
+    });
+  }
+};
 exports.search = async (req, res) => {
   // console.log(req.query.fields)
 
@@ -462,6 +512,33 @@ exports.search = async (req, res) => {
     return res.status(500).json({
       success: false,
       result: [],
+      message: "Oops there is an Error",
+    });
+  }
+};
+
+exports.filter = async (req, res) => {
+  try {
+    if (req.query.filter === undefined || req.query.equal === undefined) {
+      return res.status(403).json({
+        success: false,
+        result: null,
+        message: "filter not provided correctly",
+      });
+    }
+    const result = await User.find({ removed: false })
+      .where(req.query.filter)
+      .equals(req.query.equal);
+    return res.status(200).json({
+      success: true,
+      result,
+      message:
+        "Successfully found all documents where equal to : " + req.params.equal,
+    });
+  } catch {
+    return res.status(500).json({
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }

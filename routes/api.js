@@ -74,6 +74,7 @@ router.route("/user/delete/:id").delete(catchErrors(userController.delete));
 router.route("/user/search").get(catchErrors(userController.search));
 router.route("/user/list").get(catchErrors(userController.list));
 router.route("/user/profile").get(catchErrors(userController.profile));
+router.route("/user/status/:id").patch(catchErrors(userController.status));
 router
   .route("/user/photo")
   .post(

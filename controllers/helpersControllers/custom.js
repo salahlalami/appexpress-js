@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const pdf = require("phantom-html2pdf");
-const ejs = require("ejs");
+const pug = require("pug");
 const fs = require("fs");
 const moment = require("moment");
 
@@ -79,7 +79,7 @@ exports.generatePDF = (
 
     const result = await Model.findOne({ _id: req.params.id });
     const fileId = info.filename + "-" + req.params.id + ".pdf";
-    const html = ejs.renderFile("views/pdf/" + ejsFile + ".ejs", {
+    const html = pug.renderFile("views/pdf/" + ejsFile + ".pug", {
       model: result,
     });
 
@@ -122,7 +122,7 @@ exports.generatePDF = (
 //   const Model = mongoose.model(modelName);
 //   try {
 //     const result = await Model.findOne({ _id: req.params.id });
-//     const html = ejs.renderFile("views/pdf/" + modelName + ".ejs", {
+//     const html = pug.renderFile("views/pdf/" + modelName + ".pug", {
 //       model: result,
 //     });
 //     pdf.create(html, { format: info.format }).toStream(function (err, stream) {
@@ -169,7 +169,7 @@ exports.pdfGenerater = async (
     }
 
     //render pdf html
-    const html = ejs.renderFile("views/pdf/" + modelName + ".ejs", {
+    const html = pug.renderFile("views/pdf/" + modelName + ".pug", {
       model: result,
       moment: moment,
     });

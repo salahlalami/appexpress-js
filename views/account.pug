@@ -1,0 +1,45 @@
+extends layout 
+include mixins/_accountForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+//- block panelHeader
+//-     - const get = '/api/account/get/'
+//-     - const read = '/api/account/read/'
+//-     - const remove ='/api/account/delete/'
+//-     - const searchAction = '/api/account/search?fields=name,surname,email&q='
+//-     - const titleColumn = 'company'
+//-     p.panelTitle #{title}
+//-     .space-25
+//-     .search-container
+//-         +searchForm(searchAction, 'account', titleColumn, read)
+//- block panelBody
+//-     .clearfix
+//-     .panelContent.component(data-component="view-details" data-page="account")
+//-         .panel-body.hidden
+//-             +infoHeader(read, remove, "accounts: ", titleColumn)
+//-             .tab-content         
+//-                 .read
+//-                     - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'email',text:'Email',{key:'accountType',text:'Compte'},{key:'dashboardType',text:'type de dashboard'}}]
+//-                     +information(listInfo)
+//-                 .edit.hidden
+//-                     //- +accountForm('/api/account/')
+
+//- block panelFooter                    
+//-     .component(data-component="accordionForm")
+//-         .accordionForm
+//-             .accordionFormHeader 
+//-                 | Ajouter un nouveaux #{title}
+//-                 != h.icon('plus-circle') 
+//-             .whiteBg
+//-             .box
+//-                 //- +accountForm('/api/account/')
+        
+block content 
+    .model.modelSmall
+        - const col = ['name', 'surname', 'email', 'accountType']
+        - const list = ['Nom', 'Prenom', 'Email', 'Compte']
+        - const items = 20
+        +dataTable(list,get,read,remove,col,items, "Liste des accounts", titleColumn)

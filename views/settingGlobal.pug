@@ -1,0 +1,47 @@
+extends layout 
+include mixins/_settingGlobalForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+
+block panelHeader
+    - const searchAction = '/api/settingGlobal/search?q='
+    - const get = '/api/settingGlobal/get/'
+    - const read = '/api/settingGlobal/read/'
+    - const remove = '/api/settingGlobal/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"settingGlobal",titleColumn, read)
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="settingGlobal")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Setting: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Name'},{key:'value',text:'Value'},{key:'tableName',text:'Table Name'},{key:'relationID',text:'Relation ID'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +settingGlobalForm('/api/settingGlobal/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +settingGlobalForm('/api/settingGlobal/')
+
+block content 
+    .model.modelSmall
+        - const col = ['name', 'value', 'tableName', 'relationID']
+        - const header = ['Name', 'Value', 'Table Name', 'Relation ID']
+        - const limit = 20
+        +dataTable(header, get, read, remove, col, limit, "Globals Setting", titleColumn)

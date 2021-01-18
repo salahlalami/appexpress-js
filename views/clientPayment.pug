@@ -1,0 +1,51 @@
+
+extends layout
+include mixins/_clientPaymentForm
+include mixins/_dataTable
+include mixins/_searchForm
+include mixins/_information
+include components/_infoHeader
+
+//- Client Payement page
+
+
+
+block panelHeader
+    - const actionForm = '/api/clientPayment/'
+    - const get = '/api/clientPayment/get/'
+    - const read = '/api/clientPayment/read/'
+    - const remove = '/api/clientPayment/delete/'
+    - const titleColumn = 'number'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"clientPayment","name", read)
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="clientPayment")
+        panel-body.hidden
+            +infoHeader(read, remove, "Client Payment: ", titleColumn)
+            .tab-content.is-active
+                .read
+                    - const listInfo = [{key:'number',text:'Number'},{key:'client',text:'Client'},{key:'invoice',text:'Invoice'},{key:'amount',text:'Amount'},{key:'paymentMode',text:'Payment Mode'}]
+                    +information(listInfo)
+                .edit
+                    +clientPaymentForm(actionForm)
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux Client Payment
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +clientPaymentForm('/api/clientPayment/')
+
+block content 
+  .model.modelSmall
+    - const col = ['number', 'client', 'invoice', 'date', 'amount', 'paymentMode']
+    - const list = ['Number', 'Client', 'Invoice', 'Date', 'Amount', 'Payment Mode']
+    - const items = 20
+    +dataTable(list,get,read,remove,col,items, "Liste des client payment", titleColumn)

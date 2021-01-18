@@ -1,0 +1,30 @@
+
+mixin currencyTypeForm(actionForm={})
+    .component(data-component="ajaxForm")  
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+            .loaderWarpper
+                .loader
+
+            .col-24.alpha.omega
+                .col-12.alpha
+                    label(for="name") Name
+                    input(name="name" data-name="name" type="text")
+                .col-12.omega
+                    label(for="symbol") Symbol
+                    input(name="symbol" data-name="symbol" type="text")
+
+                .col-12.alpha
+                    label(for="decimalSeparator") Decimal Separator
+                    input(name="decimalSeparator" data-name="decimalSeparator" type="text")
+                .col-12.omega
+                    label(for="thousandSeparator") Thousand Separator
+                    input(name="thousandSeparator" data-name="thousandSeparator" type="text")
+
+                .clearfix
+                .col-12.alpha    
+                    button(type="submit" class="save")  Enregistrer      
+                .col-12.omega
+                    button(type="button" class="cancel")  Cancel 
+

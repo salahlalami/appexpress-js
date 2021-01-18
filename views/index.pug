@@ -1,0 +1,344 @@
+extends layoutDashboard
+
+block content
+  p.panelTitle Tableau de bord Manager
+    .dashboard-container
+      .high-level-info-container
+        .content-row
+          .col-6
+            .section
+              .section-header
+                  span Consultations / Aujourd'huit
+              .section-content
+                  .inner-item
+                      .value 43/175
+                      .description Passées
+                  .seperator
+                  .inner-item
+                      .value 230, 000,00 DA
+                      .description Encaissée
+
+
+          .col-6
+            .section
+              .section-header
+                  span Laboratoires / Aujourd'huit
+              .section-content
+                  .inner-item
+                      .value 43/175
+                      .description Passées
+                  .seperator
+                  .inner-item
+                      .value 230, 000,00 DA
+                      .description Encaissée
+
+          .col-6
+            .section
+              .section-header
+                  span Imageric Médicale / Aujourd'huit
+              .section-content
+                  .inner-item
+                      .value 43/175
+                      .description Passées
+                  .seperator
+                  .inner-item
+                      .value 230, 000,00 DA
+                      .description Encaissée
+
+          .col-6
+            .section
+              .section-header
+                  span Liste des Taches
+              .section-content
+                  .inner-item
+                      .value 25
+                      .description Taches
+                  .seperator
+                  .inner-item
+                      .value.value-with-icon!= h.icon("star")
+                        | 05
+                      .description Taches Prioritaires
+                  .inner-item
+
+
+      .mid-level-info-container
+        .content-row.align-start
+          .col-12
+            .section
+              .section-content.align-start.equal-height-dash-sec.no-header
+                .dashboard-sec-head.justify-right
+                  .meta-actions
+                    span.action-item.d-flex.align-center
+                      span.chart-legend.primary
+                      span Ressete
+                    span.action-item.d-flex.align-center
+                      span.chart-legend.secondary
+                      span Dépenses
+                    span.action-item 
+                        select(name='type' class="chart-dd")
+                            option(value='Ordonnance') Dernier 6 mois
+                            option(value='Ordonnance') Dernier 7 mois
+                            option(value='Ordonnance') Dernier 8 mois
+                            option(value='Ordonnance') Dernier 9 mois
+                  //- .heading Consultations
+                  .more-option!= h.icon("more-vertical")
+                .dashboard-sec-content
+                  .graphics-area
+                    img.bar-chart(src=`/images/photos/dashboard-bar-chart.png`)
+
+          .col-6
+            .section
+              .section-content.align-start.equal-height-dash-sec.no-header
+                .dashboard-sec-head
+                  .heading Consultations
+                  .more-option!= h.icon("more-vertical")
+                .dashboard-sec-content
+                  .meta-content
+                    .counter 34 654
+                    .meta-value
+                      span.value-direction!= h.icon("arrow-value-up")
+                      //- span!= h.icon("arrow-value-down")
+                      span.value-percent 7 %
+                  .graphics-area
+                    img.line-chart(src=`/images/photos/dashboard-line-graph.png`)
+
+                .dashboard-sec-footer
+                  .section-content
+                      .inner-item
+                          .value 175
+                          .description Aujourd'huit
+                      .seperator
+                      .inner-item
+                          .value 3000
+                          .description Cete Semaine
+
+          .col-6
+            .section
+              .section-header
+                  span Taches Priorities
+              .section-content.align-start.equal-height-dash-sec
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #1
+                      .seperator-sm
+                      .record-value Impremer les ordonance
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #2
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #3
+                      .seperator-sm
+                      .record-value Recuperer les Clé
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #4
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+                  a(href='javascript:;').success-strike
+                    .inner-row
+                      .record-key #5
+                      .seperator-sm
+                      .record-value Impremer les ordonance
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #6
+                      .seperator-sm
+                      .record-value Recuperer les Clé
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #7
+                      .seperator-sm
+                      .record-value Impremer les ordonance
+                  a(href='javascript:;').danger-strike
+                    .inner-row
+                      .record-key #8
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #9
+                      .seperator-sm
+                      .record-value Recuperer les Clé
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #10
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+                  a(href='javascript:;').danger-strike
+                    .inner-row
+                      .record-key #11
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #12
+                      .seperator-sm
+                      .record-value Recuperer les Clé
+                  a(href='javascript:;')
+                    .inner-row
+                      .record-key #13
+                      .seperator-sm
+                      .record-value Appeler IDURAR Web Agency
+
+
+
+  
+      .detail-level-info-container.page-content-container
+        .content-row.align-start
+          .col-18
+            .section
+              .section-content.align-start.equal-height-dash-sec.no-header
+                .contetn-row
+                  .col-8
+                    .dashbaord-bars-container
+                      .header
+                        .heading APERÇU DES FACTURES
+                      .bars-content
+                        .single-bar
+                          .bar-head
+                            span 0 brouillon
+                            span 0 %
+                          .progress-bar
+                            progress(value=0 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 2 Non envoye
+                            span 15 %
+                          .progress-bar
+                            progress(value=15 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 1 Impayee
+                            span 28 %
+                          .progress-bar
+                            progress(value=28 max=100).warning
+                        .single-bar
+                          .bar-head
+                            span 4 partiellement
+                            span 21 %
+                          .progress-bar
+                            progress(value=21 max=100).primary
+                        .single-bar
+                          .bar-head
+                            span 2 echue
+                            span 42 %
+                          .progress-bar
+                            progress(value=42 max=100).danger
+                        .single-bar
+                          .bar-head
+                            span 82 payee
+                            span 75 %
+                          .progress-bar
+                            progress(value=75 max=100).success
+
+                  .col-8
+                    .dashbaord-bars-container
+                      .header
+                        .heading APERÇU DES FACTURES
+                      .bars-content
+                        .single-bar
+                          .bar-head
+                            span 0 brouillon
+                            span 0 %
+                          .progress-bar
+                            progress(value=0 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 2 Non envoye
+                            span 15 %
+                          .progress-bar
+                            progress(value=15 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 1 Expire
+                            span 28 %
+                          .progress-bar
+                            progress(value=28 max=100).warning
+                        .single-bar
+                          .bar-head
+                            span 4 envoye
+                            span 21 %
+                          .progress-bar
+                            progress(value=21 max=100).primary
+                        .single-bar
+                          .bar-head
+                            span 2 decline
+                            span 42 %
+                          .progress-bar
+                            progress(value=42 max=100).danger
+                        .single-bar
+                          .bar-head
+                            span 82 accepte
+                            span 75 %
+                          .progress-bar
+                            progress(value=75 max=100).success
+                  .col-8
+                    .dashbaord-bars-container
+                      .header
+                        .heading APERÇU DES FACTURES
+                      .bars-content
+                        .single-bar
+                          .bar-head
+                            span 0 brouillon
+                            span 0 %
+                          .progress-bar
+                            progress(value=0 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 2 Non envoye
+                            span 15 %
+                          .progress-bar
+                            progress(value=15 max=100).basic
+                        .single-bar
+                          .bar-head
+                            span 1 Impayee
+                            span 28 %
+                          .progress-bar
+                            progress(value=28 max=100).warning
+                        .single-bar
+                          .bar-head
+                            span 4 partiellement
+                            span 21 %
+                          .progress-bar
+                            progress(value=21 max=100).primary
+                        .single-bar
+                          .bar-head
+                            span 2 echue
+                            span 42 %
+                          .progress-bar
+                            progress(value=42 max=100).danger
+                        .single-bar
+                          .bar-head
+                            span 82 payee
+                            span 75 %
+                          .progress-bar
+                            progress(value=75 max=100).success
+        
+          .col-6
+            .section
+              .section-content.align-start.equal-height-dash-sec.no-header
+                .dashboard-sec-head
+                  .heading Patients
+                  .more-option!= h.icon("more-vertical")
+                .dashboard-sec-content
+                  .meta-content
+                    .counter 3654
+                    .meta-value
+                      span.value-direction!= h.icon("arrow-value-up")
+                      //- span!= h.icon("arrow-value-down")
+                      span.value-percent 7 %
+                  .graphics-area
+                    img.pie-chart(src=`/images/photos/dashboard-pie-chart.png`)
+
+                .dashboard-sec-footer
+                  .section-content
+                      .inner-item
+                          .value 175
+                          .description Aujourd'huit
+                      .seperator
+                      .inner-item
+                          .value 900
+                          .description Cete Semaine     

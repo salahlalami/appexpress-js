@@ -1,0 +1,73 @@
+mixin dataTable(lists={},get={},read={},remove={},tableCol={} ,items={}, title="", row_title="",viewType="standard")
+    .component(data-component="dataTable")
+        .table(data-action=get data-show=read data-col=tableCol data-items=items data-remove=remove data-viewtype=viewType)
+            .moreOption.hidden
+                .toggle
+                    != h.icon("more")
+                    ul.toggleOption
+                        li.read
+                            != h.icon("option-read") 
+                            | Afficher
+                        li.edit
+                            != h.icon("option-edit") 
+                            | Modifier
+                        //- li.remove
+                        //-     != h.icon("delete-trash") 
+                        //-     | Supprimer
+                        li.remove(data-label=row_title)
+                            != h.icon("delete-trash") 
+                            a(href="#delete-record" class="record-action") Supprimer
+            .boxHeader
+                .patient-table-header
+                    .tableTitle=title
+                    .meta-table-actions
+                        span.action-item 
+                            select(name='birthplace' class="dd-per-page")
+                                option(value=10) 10 par page
+                                option(value=20) 20 par page
+                                option(value=30) 30 par page
+                                option(value=40) 40 par page
+                        span.action-item
+                            button(type="submit" class="export-btn")!= h.icon('sort') 
+                                | Exporter en PDF
+                        span.action-item
+                            button(type="submit" class="export-btn")!= h.icon('sort') 
+                                | Trier
+
+            .line
+            ul.tableHeader
+                li(class="table-header-li")
+                    each list,indx in lists
+                        p(class=col[indx]) #{list}
+            ul.tableBody
+            #pagination
+                div.prev(data-action=get) Precident
+                ul.pages
+                    li(data-action=get+"1" class="active") 1
+                div.next(data-action=get) Suivant
+
+            //- -----------------Delete Modal (JS and CSS included in layout.pug)--------------------
+            //- a(href="#delete-record" class="btn primary-btn" data-modal-open) Modal
+            
+            .modal
+                span.modal-inner.delete-modal
+                    .modal-content
+
+            
+            #delete-record(style="display:none")
+                .popup-container
+                    .content-row.popup-row
+                        .pop-up-text 
+                            | Êtes-vous sûr de vouloir supprimer 
+                            span.row-info
+                            | ?
+                    .space-15
+                    .content-row
+                        .col-12.alpha
+                            button(type="button" class="btn primary-btn slim-btn icon-btn danger delete-confirm" data-delete-url=remove) Supprimer
+                                != h.icon('cross-circle') 
+                        .col-12.omega
+                            button(type="button" class="btn secondary-btn slim-btn icon-btn" data-modal-close) Annuler
+                                != h.icon('left-arrow-circle')
+                
+

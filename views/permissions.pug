@@ -1,0 +1,36 @@
+head 
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+div.row
+    each  permission in permissions
+            .col-4
+             if (permissionsArrayIds.includes(permission._id))
+                .custom-control.custom-checkbox
+                    input.custom-control-input(type='checkbox' checked="true" value=permission._id id=permission._id)
+                    label.custom-control-label(for=permission._id class=permission._id) #{permission.name}
+             else
+                .custom-control.custom-checkbox
+                    input.custom-control-input(type='checkbox' value=permission._id id=permission._id)
+                    label.custom-control-label(for=permission._id class=permission._id) #{permission.name}
+div.row
+ input(hidden, id="userId" value=user._id ) 
+.col-12(style="text-align:center")
+ <button id="updateBtn">UPDATE PERMISSIONS</button>
+    <form action="/permissions/users/update" method="post" id="myForm" style="display:none">
+        <input type="text"  value="" name="permissions" id="permissions">
+         <input type="text" value="" name="user" id="user">
+    </form>
+
+script.     
+    $(document).ready(function() {
+            $('#updateBtn').on('click',function(){
+                var permissions = []
+                $( "input:checked" ).each(function( index ) {
+                     permissions.push($( this ).attr("value"))
+                     });
+                     $('#permissions').attr('value', permissions)
+                     $('#user').attr('value',$('#userId').attr('value'))
+                     $('#myForm').submit()
+            })
+    });

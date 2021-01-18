@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const ejs = require("ejs");
+const pug = require("pug");
 const juice = require("juice");
 const htmlToText = require("html-to-text");
 const promisify = require("es6-promisify");
@@ -14,8 +14,8 @@ const transport = nodemailer.createTransport({
 });
 
 const generateHTML = (filename, options = {}) => {
-  const html = ejs.renderFile(
-    `${__dirname}/../views/email/${filename}.ejs`,
+  const html = pug.renderFile(
+    `${__dirname}/../views/email/${filename}.pug`,
     options
   );
   const inlined = juice(html);

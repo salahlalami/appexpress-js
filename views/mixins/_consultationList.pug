@@ -1,0 +1,230 @@
+
+mixin consultationList(actionForm={}, title='')
+    .alert-success.alert Successfully udated
+    .alert-error.alert Oops there is error  
+    form(class=formNameClass action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+        .loaderWarpper
+            .loader
+
+        .page-tabs-container
+            a.tab-item.is-active(href='') RDV Des Patients
+            a.tab-item(href='') Liste Consultations
+        .page-container
+            .page-header.d-flex.c-border
+                .page-title=title
+                .meta-table-actions
+                    span.action-item 
+                        select(name='par_page' class="dd-per-page")
+                            option(value=10) 10 par page
+                            option(value=20) 20 par page
+                            option(value=30) 30 par page
+                            option(value=40) 40 par page
+                    span.action-item
+                        button(type="submit" class="export-btn")!= h.icon('filter') 
+                            | Filter
+                    span.action-item
+                        button(type="submit" class="export-btn")!= h.icon('date-icon') 
+                            | Affichage
+            .line
+            .page-content-container
+                .content-row.mb-20
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                .content-row.mb-20
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+                .content-row.mb-20
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+                .content-row.mb-20
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+                .content-row.mb-20
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00
+
+                    .col-12
+                        .more-option
+                            != h.icon("more")
+                        .tab-container
+                            .single-item
+                                .item-row.mb-10
+                                    .item-data
+                                        != h.icon('patients')
+                                        | Sehnoun Sophian
+                                    .item-data
+                                        != h.icon('status-icon')
+                                        | Confirme
+                                .item-row
+                                    .item-data
+                                        != h.icon('date-icon')
+                                        | Samedi 16/08/2018
+                                    .item-data
+                                        != h.icon('time-icon')
+                                        | 14h00

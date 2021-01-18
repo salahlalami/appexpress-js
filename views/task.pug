@@ -1,0 +1,70 @@
+
+extends layout
+include mixins/_searchForm
+include mixins/_taskForm
+include mixins/_dataTable
+include mixins/_information
+include mixins/_consultation
+
+
+
+block panelHeader
+    - const get = 'api/task/get/'
+    - const read = 'api/task/read/'
+    - const remove ='api/task/delete/'
+    - const searchAction = 'api/task/search?q='
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction, 'task', 'title', read)
+        
+block panelBody
+    - const actionForm = 'api/task/'
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="task")
+        .panel-body.hidden
+            .patient-header.header
+                .meta-patient-name.view-title(data-prefix="Task:" data-key="title")
+                .meta-patient-actions.meta-actions
+                    span.meta-printer
+                        != h.icon('printer')
+                    span.meta-modifier(data-action-url=read)
+                        != h.icon('update-ico')
+                        |Modifier
+                    span.meta-supperimer(data-action-url=remove) 
+                        != h.icon('delete-trash')
+                        |Supprimer
+                    //- +confirmModal()
+                    
+            #tabs1.tab-contents.no-js
+                .tab-nav
+                    a.tab-link.is-active() Informations
+                .panelContent
+                    .tab-content.is-active
+                        .read 
+                            - const listInfo = [{key:'title',text:'Title'},{key:'description',text:'Description'},{key:'status',text:'Status'}]
+                            +information(listInfo)
+                        .edit.hidden
+                            +taskForm(actionForm)
+
+
+
+block panelFooter                  
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                != h.icon('plus-circle') 
+                | Ajouter un nouveaux task
+                span.arrow-right
+                    != h.icon('arrow-right')
+            .whiteBg
+            .box
+                +taskForm(actionForm)                                    
+
+block content
+    .model.modelSmall
+        - const col = ['title','description']  
+        - const items = 20
+        - const lists = ['Title','Description']
+        +dataTable(lists,get,read,remove,col,items, "Liste des tasks")
+

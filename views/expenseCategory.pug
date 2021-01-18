@@ -1,0 +1,49 @@
+extends layout 
+include mixins/_expenseCategoryForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/expenseCategory/search?q='
+    - const get = '/api/expenseCategory/get/'
+    - const read = '/api/expenseCategory/read/'
+    - const remove = '/api/expenseCategory/delete/'
+    - const titleColumn = 'company'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction, "expenseCategory", titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="expenseCategory")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Expense Category: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'enabled',text:'Activée'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +expenseCategoryForm('/api/expenseCategory/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +expenseCategoryForm('/api/expenseCategory/')
+
+
+block content 
+    .model.modelSmall
+
+        - const col = ['name', 'description', 'enabled']
+        - const header = ['Nom', 'Description', 'Activée']
+        - const limit = 20
+        +dataTable(header,get,read,remove,col,limit, "Expense Categories", titleColumn)

@@ -25,9 +25,9 @@ exports.createCRUDController = (modelName, filter = []) => {
       apiRest.delete(Model, req, res);
     };
   }
-  if (!filter.includes("getAll")) {
-    crudMethods.getAll = async (req, res) => {
-      apiRest.getAll(Model, req, res);
+  if (!filter.includes("list")) {
+    crudMethods.list = async (req, res) => {
+      apiRest.list(Model, req, res);
     };
   }
   if (!filter.includes("search")) {
@@ -35,9 +35,9 @@ exports.createCRUDController = (modelName, filter = []) => {
       apiRest.search(Model, req, res);
     };
   }
-  if (!filter.includes("getByFilter")) {
-    crudMethods.getByFilter = async (req, res) => {
-      apiRest.getByFilter(Model, req, res);
+  if (!filter.includes("filter")) {
+    crudMethods.filter = async (req, res) => {
+      apiRest.filter(Model, req, res);
     };
   }
   if (!filter.includes("getFilterbyDate")) {

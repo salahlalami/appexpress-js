@@ -53,7 +53,7 @@ let render = {
     if (paginationData.page > 1) {
       prev = parseInt(paginationData.page) - 1;
     } else prev = "";
-    table.querySelector("#pagination .prev").dataset.action =
+    table.querySelector("#pagination .prev").dataset.page =
       table.dataset.action + prev;
     let next = "";
     if (paginationData.page < paginationData.pages) {
@@ -104,7 +104,7 @@ const dataGrid = {
     const target = table.dataset.target;
     console.log("target : " + target);
     const result = listSync(target);
-    console.log(result);
+
     result.then(function (response) {
       render.grid(response, table, col);
       render.pagination(response, table);

@@ -3,12 +3,20 @@ import viewItem from "./viewItem";
 import editItem from "./editItem";
 import removeItem from "./removeItem";
 import delegate from "../lib/delegate";
+import {
+  createSync,
+  readSync,
+  updateSync,
+  deleteSync,
+  listSync,
+  searchSync,
+} from "../axiosRequest";
 import { valueByString } from "../helper";
 
 let render = {
-  grid: function (res, table, col) {
+  grid: function (res = {}, table, col) {
     console.log(res);
-    const datas = res.data;
+    const datas = res.result;
     const paginationData = res.pagination;
 
     table.querySelector("ul.tableBody").innerHTML = "";
@@ -93,12 +101,13 @@ const dataGrid = {
       '.component[data-component="search-input"]'
     );
 
-    const action = table.dataset.action;
-    const result = ajaxGetData(action);
-
-    result.then(function (res) {
-      render.grid(res, table, col);
-      render.pagination(res, table);
+    const target = table.dataset.target;
+    console.log("target : " + target);
+    const result = listSync(target);
+    console.log(result);
+    result.then(function (response) {
+      render.grid(response, table, col);
+      render.pagination(response, table);
     });
 
     delegate(

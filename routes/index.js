@@ -9,9 +9,13 @@ const { catchErrors } = require("../handlers/errorHandlers");
 const {
   isLoggedIn,
   alreadyLoggedIn,
+  login,
+  redirect,
 } = require("../controllers/authController");
 
 router.route("/login").get(alreadyLoggedIn, appController.login);
+router.route("/login").post(catchErrors(login, redirect));
+
 router
   .route("/logout")
   .post(isLoggedIn, catchErrors(authController.logout))

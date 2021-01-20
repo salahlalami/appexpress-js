@@ -7,6 +7,7 @@ include mixins/_consultation
 include components/_infoHeader
 
 block panelHeader
+    - const target = 'patient'
     - const get = '/api/patient/get/'
     - const read = '/api/patient/read/'
     - const remove ='/api/patient/delete/'
@@ -43,5 +44,5 @@ block content
         - const col = ['name','surname','sexe','birthday','tel']  
         - const items = 20
         - const lists = ['Nom','Prenom','Sexe','Date de Naissance','Telephone']
-        +dataTable(lists,get,read,remove,col,items, "Liste des patients", "name|surname")
+        +dataTable(target,lists,col,items, "Liste des patients", "name|surname")
 

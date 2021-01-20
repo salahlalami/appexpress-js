@@ -1,6 +1,6 @@
-mixin dataTable(lists={},get={},read={},remove={},tableCol={} ,items={}, title="", row_title="",viewType="standard")
+mixin dataTable(target={},lists={},tableCol={} ,items={}, title="", row_title="",viewType="standard")
     .component(data-component="dataTable")
-        .table(data-action=get data-show=read data-col=tableCol data-items=items data-remove=remove data-viewtype=viewType)
+        .table(data-target=target data-col=tableCol data-items=items data-viewtype=viewType)
             .moreOption.hidden
                 .toggle
                     != h.icon("more")

@@ -65,7 +65,6 @@ docReady(function () {
     '.component[data-component="item-list"]'
   );
 
-  modal.init();
   window.modal = modal;
   moreOption();
   initSubMenuDrawer();

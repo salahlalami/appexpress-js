@@ -8,6 +8,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const autoprefixer = require("autoprefixer");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
+require("babel-polyfill");
+
 /*
   webpack sees every file as a module.
   How to handle those files is up to loaders.
@@ -57,6 +59,7 @@ const uglify = new webpack.optimize.UglifyJsPlugin({
   compress: { warnings: false },
 });
 
+module.exports = {};
 // OK - now it's time to put it all together
 const config = {
   entry: {

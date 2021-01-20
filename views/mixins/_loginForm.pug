@@ -9,7 +9,7 @@ mixin loginForm()
         != h.icon('login-password')
       input(type="password" name="password" placeholder="Mot de passe")
     label
-      input.remember-check-input(type='checkbox' value='' formcontrolname='agree_privacy')
+      input.remember-check-input(name="remember" type='checkbox' value='' formcontrolname='agree_privacy')
       span.form-check-sign
         span.check  
       span.remember-text

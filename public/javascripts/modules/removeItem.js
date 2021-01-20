@@ -1,4 +1,3 @@
-import ajaxGetData from "./ajaxGetData";
 import dataGrid from "./dataGrid";
 import { accordionBar } from "./accordionModel";
 import {

@@ -1,6 +1,8 @@
-import viewItem from "./viewItem";
-import editItem from "./editItem";
-import removeItem from "./removeItem";
+// import viewItem from "./viewItem";
+// import editItem from "./editItem";
+// import removeItem from "./removeItem";
+
+import { viewItem, editItem, removeItem } from "./crudPanel";
 import delegate from "../lib/delegate";
 import { listSync } from "../axiosRequest";
 import { valueByString } from "../helper";
@@ -175,7 +177,7 @@ const dataGrid = {
       searchInput.addEventListener(
         "select",
         function (event) {
-          const url = searchInput.dataset.read;
+          // const url = searchInput.dataset.read;
           const { detail } = event;
           viewItem(target, detail.id, viewType);
         },

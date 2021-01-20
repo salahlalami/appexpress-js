@@ -1,4 +1,3 @@
-import ajaxGetData from "./ajaxGetData";
 import activeTab from "./activeTab";
 import setCurrentRecord from "./setCurrentRecord";
 import ajaxDataRead from "./ajaxDataRead";

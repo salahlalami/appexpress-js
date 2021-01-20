@@ -11,8 +11,8 @@ function setCurrentRecord(target, res) {
   const infoTitle = viewInfo.querySelector(".info-title");
   const metaActions = viewInfo.querySelector(".meta-actions");
   const removeIcon = metaActions.querySelector(".meta-remove");
-  removeIcon.removeEventListener("click", handleDelete, true);
-  removeIcon.addEventListener("click", handleDelete, true);
+  removeIcon.removeEventListener("click", handleDelete, false);
+  removeIcon.addEventListener("click", handleDelete, false);
   viewInfo.querySelector(".panel-body").classList.remove("hidden");
 
   if (viewInfo.dataset.page == "patient") {

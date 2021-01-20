@@ -1,6 +1,6 @@
 import axios from "axios";
 import activeTab from "./activeTab";
-import viewItem from "./viewItem";
+import { viewItem } from "./crudPanel";
 import dataGrid from "./dataGrid";
 // convert form data to json
 function toJson(form) {
@@ -54,9 +54,10 @@ function ajaxForm(form, component) {
       activePaginationButton
         ? dataGrid.refresh(dataTable)
         : dataGrid.init(dataTable, ".table", "form.ajax");
-      const actionClic = form.dataset.read + res.data.data._id;
       const formtype = form.dataset.formtype || "standard";
-      viewItem(actionClic, [formtype]);
+      const target = form.dataset.target;
+      viewItem(target, res.data.data._id, formtype);
+
       setTimeout(function () {
         // alertSuccess.classList.add("show");
         // Show updated or new data

@@ -19,7 +19,7 @@ exports.createSync = (target, jsonData) => {
 };
 exports.readSync = (target, id) => {
   const result = axios
-    .get(baseUrl + target + "/read" + id)
+    .get(baseUrl + target + "/read/" + id)
     .then((response) => {
       // returning the data here allows the caller to get it through another .then(...)
       //console.log(response.data);
@@ -35,7 +35,7 @@ exports.readSync = (target, id) => {
 };
 exports.updateSync = (target, id, jsonData) => {
   const result = axios
-    .patch(baseUrl + target + "/update" + id, jsonData)
+    .patch(baseUrl + target + "/update/" + id, jsonData)
     .then((response) => {
       // returning the data here allows the caller to get it through another .then(...)
       //console.log(response.data);
@@ -52,7 +52,7 @@ exports.updateSync = (target, id, jsonData) => {
 
 exports.deleteSync = (target, id) => {
   const result = axios
-    .delete(baseUrl + target + "/delete" + id)
+    .delete(baseUrl + target + "/delete/" + id)
     .then((response) => {
       // returning the data here allows the caller to get it through another .then(...)
       //console.log(response.data);

@@ -3,15 +3,23 @@ import activeTab from "./activeTab";
 import setCurrentRecord from "./setCurrentRecord";
 import ajaxDataRead from "./ajaxDataRead";
 import consultationComponent from "./consultationComponent";
+import {
+  createSync,
+  readSync,
+  updateSync,
+  deleteSync,
+  listSync,
+  searchSync,
+} from "../axiosRequest";
 // import { toForm } from './editItem';
 
-function viewItem(url, viewType = ["standard"]) {
+function viewItem(target, id, viewType = ["standard"]) {
   console.log(viewType);
-  const result = ajaxGetData(url);
-  return result.then(function (res) {
-    setCurrentRecord(res);
+  const result = readSync(target, id);
+  return result.then(function (response) {
+    setCurrentRecord(target, response);
     activeTab(["read"]);
-    // toForm(res);
+    // toForm(response);
 
     if (viewType.includes("consultation")) {
       const infoDivs = document.querySelectorAll(
@@ -19,7 +27,7 @@ function viewItem(url, viewType = ["standard"]) {
       );
       [].forEach.call(infoDivs, function (infoDiv) {
         console.log("viewType consultation");
-        consultationComponent.info(infoDiv, res);
+        consultationComponent.info(infoDiv, response);
       });
     } else {
       const infoDivs = document.querySelectorAll(
@@ -27,10 +35,10 @@ function viewItem(url, viewType = ["standard"]) {
       );
       [].forEach.call(infoDivs, function (infoDiv) {
         console.log("viewType standard");
-        ajaxDataRead(infoDiv, "ul.info", res);
+        ajaxDataRead(infoDiv, "ul.info", response);
       });
     }
-    return res;
+    return response;
   });
 }
 export default viewItem;

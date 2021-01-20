@@ -1,8 +1,16 @@
 import ajaxGetData from "./ajaxGetData";
 import dataGrid from "./dataGrid";
 import { accordionBar } from "./accordionModel";
+import {
+  createSync,
+  readSync,
+  updateSync,
+  deleteSync,
+  listSync,
+  searchSync,
+} from "../axiosRequest";
 
-function removeItem(removeAction, displaylabel) {
+function removeItem(target, id, displaylabel) {
   if (displaylabel != undefined) {
     document
       .getElementById("delete-record")
@@ -22,7 +30,7 @@ function removeItem(removeAction, displaylabel) {
   }
 
   function handleDeleteConfirm() {
-    const result = ajaxGetData(removeAction);
+    const result = deleteSync(target, id);
     result.then(function () {
       accordionBar();
       document

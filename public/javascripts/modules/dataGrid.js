@@ -1,27 +1,19 @@
-import ajaxGetData from "./ajaxGetData";
 import viewItem from "./viewItem";
 import editItem from "./editItem";
 import removeItem from "./removeItem";
 import delegate from "../lib/delegate";
-import {
-  createSync,
-  readSync,
-  updateSync,
-  deleteSync,
-  listSync,
-  searchSync,
-} from "../axiosRequest";
+import { listSync } from "../axiosRequest";
 import { valueByString } from "../helper";
 
 let render = {
-  grid: function (res = {}, table, col) {
-    console.log(res);
-    const datas = res.result;
-    const paginationData = res.pagination;
+  grid: function (response = {}, table, col) {
+    console.log(response);
+    const datas = response.result;
+    const paginationData = response.pagination;
 
     table.querySelector("ul.tableBody").innerHTML = "";
-    table.querySelector("#pagination .prev").dataset.action = "";
-    table.querySelector("#pagination .next").dataset.action = "";
+    table.querySelector("#pagination .prev").dataset.page = "";
+    table.querySelector("#pagination .next").dataset.page = "";
 
     for (const data of datas) {
       let listItem = document.createElement("li");
@@ -53,24 +45,22 @@ let render = {
     if (paginationData.page > 1) {
       prev = parseInt(paginationData.page) - 1;
     } else prev = "";
-    table.querySelector("#pagination .prev").dataset.page =
-      table.dataset.action + prev;
+    table.querySelector("#pagination .prev").dataset.page = prev;
     let next = "";
     if (paginationData.page < paginationData.pages) {
       next = parseInt(paginationData.page) + 1;
     } else next = "";
-    table.querySelector("#pagination .next").dataset.action =
-      table.dataset.action + next;
+    table.querySelector("#pagination .next").dataset.page = next;
   },
-  pagination: function (res, table) {
-    const paginationData = res.pagination;
+  pagination: function (response, table) {
+    const paginationData = response.pagination;
 
     table.querySelector("#pagination ul.pages").innerHTML = "";
 
     for (let i = 1; i <= paginationData.pages; ++i) {
       let listPag = document.createElement("li");
       listPag.innerHTML = i;
-      listPag.dataset.action = table.dataset.action + i;
+      listPag.dataset.page = i;
 
       if (i === paginationData.page) {
         listPag.classList.add("active");
@@ -93,9 +83,6 @@ const dataGrid = {
     const form = document.querySelector(panelFormName);
     const table = component.querySelector(tableName);
     const col = JSON.parse(table.dataset.col);
-    const actionEdit = table.dataset.show;
-    const actionRead = table.dataset.show;
-    const removeUrl = table.dataset.remove;
     const viewType = table.dataset.viewtype;
     const searchInput = document.querySelector(
       '.component[data-component="search-input"]'
@@ -115,9 +102,7 @@ const dataGrid = {
       ".tableBody li .moreOption .edit",
       "click",
       function (e) {
-        console.log("delegate .edit");
-        const actionClic = actionEdit + e.delegateTarget.dataset.id;
-        editItem(actionClic, form, e.delegateTarget.dataset.id);
+        editItem(form, target, e.delegateTarget.dataset.id);
       },
       false
     );
@@ -127,8 +112,7 @@ const dataGrid = {
       ".tableBody li .moreOption .read",
       "click",
       function (e) {
-        console.log("delegate .read");
-        viewItem(actionRead + e.delegateTarget.dataset.id, viewType);
+        viewItem(target, e.delegateTarget.dataset.id, viewType);
       },
       false
     );
@@ -139,9 +123,8 @@ const dataGrid = {
       "click",
       function (e) {
         console.log("delegate .remove");
-        const removeAction = removeUrl + e.delegateTarget.dataset.id;
         const displayLabel = e.delegateTarget.dataset.displayLabel;
-        removeItem(removeAction, displayLabel);
+        removeItem(target, e.delegateTarget.dataset.id, displayLabel);
       },
       false
     );
@@ -151,11 +134,11 @@ const dataGrid = {
       "#pagination ul.pages li",
       "click",
       function (e) {
-        const actionClic = e.delegateTarget.dataset.action;
-        const result = ajaxGetData(actionClic);
-        result.then(function (res) {
-          render.grid(res, table, col);
-          render.activePagination(res.pagination.page);
+        const pageNumber = e.delegateTarget.dataset.page;
+        const result = listSync(target, { page: pageNumber });
+        result.then(function (response) {
+          render.grid(response, table, col);
+          render.activePagination(response.pagination.page);
         });
       },
       false
@@ -165,11 +148,11 @@ const dataGrid = {
       "click",
       function () {
         console.log("#pagination .next");
-        const actionClic = this.dataset.action;
-        const result = ajaxGetData(actionClic);
-        result.then(function (res) {
-          render.grid(res, table, col);
-          render.activePagination(res.pagination.page);
+        const pageNumber = this.dataset.page;
+        const result = listSync(target, { page: pageNumber });
+        result.then(function (response) {
+          render.grid(response, table, col);
+          render.activePagination(response.pagination.page);
         });
       },
       false
@@ -179,11 +162,11 @@ const dataGrid = {
       "click",
       function () {
         console.log("#pagination .prev");
-        const actionClic = this.dataset.action;
-        const result = ajaxGetData(actionClic);
-        result.then(function (res) {
-          render.grid(res, table, col);
-          render.activePagination(res.pagination.page);
+        const pageNumber = this.dataset.page;
+        const result = listSync(target, { page: pageNumber });
+        result.then(function (response) {
+          render.grid(response, table, col);
+          render.activePagination(response.pagination.page);
         });
       },
       false
@@ -194,7 +177,7 @@ const dataGrid = {
         function (event) {
           const url = searchInput.dataset.read;
           const { detail } = event;
-          viewItem(url + detail.id, viewType);
+          viewItem(target, detail.id, viewType);
         },
         false
       );
@@ -210,12 +193,13 @@ const dataGrid = {
       "#pagination ul.pages li.active"
     );
     if (currentActivePage) {
-      const actionClic = currentActivePage.dataset.action;
-      const result = ajaxGetData(actionClic);
-      result.then(function (res) {
-        render.grid(res, table, col);
-        render.pagination(res, table);
-        render.activePagination(res.pagination.page);
+      const result = listSync(table.dataset.target, {
+        page: currentActivePage.dataset.page,
+      });
+      result.then(function (response) {
+        render.grid(response, table, col);
+        render.pagination(response, table);
+        render.activePagination(response.pagination.page);
       });
     }
   },

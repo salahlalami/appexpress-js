@@ -1,15 +1,18 @@
 import editItem from "./editItem";
 import removeItem from "./removeItem";
 import { valueByString } from "../helper";
+import delegate from "../lib/delegate";
 
-function setCurrentRecord(res) {
-  const { data } = res;
+function setCurrentRecord(target, res) {
+  const data = res.result;
   const viewInfo = document.querySelector(
     '.component[data-component="view-details"]'
   );
   const infoTitle = viewInfo.querySelector(".info-title");
   const metaActions = viewInfo.querySelector(".meta-actions");
-
+  const removeIcon = metaActions.querySelector(".meta-remove");
+  removeIcon.removeEventListener("click", handleDelete, true);
+  removeIcon.addEventListener("click", handleDelete, true);
   viewInfo.querySelector(".panel-body").classList.remove("hidden");
 
   if (viewInfo.dataset.page == "patient") {
@@ -56,32 +59,27 @@ function setCurrentRecord(res) {
         metaActions.querySelector(".meta-remove").dataset.label
       );
     }
-    metaActions
-      .querySelector(".meta-remove")
-      .removeEventListener("click", handleDelete, false);
-    metaActions
-      .querySelector(".meta-remove")
-      .addEventListener("click", handleDelete, false);
+    // delegate(document.body, ".meta-remove", "click", handleDelete, false);
   }
   if (metaActions.querySelector(".meta-print")) {
     metaActions.querySelector(".meta-print").dataset.id = data._id;
   }
+
+  function handleEdit() {
+    const viewInfo = document.querySelector(
+      '.component[data-component="view-details"]'
+    );
+    const form = viewInfo.querySelector("form.ajax");
+    // if (type != 'edit') {
+    editItem(form, target, this.dataset.id);
+    // }
+  }
+
+  function handleDelete() {
+    console.log("handleDelete event");
+    const displayLabel = this.dataset.displayLabel;
+    removeItem(target, this.dataset.id, displayLabel);
+  }
 }
 
-function handleEdit() {
-  const viewInfo = document.querySelector(
-    '.component[data-component="view-details"]'
-  );
-  const actionClic = this.dataset.actionUrl + this.dataset.id;
-  const form = viewInfo.querySelector("form.ajax");
-  // if (type != 'edit') {
-  editItem(actionClic, form, this.dataset.id);
-  // }
-}
-
-function handleDelete() {
-  const actionClic = this.dataset.actionUrl + this.dataset.id;
-  const displayLabel = this.dataset.displayLabel;
-  removeItem(actionClic, displayLabel);
-}
 export default setCurrentRecord;

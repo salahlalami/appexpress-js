@@ -1,11 +1,16 @@
-import ajaxGetData from "./ajaxGetData";
 import activeTab from "./activeTab";
 import { valueByString } from "../helper";
 // import ajaxDataRead from './ajaxDataRead';
 import setCurrentRecord from "./setCurrentRecord";
-
-export function toForm(result, form) {
-  console.log(result.data);
+import {
+  createSync,
+  readSync,
+  updateSync,
+  deleteSync,
+  listSync,
+  searchSync,
+} from "../axiosRequest";
+export function toForm(response, form) {
   if (!form) {
     form = document.querySelector("form.ajax");
   }
@@ -14,32 +19,31 @@ export function toForm(result, form) {
   }
   const elements = form.querySelectorAll("input, select, textarea");
   for (let i = 0; i < elements.length; ++i) {
-    console.log(elements[i]);
     const element = elements[i];
     if (element.classList.contains("ajaxResult")) {
-      var value = result.data[element.name];
+      var value = response.result[element.name];
       element.dataset.value = value._id;
     } else {
       if (element.classList.contains("ajaxSelect")) {
-        var variable = result.data[element.name];
+        var variable = response.result[element.name];
         element.value = variable._id || variable;
         setTimeout(() => {
           const e = new Event("change");
           element.dispatchEvent(e);
         }, 100);
       } else if (element.classList.contains("searchAjax")) {
-        var _id = result.data[element.name];
+        var _id = response.result[element.name];
         // var variable = "";
         if (
           element.dataset.label &&
-          typeof result.data[element.name] == "object"
+          typeof response.result[element.name] == "object"
         ) {
           variable = valueByString(
-            result.data[element.name],
+            response.result[element.name],
             element.dataset.label
           );
-          console.log(variable);
-          _id = result.data[element.name]._id;
+
+          _id = response.result[element.name]._id;
         }
 
         element.value = variable;
@@ -63,18 +67,17 @@ export function toForm(result, form) {
         //     element.value= detail.display;
         // }, false);
       } else {
-        console.log(element.name);
         const name = element.dataset.name || element.name;
-        variable = valueByString(result.data, name);
+        variable = valueByString(response.result, name);
         //const json =  JSON.stringify(variable);
-        console.log(variable);
+
         element.value = variable._id || variable;
       }
     }
   }
 }
 
-function editItem(action, form, id) {
+function editItem(form, target, id) {
   if (!form) {
     form = document.querySelector("form.ajax");
   }
@@ -86,16 +89,17 @@ function editItem(action, form, id) {
     viewInfo.querySelector(".panel-body").classList.remove("hidden");
   }
 
-  form.action = form.dataset.edit + id;
   form.dataset.id = id;
-  const result = ajaxGetData(action);
-  result.then(function (res) {
-    setCurrentRecord(res);
+  form.dataset.target = target;
+  form.dataset.state = "update";
+  const result = readSync(target, id);
+  result.then(function (response) {
+    setCurrentRecord(target, response);
     activeTab(["edit"]);
-    toForm(res, form);
+    toForm(response, form);
     // const infoDivs = document.querySelectorAll('.component[data-component="information"]');
     // [].forEach.call(infoDivs, function (infoDiv) {
-    //     ajaxDataRead(infoDiv, 'ul.info', res);
+    //     ajaxDataRead(infoDiv, 'ul.info', response);
     // });
   });
 }

@@ -5,7 +5,7 @@ function ajaxDataRead(component, divResultName, res) {
   const list = divResult.dataset.listinfos;
   divResult.innerHTML = "";
   console.log(res);
-  const data = res.data;
+  const data = res.result;
   const obj = JSON.parse(list);
   console.log(res);
 

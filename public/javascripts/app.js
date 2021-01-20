@@ -22,6 +22,7 @@ import FileUpload from "./modules/fileUpload";
 import consultationComponent from "./modules/consultationComponent";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
 import patientFolder from "./modules/patientFolder";
+import { initCrudPanel } from "./modules/crudPanel";
 
 docReady(function () {
   // const allPages = $('#pageId');
@@ -29,6 +30,9 @@ docReady(function () {
 
   const dataTables = document.querySelectorAll(
     '.component[data-component="dataTable"]'
+  );
+  const viewdetails = document.querySelectorAll(
+    '.component[data-component="view-details"]'
   );
   const ajaxForms = document.querySelectorAll(
     '.component[data-component="ajaxForm"]'
@@ -77,6 +81,10 @@ docReady(function () {
 
   [].forEach.call(dataTables, function (dataTable) {
     dataGrid.init(dataTable, ".table", "form.ajax");
+  });
+
+  [].forEach.call(viewdetails, function (viewdetail) {
+    initCrudPanel(viewdetail);
   });
 
   [].forEach.call(ajaxForms, function (ajaxForm) {

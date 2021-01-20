@@ -8,6 +8,31 @@ import dataGrid from "./dataGrid";
 
 import { readSync, deleteSync } from "../axiosRequest";
 
+export const initCrudPanel = (component) => {
+  delegate(
+    document.body,
+    ".meta-actions .meta-remove",
+    "click",
+    function (e) {
+      const target = component.dataset.target;
+      const displayLabel = e.delegateTarget.dataset.displayLabel;
+      removeItem(target, e.delegateTarget.dataset.id, displayLabel);
+    },
+    false
+  );
+
+  delegate(
+    document.body,
+    ".meta-actions .meta-edit",
+    "click",
+    function (e) {
+      const form = component.querySelector("form.ajax");
+      const target = component.dataset.target;
+      editItem(form, target, e.delegateTarget.dataset.id);
+    },
+    false
+  );
+};
 export const toForm = (response, form) => {
   if (!form) {
     form = document.querySelector("form.ajax");
@@ -52,18 +77,6 @@ export const toForm = (response, form) => {
         inpSelect.setAttribute("id", "hiddenSelect");
         inpSelect.options[0] = new Option(variable, _id);
         element.parentNode.appendChild(inpSelect);
-        // var event = new CustomEvent("setValue", {
-        //     detail: {
-        //         display: variable,
-        //         id: _id,
-        //     }
-        // });
-        // element.dispatchEvent(event);
-
-        // element.addEventListener("setValue", function(event) {
-        //     const { detail } = event;
-        //     element.value= detail.display;
-        // }, false);
       } else {
         const name = element.dataset.name || element.name;
         variable = valueByString(response.result, name);
@@ -95,10 +108,6 @@ export const editItem = (form, target, id) => {
     setCurrentRecord(target, response);
     activeTab(["edit"]);
     toForm(response, form);
-    // const infoDivs = document.querySelectorAll('.component[data-component="information"]');
-    // [].forEach.call(infoDivs, function (infoDiv) {
-    //     ajaxDataRead(infoDiv, 'ul.info', response);
-    // });
   });
 };
 
@@ -174,11 +183,10 @@ export const setCurrentRecord = (target, res) => {
   const viewInfo = document.querySelector(
     '.component[data-component="view-details"]'
   );
+  viewInfo.dataset.target = target;
   const infoTitle = viewInfo.querySelector(".info-title");
   const metaActions = viewInfo.querySelector(".meta-actions");
-  const removeIcon = metaActions.querySelector(".meta-remove");
-  removeIcon.removeEventListener("click", handleDelete, false);
-  removeIcon.addEventListener("click", handleDelete, false);
+
   viewInfo.querySelector(".panel-body").classList.remove("hidden");
 
   if (viewInfo.dataset.page == "patient") {
@@ -208,12 +216,6 @@ export const setCurrentRecord = (target, res) => {
 
   if (metaActions.querySelector(".meta-edit")) {
     metaActions.querySelector(".meta-edit").dataset.id = data._id;
-    metaActions
-      .querySelector(".meta-edit")
-      .removeEventListener("click", handleEdit, false);
-    metaActions
-      .querySelector(".meta-edit")
-      .addEventListener("click", handleEdit, false);
   }
   if (metaActions.querySelector(".meta-remove")) {
     metaActions.querySelector(".meta-remove").dataset.id = data._id;
@@ -225,25 +227,10 @@ export const setCurrentRecord = (target, res) => {
         metaActions.querySelector(".meta-remove").dataset.label
       );
     }
-    // delegate(document.body, ".meta-remove", "click", handleDelete, false);
   }
   if (metaActions.querySelector(".meta-print")) {
     metaActions.querySelector(".meta-print").dataset.id = data._id;
   }
 
-  function handleEdit() {
-    const viewInfo = document.querySelector(
-      '.component[data-component="view-details"]'
-    );
-    const form = viewInfo.querySelector("form.ajax");
-    // if (type != 'edit') {
-    editItem(form, target, this.dataset.id);
-    // }
-  }
-
-  function handleDelete() {
-    console.log("handleDelete event");
-    const displayLabel = this.dataset.displayLabel;
-    removeItem(target, this.dataset.id, displayLabel);
-  }
+  //
 };

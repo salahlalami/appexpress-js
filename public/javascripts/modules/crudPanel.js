@@ -77,18 +77,6 @@ export const toForm = (response, form) => {
         inpSelect.setAttribute("id", "hiddenSelect");
         inpSelect.options[0] = new Option(variable, _id);
         element.parentNode.appendChild(inpSelect);
-        // var event = new CustomEvent("setValue", {
-        //     detail: {
-        //         display: variable,
-        //         id: _id,
-        //     }
-        // });
-        // element.dispatchEvent(event);
-
-        // element.addEventListener("setValue", function(event) {
-        //     const { detail } = event;
-        //     element.value= detail.display;
-        // }, false);
       } else {
         const name = element.dataset.name || element.name;
         variable = valueByString(response.result, name);
@@ -120,10 +108,6 @@ export const editItem = (form, target, id) => {
     setCurrentRecord(target, response);
     activeTab(["edit"]);
     toForm(response, form);
-    // const infoDivs = document.querySelectorAll('.component[data-component="information"]');
-    // [].forEach.call(infoDivs, function (infoDiv) {
-    //     ajaxDataRead(infoDiv, 'ul.info', response);
-    // });
   });
 };
 
@@ -202,9 +186,7 @@ export const setCurrentRecord = (target, res) => {
   viewInfo.dataset.target = target;
   const infoTitle = viewInfo.querySelector(".info-title");
   const metaActions = viewInfo.querySelector(".meta-actions");
-  //   const removeIcon = metaActions.querySelector(".meta-remove");
-  //   removeIcon.removeEventListener("click", handleDelete, false);
-  //   removeIcon.addEventListener("click", handleDelete, false);
+
   viewInfo.querySelector(".panel-body").classList.remove("hidden");
 
   if (viewInfo.dataset.page == "patient") {
@@ -245,7 +227,6 @@ export const setCurrentRecord = (target, res) => {
         metaActions.querySelector(".meta-remove").dataset.label
       );
     }
-    // delegate(document.body, ".meta-remove", "click", handleDelete, false);
   }
   if (metaActions.querySelector(".meta-print")) {
     metaActions.querySelector(".meta-print").dataset.id = data._id;

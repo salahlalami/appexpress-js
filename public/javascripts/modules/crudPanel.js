@@ -6,7 +6,7 @@ import ajaxDataRead from "./ajaxDataRead";
 import consultationComponent from "./consultationComponent";
 import dataGrid from "./dataGrid";
 
-import { readSync, deleteSync } from "../axiosRequest";
+import { createSync, readSync, updateSync, deleteSync } from "../axiosRequest";
 
 export const initCrudPanel = (component) => {
   delegate(
@@ -26,7 +26,7 @@ export const initCrudPanel = (component) => {
     ".meta-actions .meta-edit",
     "click",
     function (e) {
-      const form = component.querySelector("form.ajax");
+      const form = document.querySelector('form.ajax[data-state="update"]');
       const target = component.dataset.target;
       editItem(form, target, e.delegateTarget.dataset.id);
     },
@@ -90,7 +90,7 @@ export const toForm = (response, form) => {
 
 export const editItem = (form, target, id) => {
   if (!form) {
-    form = document.querySelector("form.ajax");
+    form = document.querySelector('form.ajax[data-state="update"]');
   }
 
   const viewInfo = document.querySelector(
@@ -234,3 +234,102 @@ export const setCurrentRecord = (target, res) => {
 
   //
 };
+
+// convert form data to json
+export function toJson(form) {
+  let obj = {};
+
+  const elements = form.querySelectorAll("input, select, textarea");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    const name = element.name;
+    const value = element.value;
+
+    if (name && element.dataset.disabled != "true") {
+      obj[name] = value;
+    }
+  }
+  return obj;
+}
+
+export function ajaxForm(form, component) {
+  //e.preventDefault();
+  const dataTable = document.querySelector(
+    '.component[data-component="dataTable"]'
+  );
+  var element = component.querySelector(".loaderWarpper");
+  const alertSuccess = component.querySelector(".alert-success");
+  const alertError = component.querySelector(".alert-error");
+  element.classList.add("show");
+  const target = form.dataset.target || dataTable.dataset.target;
+  const state = form.dataset.state || "create";
+
+  const json = toJson(form);
+
+  //if element iput was empty convert his value to undefined
+  for (const key in json) {
+    if (json.hasOwnProperty(key)) {
+      const field = json[key];
+      if (!field || !field.trim()) {
+        json[key] = undefined;
+        delete json[key];
+      }
+    }
+  }
+  let ajaxCall = null;
+  if (state === "create") {
+    ajaxCall = createSync(target, json);
+  } else if (state === "update") {
+    const id = form.dataset.id;
+    ajaxCall = updateSync(target, id, json);
+  }
+  if (ajaxCall != null) {
+    ajaxCall.then(function (response) {
+      alertSuccess.innerHTML = response.result;
+      element.classList.remove("show");
+      // Refresh table when adding/updating an entry
+      const activePaginationButton = document.querySelector(
+        "#pagination > ul > li.active"
+      );
+      activePaginationButton
+        ? dataGrid.refresh(dataTable)
+        : dataGrid.init(dataTable, ".table", "form.ajax");
+      const formtype = form.dataset.formtype || "standard";
+      viewItem(target, response.result._id, formtype);
+    });
+  }
+}
+
+export function formSubmit(component, formName) {
+  component.querySelector("button.cancel").addEventListener(
+    "click",
+    function (e) {
+      activeTab(["read"]);
+    },
+    false
+  );
+
+  component.querySelector(".alert").addEventListener(
+    "click",
+    function (e) {
+      this.classList.remove("show");
+    },
+    false
+  );
+  component.querySelector(".loaderWarpper").addEventListener(
+    "click",
+    function (e) {
+      this.classList.remove("show");
+    },
+    false
+  );
+
+  const form = component.querySelector(formName);
+  //form.on('submit', ajaxForm)
+  // const formState = form.dataset.state;
+  // const target = form.dataset.target;
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    ajaxForm(form, component);
+  });
+}

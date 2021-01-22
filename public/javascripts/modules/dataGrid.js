@@ -82,7 +82,7 @@ let render = {
 
 const dataGrid = {
   init: function (component, tableName, panelFormName) {
-    const form = document.querySelector(panelFormName);
+    const form = document.querySelector('form.ajax[data-state="update"]');
     const table = component.querySelector(tableName);
     const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;

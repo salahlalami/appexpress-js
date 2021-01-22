@@ -22,7 +22,7 @@ import FileUpload from "./modules/fileUpload";
 import consultationComponent from "./modules/consultationComponent";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
 import patientFolder from "./modules/patientFolder";
-import { initCrudPanel } from "./modules/crudPanel";
+import { initCrudPanel, formSubmit } from "./modules/crudPanel";
 
 docReady(function () {
   // const allPages = $('#pageId');
@@ -88,7 +88,7 @@ docReady(function () {
   });
 
   [].forEach.call(ajaxForms, function (ajaxForm) {
-    ajaxFormSubmit(ajaxForm, "form.ajax");
+    formSubmit(ajaxForm, "form");
   });
 
   [].forEach.call(ajaxSelects, function (ajaxSelect) {

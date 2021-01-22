@@ -4,7 +4,7 @@ const crudController = require("./helpersControllers/crudController");
 const states = require("../utils/states");
 let methods = crudController.createCRUDController("Patient");
 delete methods["create"];
-//delete methods['update'];
+delete methods["update"];
 
 methods.create = async (req, res) => {
   try {

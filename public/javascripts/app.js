@@ -80,7 +80,7 @@ docReady(function () {
   datepicker(".datepicker");
 
   [].forEach.call(dataTables, function (dataTable) {
-    dataGrid.init(dataTable, ".table", "form.ajax");
+    dataGrid.init(dataTable);
   });
 
   [].forEach.call(viewdetails, function (viewdetail) {
@@ -88,7 +88,7 @@ docReady(function () {
   });
 
   [].forEach.call(ajaxForms, function (ajaxForm) {
-    formSubmit(ajaxForm, "form");
+    formSubmit(ajaxForm, "form.ajax");
   });
 
   [].forEach.call(ajaxSelects, function (ajaxSelect) {

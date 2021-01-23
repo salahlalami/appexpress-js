@@ -278,13 +278,17 @@ export function ajaxForm(form, component) {
   }
   let ajaxCall = null;
   if (state === "create") {
+    console.log("createSync");
     ajaxCall = createSync(target, json);
   } else if (state === "update") {
+    console.log("updateSync");
     const id = form.dataset.id;
     ajaxCall = updateSync(target, id, json);
   }
   if (ajaxCall != null) {
     ajaxCall.then(function (response) {
+      console.log(" ----------- response : " + response);
+
       alertSuccess.innerHTML = response.result;
       element.classList.remove("show");
       // Refresh table when adding/updating an entry

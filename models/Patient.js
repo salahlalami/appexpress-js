@@ -71,11 +71,6 @@ const patientSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  status: {
-    type: String,
-    default: 1,
-    required: true,
-  },
   created: {
     type: Date,
     default: Date.now,

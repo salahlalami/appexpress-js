@@ -7,7 +7,7 @@ import docReady from "./lib/docReady";
 import moreOption from "./modules/moreOption";
 import modal from "./modules/modal";
 import inputFunction from "./modules/inputFunction";
-import ajaxFormSubmit from "./modules/ajaxFormSubmit";
+// import ajaxFormSubmit from "./modules/ajaxFormSubmit";
 import dataGrid from "./modules/dataGrid";
 import ajaxSelectInput from "./modules/ajaxSelectInput";
 import ajaxAutocomplete from "./modules/ajaxAutocomplete";

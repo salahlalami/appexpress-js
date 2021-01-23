@@ -104,7 +104,7 @@ exports.searchSync = (target, option = null) => {
     if (option.fields) {
       fields = "fields=" + option.fields;
     }
-    if (option.q) {
+    if (option.question) {
       question = "&q=" + option.question;
     }
     query = `?${fields}${question}`;

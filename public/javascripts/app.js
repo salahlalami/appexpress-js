@@ -11,7 +11,7 @@ import inputFunction from "./modules/inputFunction";
 import dataGrid from "./modules/dataGrid";
 import ajaxSelectInput from "./modules/ajaxSelectInput";
 import ajaxAutocomplete from "./modules/ajaxAutocomplete";
-import searchItem from "./modules/searchItem";
+// import searchItem from "./modules/searchItem";
 import tabPanel from "./modules/tabPanel";
 import navApp from "./modules/navApp";
 import initSubMenuDrawer from "./modules/subMenuDrawer";
@@ -22,7 +22,7 @@ import FileUpload from "./modules/fileUpload";
 import consultationComponent from "./modules/consultationComponent";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
 import patientFolder from "./modules/patientFolder";
-import { initCrudPanel, formSubmit } from "./modules/crudPanel";
+import { initCrudPanel, formSubmit, searchItem } from "./modules/crudPanel";
 
 docReady(function () {
   // const allPages = $('#pageId');
@@ -96,7 +96,7 @@ docReady(function () {
   });
 
   [].forEach.call(ajaxSearchs, function (ajaxSearch) {
-    ajaxAutocomplete(ajaxSearch, ".searchAjax");
+    searchItem(ajaxSearch, ".searchAjax");
   });
 
   [].forEach.call(searchLists, function (searchList) {

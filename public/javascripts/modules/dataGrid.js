@@ -89,9 +89,6 @@ const dataGrid = {
     const table = component.querySelector(".table");
     const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;
-    const searchInput = document.querySelector(
-      '.component[data-component="search-input"]'
-    );
 
     const target = table.dataset.target;
     console.log("target : " + target);
@@ -176,19 +173,6 @@ const dataGrid = {
       },
       false
     );
-    if (searchInput) {
-      searchInput.addEventListener(
-        "select",
-        function (event) {
-          // const url = searchInput.dataset.read;
-          const { detail } = event;
-          viewItem(target, detail.id, viewType);
-        },
-        false
-      );
-    } else {
-      console.error(`cant find .component[data-component="search-input"]`);
-    }
   },
 
   refresh: function (component) {

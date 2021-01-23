@@ -1,9 +1,9 @@
 
-mixin searchForm(search={}, modelName={},displayName="name|surname", read)
+mixin searchForm(target={},fieldsSearch={},displayFields="name")
 
     .col-21.alpha.component(data-component="ajaxSearch" data-error-message="No search result found")   
         .autocomplete
-            input(type="text" data-component="search-input" class="component searchAjax search-input" name=modelName data-disabled="true" data-name=modelName data-read=read data-ajax=search autocomplete="off" placeholder="Rechercher" data-label=displayName data-change="true")    
+            input(type="text" data-component="search-input" class="component searchAjax search-input" name=target  data-name=target data-target=target data-fields=fieldsSearch autocomplete="off" placeholder="Rechercher" data-label=displayFields data-change="true" data-disabled="true")    
             
     .col-3.alpha.omega    
         .add-click()!= h.icon('plus-circle')  

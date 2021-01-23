@@ -8,20 +8,17 @@ include components/_infoHeader
 
 block panelHeader
     - const target = 'patient'
-    - const get = '/api/patient/get/'
-    - const read = '/api/patient/read/'
-    - const remove ='/api/patient/delete/'
-    - const searchAction = '/api/patient/search?q='
-    - const titleColumn = 'name|surname|birthday'
+    - const fields = 'name,surname,birthday'
+    - const displayFields = 'name|surname|birthday'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, 'patient', titleColumn, read)
+        +searchForm(target,fields,displayFields)
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="patient")
         .panel-body.hidden
-            +infoHeader(read, remove, "Patient: ", "name|surname", true)
+            +infoHeader("Patient: ", "name|surname", false)
             +patientInformation(target,"update")
 
 

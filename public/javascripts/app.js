@@ -7,7 +7,7 @@ import docReady from "./lib/docReady";
 import moreOption from "./modules/moreOption";
 import modal from "./modules/modal";
 import inputFunction from "./modules/inputFunction";
-import ajaxFormSubmit from "./modules/ajaxFormSubmit";
+// import ajaxFormSubmit from "./modules/ajaxFormSubmit";
 import dataGrid from "./modules/dataGrid";
 import ajaxSelectInput from "./modules/ajaxSelectInput";
 import ajaxAutocomplete from "./modules/ajaxAutocomplete";
@@ -22,7 +22,7 @@ import FileUpload from "./modules/fileUpload";
 import consultationComponent from "./modules/consultationComponent";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
 import patientFolder from "./modules/patientFolder";
-import { initCrudPanel } from "./modules/crudPanel";
+import { initCrudPanel, formSubmit } from "./modules/crudPanel";
 
 docReady(function () {
   // const allPages = $('#pageId');
@@ -80,7 +80,7 @@ docReady(function () {
   datepicker(".datepicker");
 
   [].forEach.call(dataTables, function (dataTable) {
-    dataGrid.init(dataTable, ".table", "form.ajax");
+    dataGrid.init(dataTable);
   });
 
   [].forEach.call(viewdetails, function (viewdetail) {
@@ -88,7 +88,7 @@ docReady(function () {
   });
 
   [].forEach.call(ajaxForms, function (ajaxForm) {
-    ajaxFormSubmit(ajaxForm, "form.ajax");
+    formSubmit(ajaxForm, "form.ajax");
   });
 
   [].forEach.call(ajaxSelects, function (ajaxSelect) {

@@ -28,7 +28,7 @@ export const initCrudPanel = (component) => {
     function (e) {
       const form = document.querySelector('form.ajax[data-state="update"]');
       const target = component.dataset.target;
-      editItem(form, target, e.delegateTarget.dataset.json);
+      editItem(form, target, e.delegateTarget.dataset.id);
     },
     false
   );
@@ -88,7 +88,7 @@ export const toForm = (response, form) => {
   }
 };
 
-export const editItem = (form, target, json) => {
+export const editItem = (form, target, id) => {
   if (!form) {
     form = document.querySelector('form.ajax[data-state="update"]');
   }
@@ -99,45 +99,45 @@ export const editItem = (form, target, json) => {
   if (viewInfo) {
     viewInfo.querySelector(".panel-body").classList.remove("hidden");
   }
-  const data = JSON.parse(json);
-  form.dataset.id = data._id;
+
+  form.dataset.id = id;
   form.dataset.target = target;
   form.dataset.state = "update";
-  // const result = readSync(target, json._id);
-  console.log(json);
-  const objResult = JSON.parse(json);
-  const response = { result: objResult };
-  setCurrentRecord(target, response);
-  activeTab(["edit"]);
-  toForm(response, form);
+  const result = readSync(target, id);
+  result.then(function (response) {
+    setCurrentRecord(target, response);
+    activeTab(["edit"]);
+    toForm(response, form);
+  });
 };
 
-export const viewItem = (target, json, viewType = ["standard"]) => {
+export const viewItem = (target, id, viewType = ["standard"]) => {
   console.log(viewType);
-  // const result = readSync(target, id);
-  const objResult = JSON.parse(json);
-  const response = { result: objResult };
-  setCurrentRecord(target, response);
-  activeTab(["read"]);
-  // toForm(response);
+  const result = readSync(target, id);
+  return result.then(function (response) {
+    setCurrentRecord(target, response);
+    activeTab(["read"]);
+    // toForm(response);
 
-  if (viewType.includes("consultation")) {
-    const infoDivs = document.querySelectorAll(
-      '.component[data-component="consultationInfo"]'
-    );
-    [].forEach.call(infoDivs, function (infoDiv) {
-      console.log("viewType consultation");
-      consultationComponent.info(infoDiv, response);
-    });
-  } else {
-    const infoDivs = document.querySelectorAll(
-      '.component[data-component="information"]'
-    );
-    [].forEach.call(infoDivs, function (infoDiv) {
-      console.log("viewType standard");
-      ajaxDataRead(infoDiv, "ul.info", response);
-    });
-  }
+    if (viewType.includes("consultation")) {
+      const infoDivs = document.querySelectorAll(
+        '.component[data-component="consultationInfo"]'
+      );
+      [].forEach.call(infoDivs, function (infoDiv) {
+        console.log("viewType consultation");
+        consultationComponent.info(infoDiv, response);
+      });
+    } else {
+      const infoDivs = document.querySelectorAll(
+        '.component[data-component="information"]'
+      );
+      [].forEach.call(infoDivs, function (infoDiv) {
+        console.log("viewType standard");
+        ajaxDataRead(infoDiv, "ul.info", response);
+      });
+    }
+    return response;
+  });
 };
 
 export const removeItem = (target, id, displaylabel) => {
@@ -216,7 +216,6 @@ export const setCurrentRecord = (target, res) => {
 
   if (metaActions.querySelector(".meta-edit")) {
     metaActions.querySelector(".meta-edit").dataset.id = data._id;
-    metaActions.querySelector(".meta-edit").dataset.json = JSON.stringify(data);
   }
   if (metaActions.querySelector(".meta-remove")) {
     metaActions.querySelector(".meta-remove").dataset.id = data._id;
@@ -260,7 +259,7 @@ export function ajaxForm(form, component) {
   );
   var element = component.querySelector(".loaderWarpper");
   const alertSuccess = component.querySelector(".alert-success");
-  // const alertError = component.querySelector(".alert-error");
+  const alertError = component.querySelector(".alert-error");
   element.classList.add("show");
   const target = form.dataset.target || dataTable.dataset.target;
   const state = form.dataset.state || "create";
@@ -300,39 +299,36 @@ export function ajaxForm(form, component) {
         ? dataGrid.refresh(dataTable)
         : dataGrid.init(dataTable, ".table", "form.ajax");
       const formtype = form.dataset.formtype || "standard";
-      const json = JSON.stringify(response.result);
-      viewItem(target, json, formtype);
-      form.reset();
+      viewItem(target, response.result._id, formtype);
     });
   }
 }
 
 export function formSubmit(component, formName) {
-  const form = component.querySelector(formName);
   component.querySelector("button.cancel").addEventListener(
     "click",
-    function () {
+    function (e) {
       activeTab(["read"]);
-      form.reset();
     },
     false
   );
 
   component.querySelector(".alert").addEventListener(
     "click",
-    function () {
+    function (e) {
       this.classList.remove("show");
     },
     false
   );
   component.querySelector(".loaderWarpper").addEventListener(
     "click",
-    function () {
+    function (e) {
       this.classList.remove("show");
     },
     false
   );
 
+  const form = component.querySelector(formName);
   //form.on('submit', ajaxForm)
   // const formState = form.dataset.state;
   // const target = form.dataset.target;

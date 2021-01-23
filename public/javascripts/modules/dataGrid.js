@@ -20,6 +20,7 @@ let render = {
     for (const data of datas) {
       let listItem = document.createElement("li");
       listItem.dataset.id = data._id;
+      listItem.dataset.json = JSON.stringify(data);
       const orgMoreOption = table.querySelector(".moreOption");
       let moreOption = orgMoreOption.cloneNode(true);
       moreOption.querySelector("li.remove").dataset.id = data._id;
@@ -30,7 +31,9 @@ let render = {
         moreOption.querySelector("li.remove").dataset.label || ""
       );
       moreOption.querySelector("li.edit").dataset.id = data._id;
+      moreOption.querySelector("li.edit").dataset.json = JSON.stringify(data);
       moreOption.querySelector("li.read").dataset.id = data._id;
+      moreOption.querySelector("li.read").dataset.json = JSON.stringify(data);
 
       for (let i = 0; i < col.length; ++i) {
         const variable = valueByString(data, col[i]);
@@ -81,9 +84,9 @@ let render = {
 };
 
 const dataGrid = {
-  init: function (component, tableName, panelFormName) {
-    const form = document.querySelector(panelFormName);
-    const table = component.querySelector(tableName);
+  init: function (component) {
+    const form = document.querySelector('form.ajax[data-state="update"]');
+    const table = component.querySelector(".table");
     const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;
     const searchInput = document.querySelector(
@@ -104,7 +107,7 @@ const dataGrid = {
       ".tableBody li .moreOption .edit",
       "click",
       function (e) {
-        editItem(form, target, e.delegateTarget.dataset.id);
+        editItem(form, target, e.delegateTarget.dataset.json);
       },
       false
     );
@@ -114,7 +117,7 @@ const dataGrid = {
       ".tableBody li .moreOption .read",
       "click",
       function (e) {
-        viewItem(target, e.delegateTarget.dataset.id, viewType);
+        viewItem(target, e.delegateTarget.dataset.json, viewType);
       },
       false
     );

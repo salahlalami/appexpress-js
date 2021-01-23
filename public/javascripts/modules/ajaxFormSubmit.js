@@ -2,6 +2,7 @@ import axios from "axios";
 import activeTab from "./activeTab";
 import { viewItem } from "./crudPanel";
 import dataGrid from "./dataGrid";
+import { createSync, updateSync } from "../axiosRequest";
 // convert form data to json
 function toJson(form) {
   let obj = {};
@@ -28,6 +29,8 @@ function ajaxForm(form, component) {
   const alertSuccess = component.querySelector(".alert-success");
   const alertError = component.querySelector(".alert-error");
   element.classList.add("show");
+  const target = form.dataset.target || dataTable.dataset.target;
+  const state = form.dataset.state || "create";
 
   const json = toJson(form);
 
@@ -41,11 +44,16 @@ function ajaxForm(form, component) {
       }
     }
   }
-
-  axios
-    .post(form.action, json)
-    .then((res) => {
-      alertSuccess.innerHTML = res.data;
+  let ajaxCall = null;
+  if (state === "create") {
+    ajaxCall = createSync(target, json);
+  } else if (state === "update") {
+    const id = form.dataset.id;
+    ajaxCall = updateSync(target, id);
+  }
+  if (ajaxCall != null) {
+    ajaxCall.then(function (response) {
+      alertSuccess.innerHTML = response.result;
       element.classList.remove("show");
       // Refresh table when adding/updating an entry
       const activePaginationButton = document.querySelector(
@@ -56,21 +64,9 @@ function ajaxForm(form, component) {
         : dataGrid.init(dataTable, ".table", "form.ajax");
       const formtype = form.dataset.formtype || "standard";
       const target = form.dataset.target;
-      viewItem(target, res.data.data._id, formtype);
-
-      setTimeout(function () {
-        // alertSuccess.classList.add("show");
-        // Show updated or new data
-        // we have option to show res data , but since we didnt populate data after save , we call api again
-      }, 200);
-    })
-    .catch((error) => {
-      console.log(error);
-      alertError.classList.add("show");
-      setTimeout(function () {
-        element.classList.remove("show");
-      }, 1000);
+      viewItem(target, response.result._id, formtype);
     });
+  }
 }
 
 function ajaxFormSubmit(component, formName) {

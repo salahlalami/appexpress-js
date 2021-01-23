@@ -22,12 +22,11 @@ block panelBody
     .panelContent.component(data-component="view-details" data-page="patient")
         .panel-body.hidden
             +infoHeader(read, remove, "Patient: ", "name|surname", true)
-            +patientInformation(listInfo)
+            +patientInformation(target,"update")
 
 
 
-block panelFooter    
-    - const actionForm = '/api/patient/'                
+block panelFooter                   
     .component(data-component="accordionForm")
         .accordionForm
             .accordionFormHeader 
@@ -37,7 +36,7 @@ block panelFooter
                     != h.icon('arrow-right')
             .whiteBg
             .box
-                +patientForm(actionForm)                                    
+                +patientForm(target,"create")                                    
 
 block content
     .model.modelSmall

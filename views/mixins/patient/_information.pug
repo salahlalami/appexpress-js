@@ -5,7 +5,7 @@ include ../list/analysesList
 include ../list/RDVList
 
 
-mixin patientInformation(listInfos={})
+mixin patientInformation(target={},formState={})
     - const actionForm = '/api/patient/'
     .component(data-component="tabContent")
         #tabs1.tab-contents.no-js
@@ -26,7 +26,7 @@ mixin patientInformation(listInfos={})
                         - const listInfo = [{key:'patientId',text:'Patient ID'},{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'birthday',text:'Date de Naissance'},{key:'birthplace',text:'lieu de naissance'},{key:'sexe',text:'Sexe'},{key:'boldType',text:'Goupe Sangain'},   {key:'size',text:'Taille'},{key:'weight',text:'Poids'},{key:'address',text:'adresse'},{key:'state',text:'Ville'},{key:'job',text:'Profession'},{key:'urgentContact',text:'Personne ECU'},{key:'tel',text:'Tel'},{key:'email',text:'Email'}]
                         +information(listInfo)
                     .edit.hidden
-                        +patientForm(actionForm)
+                        +patientForm(target,formState)
                 .tab-content
                     //- RDV Tab
                     .tab-container

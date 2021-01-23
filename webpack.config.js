@@ -6,7 +6,7 @@ const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const autoprefixer = require("autoprefixer");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+// const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCSSAssets = require("optimize-css-assets-webpack-plugin");
 require("babel-polyfill");
 
@@ -54,10 +54,10 @@ const styles = {
 };
 
 // We can also use plugins - this one will compress the crap out of our JS
-const uglify = new webpack.optimize.UglifyJsPlugin({
-  // eslint-disable-line
-  compress: { warnings: false },
-});
+// const uglify = new webpack.optimize.UglifyJsPlugin({
+//   // eslint-disable-line
+//   compress: { warnings: false },
+// });
 
 module.exports = {};
 // OK - now it's time to put it all together

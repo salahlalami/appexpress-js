@@ -38,7 +38,7 @@ block panelFooter
 block content
     .model.modelSmall
         - const col = ['name','surname','sexe','birthday','tel']  
-        - const items = 20
+        - const items = 10
         - const lists = ['Nom','Prenom','Sexe','Date de Naissance','Telephone']
         +dataTable(target,lists,col,items, "Liste des patients", "name|surname")
 

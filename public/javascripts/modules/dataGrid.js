@@ -13,12 +13,12 @@ let render = {
     const datas = response.result;
     const paginationData = response.pagination;
 
-    table.querySelector("ul.tableBody").innerHTML = "";
+    table.querySelector("tbody.tableBody").innerHTML = "";
     table.querySelector("#pagination .prev").dataset.page = "";
     table.querySelector("#pagination .next").dataset.page = "";
 
     for (const data of datas) {
-      let listItem = document.createElement("li");
+      let listItem = document.createElement("tr");
       listItem.dataset.id = data._id;
       listItem.dataset.json = JSON.stringify(data);
       const orgMoreOption = table.querySelector(".moreOption");
@@ -39,12 +39,14 @@ let render = {
         const variable = valueByString(data, col[i]);
 
         listItem.appendChild(
-          document.createElement("p")
+          document.createElement("td")
         ).textContent = variable;
       }
-      listItem.appendChild(moreOption).classList.remove("hidden");
+      const tdElement = document.createElement("td");
+      tdElement.appendChild(moreOption).classList.remove("hidden");
+      listItem.appendChild(tdElement);
 
-      table.querySelector("ul.tableBody").appendChild(listItem);
+      table.querySelector("tbody.tableBody").appendChild(listItem);
     }
     let prev = "";
     if (paginationData.page > 1) {
@@ -89,19 +91,27 @@ const dataGrid = {
     const table = component.querySelector(".table");
     const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;
-
+    let items = table.dataset.items || null;
+    const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
     console.log("target : " + target);
-    const result = listSync(target);
-
+    const result = listSync(target, { items });
     result.then(function (response) {
       render.grid(response, table, col);
       render.pagination(response, table);
     });
+    selectItems.addEventListener("change", function () {
+      items = this.value;
+      const result = listSync(target, { items });
+      result.then(function (response) {
+        render.grid(response, table, col);
+        render.pagination(response, table);
+      });
+    });
 
     delegate(
       document.body,
-      ".tableBody li .moreOption .edit",
+      ".tableBody tr .moreOption .edit",
       "click",
       function (e) {
         editItem(form, target, e.delegateTarget.dataset.json);
@@ -111,7 +121,7 @@ const dataGrid = {
 
     delegate(
       document.body,
-      ".tableBody li .moreOption .read",
+      ".tableBody tr .moreOption .read",
       "click",
       function (e) {
         viewItem(target, e.delegateTarget.dataset.json, viewType);
@@ -121,7 +131,7 @@ const dataGrid = {
 
     delegate(
       document.body,
-      ".tableBody li .moreOption .remove",
+      ".tableBody tr .moreOption .remove",
       "click",
       function (e) {
         console.log("delegate .remove");

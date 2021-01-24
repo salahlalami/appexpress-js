@@ -12,6 +12,7 @@ import {
   updateSync,
   deleteSync,
   searchSync,
+  axiosRequest,
 } from "../axiosRequest";
 
 export const initCrudPanel = (component) => {
@@ -371,11 +372,16 @@ export function searchItem(component, inputName) {
   the text field element and an array of possible autocompleted values:*/
   const inp = component.querySelector(inputName);
   const target = inp.dataset.target;
+  let source = null;
   var currentFocus;
 
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function (e) {
     removeHiddenSelect();
+    if (source) {
+      source.cancel("'Operation canceled by the user.'");
+    }
+    source = axiosRequest();
 
     let that = this;
     var a,
@@ -402,13 +408,12 @@ export function searchItem(component, inputName) {
     this.parentNode.appendChild(a);
     /*for each item in the array...*/
 
-    const actionClic = this.dataset.ajax + this.value;
     let question = this.value || null;
     let fields = this.dataset.fields || null;
     console.log("question : " + question);
     console.log("fields : " + fields);
 
-    const ajaxCall = searchSync(target, { fields, question });
+    const ajaxCall = searchSync(target, { fields, question }, source);
     ajaxCall.then(function (response) {
       let list = new Array(response.result.length);
       let listID = new Array(response.result.length);

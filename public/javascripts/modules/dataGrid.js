@@ -9,7 +9,6 @@ import { valueByString } from "../helper";
 
 let render = {
   grid: function (response = {}, table, col) {
-    console.log(response);
     const datas = response.result;
     const paginationData = response.pagination;
 
@@ -94,16 +93,22 @@ const dataGrid = {
     let items = table.dataset.items || null;
     const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
-    console.log("target : " + target);
-    const result = listSync(target, { items });
-    result.then(function (response) {
+
+    const ajaxCall = listSync(target, { items });
+    ajaxCall.then(function (response) {
+      if (response === undefined) {
+        return;
+      }
       render.grid(response, table, col);
       render.pagination(response, table);
     });
     selectItems.addEventListener("change", function () {
       items = this.value;
-      const result = listSync(target, { items });
-      result.then(function (response) {
+      const ajaxCall = listSync(target, { items });
+      ajaxCall.then(function (response) {
+        if (response === undefined) {
+          return;
+        }
         render.grid(response, table, col);
         render.pagination(response, table);
       });
@@ -134,7 +139,6 @@ const dataGrid = {
       ".tableBody tr .moreOption .remove",
       "click",
       function (e) {
-        console.log("delegate .remove");
         const displayLabel = e.delegateTarget.dataset.displayLabel;
         removeItem(target, e.delegateTarget.dataset.id, displayLabel);
       },
@@ -149,6 +153,9 @@ const dataGrid = {
         const pageNumber = e.delegateTarget.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
+          if (response === undefined) {
+            return;
+          }
           render.grid(response, table, col);
           render.activePagination(response.pagination.page);
         });
@@ -159,10 +166,12 @@ const dataGrid = {
     table.querySelector("#pagination .next").addEventListener(
       "click",
       function () {
-        console.log("#pagination .next");
         const pageNumber = this.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
+          if (response === undefined) {
+            return;
+          }
           render.grid(response, table, col);
           render.activePagination(response.pagination.page);
         });
@@ -173,10 +182,12 @@ const dataGrid = {
     table.querySelector("#pagination .prev").addEventListener(
       "click",
       function () {
-        console.log("#pagination .prev");
         const pageNumber = this.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
+          if (response === undefined) {
+            return;
+          }
           render.grid(response, table, col);
           render.activePagination(response.pagination.page);
         });
@@ -196,6 +207,9 @@ const dataGrid = {
         page: currentActivePage.dataset.page,
       });
       result.then(function (response) {
+        if (response === undefined) {
+          return;
+        }
         render.grid(response, table, col);
         render.pagination(response, table);
         render.activePagination(response.pagination.page);

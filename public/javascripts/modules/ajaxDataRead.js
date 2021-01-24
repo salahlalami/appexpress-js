@@ -1,13 +1,12 @@
 import { valueByString } from "../helper";
 
-function ajaxDataRead(component, divResultName, res) {
+function ajaxDataRead(component, divResultName, response) {
   const divResult = component.querySelector(divResultName);
   const list = divResult.dataset.listinfos;
   divResult.innerHTML = "";
-  console.log(res);
-  const data = res.result;
+
+  const data = response.result;
   const obj = JSON.parse(list);
-  console.log(res);
 
   for (let i = 0; i < obj.length; ++i) {
     let listItem = document.createElement("li");

@@ -126,11 +126,7 @@ export const searchSync = (target, option = null, source) => {
       return response.data;
     })
     .catch(function (thrown) {
-      if (axios.isCancel(thrown)) {
-        console.log("Request canceled", thrown.message);
-      } else {
-        return thrown.response;
-      }
+      return thrown.response;
     })
     .finally(function () {});
 
@@ -149,7 +145,6 @@ export const listSync = (target, option = null) => {
     }
     query = `?${page}${items}`;
   }
-  console.log("query : " + query);
 
   const result = axios
     .get(baseUrl + target + "/list" + query)

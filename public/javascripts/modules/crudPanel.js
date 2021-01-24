@@ -52,6 +52,9 @@ export const initCrudPanel = (component) => {
         const form = document.querySelector('form.ajax[data-state="update"]');
         const viewType = form.dataset.viewType;
         const { detail } = event;
+        if (detail === undefined) {
+          return;
+        }
         viewItem(target, detail.json, viewType);
       },
       false
@@ -129,7 +132,7 @@ export const editItem = (form, target, json) => {
   form.dataset.target = target;
   form.dataset.state = "update";
   // const result = readSync(target, json._id);
-  console.log(json);
+
   const objResult = JSON.parse(json);
   const response = { result: objResult };
   setCurrentRecord(target, response);
@@ -138,7 +141,6 @@ export const editItem = (form, target, json) => {
 };
 
 export const viewItem = (target, json, viewType = ["standard"]) => {
-  console.log(viewType);
   // const result = readSync(target, id);
   const objResult = JSON.parse(json);
   const response = { result: objResult };
@@ -151,7 +153,6 @@ export const viewItem = (target, json, viewType = ["standard"]) => {
       '.component[data-component="consultationInfo"]'
     );
     [].forEach.call(infoDivs, function (infoDiv) {
-      console.log("viewType consultation");
       consultationComponent.info(infoDiv, response);
     });
   } else {
@@ -159,7 +160,6 @@ export const viewItem = (target, json, viewType = ["standard"]) => {
       '.component[data-component="information"]'
     );
     [].forEach.call(infoDivs, function (infoDiv) {
-      console.log("viewType standard");
       ajaxDataRead(infoDiv, "ul.info", response);
     });
   }
@@ -224,7 +224,6 @@ export const setCurrentRecord = (target, res) => {
       /////// >>>>>> remove event and make it without event
       if (itemList) {
         el.addEventListener("click", function () {
-          console.log("event added to tabs");
           const url = itemList.dataset.get + "/" + data._id;
           itemList.dataset.getUrl = url;
         });
@@ -304,16 +303,17 @@ export function ajaxForm(form, component) {
   }
   let ajaxCall = null;
   if (state === "create") {
-    console.log("createSync");
     ajaxCall = createSync(target, json);
   } else if (state === "update") {
-    console.log("updateSync");
     const id = form.dataset.id;
     ajaxCall = updateSync(target, id, json);
   }
   if (ajaxCall != null) {
     ajaxCall.then(function (response) {
-      console.log(" ----------- response : " + response);
+      console.log("result success : " + response);
+      if (response === undefined || response.success === false) {
+        return;
+      }
 
       alertSuccess.innerHTML = response.result;
       element.classList.remove("show");
@@ -379,7 +379,7 @@ export function searchItem(component, inputName) {
   inp.addEventListener("input", function (e) {
     removeHiddenSelect();
     if (source) {
-      source.cancel("'Operation canceled by the user.'");
+      source.cancel();
     }
     source = axiosRequest();
 
@@ -410,11 +410,12 @@ export function searchItem(component, inputName) {
 
     let question = this.value || null;
     let fields = this.dataset.fields || null;
-    console.log("question : " + question);
-    console.log("fields : " + fields);
 
     const ajaxCall = searchSync(target, { fields, question }, source);
     ajaxCall.then(function (response) {
+      if (response === undefined) {
+        return;
+      }
       let list = new Array(response.result.length);
       let listID = new Array(response.result.length);
       if (response.result.length) {
@@ -487,7 +488,7 @@ export function searchItem(component, inputName) {
 
   function removeHiddenSelect() {
     let rmvElement = document.querySelectorAll("#hiddenSelect");
-    console.log(rmvElement);
+
     if (rmvElement.length != 0) {
       rmvElement[0].parentNode.removeChild(rmvElement[0]);
     }

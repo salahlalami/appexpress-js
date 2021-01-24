@@ -7,11 +7,9 @@ import docReady from "./lib/docReady";
 import moreOption from "./modules/moreOption";
 import modal from "./modules/modal";
 import inputFunction from "./modules/inputFunction";
-// import ajaxFormSubmit from "./modules/ajaxFormSubmit";
 import dataGrid from "./modules/dataGrid";
 import ajaxSelectInput from "./modules/ajaxSelectInput";
-import ajaxAutocomplete from "./modules/ajaxAutocomplete";
-// import searchItem from "./modules/searchItem";
+import searchList from "./modules/searchList";
 import tabPanel from "./modules/tabPanel";
 import navApp from "./modules/navApp";
 import initSubMenuDrawer from "./modules/subMenuDrawer";
@@ -100,7 +98,7 @@ docReady(function () {
   });
 
   [].forEach.call(searchLists, function (searchList) {
-    searchItem(searchList, ".searchAjax");
+    searchList(searchList, ".searchAjax");
   });
 
   [].forEach.call(navigations, function (navigation) {

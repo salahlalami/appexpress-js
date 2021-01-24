@@ -1,20 +1,28 @@
 import ajaxGetData from "./ajaxGetData";
 import { valueByString } from "../helper";
 
-function ajaxAutocomplete(component, inputName) {
+function searchList(component, inputName) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
   const inp = component.querySelector(inputName);
   var currentFocus;
 
+  inp.addEventListener("setValue", function ({ detail }) {
+    let inpSelect = document.createElement("SELECT");
+    inpSelect.name = this.dataset.name;
+    inpSelect.hidden = true;
+    inpSelect.setAttribute("id", "hiddenSelect");
+    inpSelect.options[0] = new Option(detail.display, detail.id);
+    console.log(detail);
+    inp.parentNode.appendChild(inpSelect);
+  });
   /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function (e) {
+  inp.addEventListener("input", function () {
     removeHiddenSelect();
 
     let that = this;
     var a,
       b,
-      i,
       val = this.value;
     let inpSelect = document.createElement("SELECT");
     inpSelect.name = this.dataset.name;
@@ -41,14 +49,18 @@ function ajaxAutocomplete(component, inputName) {
     result.then(function (res) {
       let list = new Array(res.data.length);
       let listID = new Array(res.data.length);
-      if (res.data.length) {
+
+      let arr = list;
+      if (arr.length > 0) {
         for (let i = 0; i < res.data.length; i++) {
           const data = res.data[i];
           var displayLabel = "";
           if (that.dataset.label) {
             displayLabel = valueByString(res.data[i], that.dataset.label);
+          } else if (res.data[i].name) {
+            displayLabel = res.data[i].name;
           } else {
-            displayLabel = res.data[i];
+            displayLabel = res.data[i].toString();
           }
           listID[i] = data[output];
 
@@ -65,7 +77,7 @@ function ajaxAutocomplete(component, inputName) {
             "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
 
-          b.addEventListener("click", function (e) {
+          b.addEventListener("click", function () {
             /*insert the value for the autocomplete text field:*/
             inp.value = this.getElementsByTagName("input")[0].value;
             inp.dataset.value = this.getElementsByTagName(
@@ -113,6 +125,7 @@ function ajaxAutocomplete(component, inputName) {
       rmvElement[0].parentNode.removeChild(rmvElement[0]);
     }
   }
+
   /*execute a function presses a key on the keyboard:*/
   inp.addEventListener("keydown", function (e) {
     var x = document.getElementById(this.id + "autocomplete-list");
@@ -179,4 +192,4 @@ function ajaxAutocomplete(component, inputName) {
   });
 }
 
-export default ajaxAutocomplete;
+export default searchList;

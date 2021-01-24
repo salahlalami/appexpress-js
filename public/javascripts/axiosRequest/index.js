@@ -1,7 +1,7 @@
 import axios from "axios";
 import { baseUrl } from "./config";
 
-exports.createSync = (target, jsonData) => {
+export const createSync = (target, jsonData) => {
   const result = axios
     .post(baseUrl + target + "/create", jsonData)
     .then((response) => {
@@ -17,7 +17,7 @@ exports.createSync = (target, jsonData) => {
 
   return result;
 };
-exports.readSync = (target, id) => {
+export const readSync = (target, id) => {
   const result = axios
     .get(baseUrl + target + "/read/" + id)
     .then((response) => {
@@ -33,7 +33,7 @@ exports.readSync = (target, id) => {
 
   return result;
 };
-exports.updateSync = (target, id, jsonData) => {
+export const updateSync = (target, id, jsonData) => {
   const result = axios
     .patch(baseUrl + target + "/update/" + id, jsonData)
     .then((response) => {
@@ -50,7 +50,7 @@ exports.updateSync = (target, id, jsonData) => {
   return result;
 };
 
-exports.deleteSync = (target, id) => {
+export const deleteSync = (target, id) => {
   const result = axios
     .delete(baseUrl + target + "/delete/" + id)
     .then((response) => {
@@ -67,7 +67,7 @@ exports.deleteSync = (target, id) => {
   return result;
 };
 
-exports.filterSync = (target, option = null) => {
+export const filterSync = (target, option = null) => {
   let query = "";
   if (option != null) {
     let filter = "";
@@ -96,7 +96,13 @@ exports.filterSync = (target, option = null) => {
 
   return result;
 };
-exports.searchSync = (target, option = null) => {
+
+export const axiosRequest = () => {
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+  return source;
+};
+export const searchSync = (target, option = null, source) => {
   let query = "";
   if (option != null) {
     let fields = "";
@@ -111,21 +117,26 @@ exports.searchSync = (target, option = null) => {
   }
 
   const result = axios
-    .get(baseUrl + target + "/search" + query)
+    .get(baseUrl + target + "/search" + query, {
+      cancelToken: source.token,
+    })
     .then((response) => {
       // returning the data here allows the caller to get it through another .then(...)
       //console.log(response.data);
       return response.data;
     })
-    .catch(function (error) {
-      // handle error
-      return error.response;
+    .catch(function (thrown) {
+      if (axios.isCancel(thrown)) {
+        console.log("Request canceled", thrown.message);
+      } else {
+        return thrown.response;
+      }
     })
     .finally(function () {});
 
   return result;
 };
-exports.listSync = (target, option = null) => {
+export const listSync = (target, option = null) => {
   let query = "";
   if (option != null) {
     let page = "";
@@ -156,7 +167,7 @@ exports.listSync = (target, option = null) => {
   return result;
 };
 
-exports.postDataSync = (targetUrl, jsonData) => {
+export const postDataSync = (targetUrl, jsonData) => {
   const result = axios
     .post(baseUrl + targetUrl, jsonData)
     .then((response) => {
@@ -172,7 +183,7 @@ exports.postDataSync = (targetUrl, jsonData) => {
 
   return result;
 };
-exports.getDataSync = (targetUrl) => {
+export const getDataSync = (targetUrl) => {
   const result = axios
     .get(baseUrl + targetUrl)
     .then((response) => {

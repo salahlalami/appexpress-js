@@ -91,14 +91,22 @@ const dataGrid = {
     const table = component.querySelector(".table");
     const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;
-
+    let items = table.dataset.items || null;
+    const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
     console.log("target : " + target);
-    const result = listSync(target);
-
+    const result = listSync(target, { items });
     result.then(function (response) {
       render.grid(response, table, col);
       render.pagination(response, table);
+    });
+    selectItems.addEventListener("change", function () {
+      items = this.value;
+      const result = listSync(target, { items });
+      result.then(function (response) {
+        render.grid(response, table, col);
+        render.pagination(response, table);
+      });
     });
 
     delegate(

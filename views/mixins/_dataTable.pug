@@ -1,4 +1,4 @@
-mixin dataTable(target={},lists={},tableCol={} ,items={}, title="", row_title="",viewType="standard")
+mixin dataTable(target={},lists={},tableCol={} ,items="10", title="", row_title="",viewType="standard")
     .component(data-component="dataTable")
         .table(data-target=target data-col=tableCol data-items=items data-viewtype=viewType)
             .moreOption.hidden
@@ -22,7 +22,7 @@ mixin dataTable(target={},lists={},tableCol={} ,items={}, title="", row_title=""
                     .tableTitle=title
                     .meta-table-actions
                         span.action-item 
-                            select(name='birthplace' class="dd-per-page")
+                            select(name='itemsPerPage' class="itemsPerPage")
                                 option(value=10) 10 par page
                                 option(value=20) 20 par page
                                 option(value=30) 30 par page

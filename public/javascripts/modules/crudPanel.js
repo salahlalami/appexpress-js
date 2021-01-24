@@ -372,14 +372,17 @@ export function searchItem(component, inputName) {
   the text field element and an array of possible autocompleted values:*/
   const inp = component.querySelector(inputName);
   const target = inp.dataset.target;
-  let source = axiosRequest();
+  let source = null;
   var currentFocus;
 
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function (e) {
     removeHiddenSelect();
-    source.cancel("'Operation canceled by the user.'");
+    if (source) {
+      source.cancel("'Operation canceled by the user.'");
+    }
     source = axiosRequest();
+
     let that = this;
     var a,
       b,

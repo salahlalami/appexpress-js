@@ -96,7 +96,7 @@ const dataGrid = {
 
     const ajaxCall = listSync(target, { items });
     ajaxCall.then(function (response) {
-      if (response === undefined) {
+      if (response === undefined || response.success === false) {
         return;
       }
       render.grid(response, table, col);
@@ -106,7 +106,7 @@ const dataGrid = {
       items = this.value;
       const ajaxCall = listSync(target, { items });
       ajaxCall.then(function (response) {
-        if (response === undefined) {
+        if (response === undefined || response.success === false) {
           return;
         }
         render.grid(response, table, col);
@@ -153,7 +153,7 @@ const dataGrid = {
         const pageNumber = e.delegateTarget.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
-          if (response === undefined) {
+          if (response === undefined || response.success === false) {
             return;
           }
           render.grid(response, table, col);
@@ -169,7 +169,7 @@ const dataGrid = {
         const pageNumber = this.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
-          if (response === undefined) {
+          if (response === undefined || response.success === false) {
             return;
           }
           render.grid(response, table, col);
@@ -185,7 +185,7 @@ const dataGrid = {
         const pageNumber = this.dataset.page;
         const result = listSync(target, { page: pageNumber });
         result.then(function (response) {
-          if (response === undefined) {
+          if (response === undefined || response.success === false) {
             return;
           }
           render.grid(response, table, col);
@@ -207,7 +207,7 @@ const dataGrid = {
         page: currentActivePage.dataset.page,
       });
       result.then(function (response) {
-        if (response === undefined) {
+        if (response === undefined || response.success === false) {
           return;
         }
         render.grid(response, table, col);

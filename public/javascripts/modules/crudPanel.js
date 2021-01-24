@@ -52,7 +52,7 @@ export const initCrudPanel = (component) => {
         const form = document.querySelector('form.ajax[data-state="update"]');
         const viewType = form.dataset.viewType;
         const { detail } = event;
-        if (detail === undefined) {
+        if (detail === undefined || detail.success === false) {
           return;
         }
         viewItem(target, detail.json, viewType);
@@ -413,7 +413,7 @@ export function searchItem(component, inputName) {
 
     const ajaxCall = searchSync(target, { fields, question }, source);
     ajaxCall.then(function (response) {
-      if (response === undefined) {
+      if (response === undefined || response.success === false) {
         return;
       }
       let list = new Array(response.result.length);

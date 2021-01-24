@@ -11,7 +11,7 @@ export const createSync = (target, jsonData) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -27,7 +27,7 @@ export const readSync = (target, id) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -43,7 +43,7 @@ export const updateSync = (target, id, jsonData) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -60,7 +60,7 @@ export const deleteSync = (target, id) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -90,7 +90,7 @@ export const filterSync = (target, option = null) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -125,8 +125,12 @@ export const searchSync = (target, option = null, source) => {
       //console.log(response.data);
       return response.data;
     })
-    .catch(function (thrown) {
-      return thrown.response;
+    .catch(function (error) {
+      if (error.response === undefined) {
+        return { success: false };
+      } else {
+        return error.response.data;
+      }
     })
     .finally(function () {});
 
@@ -155,7 +159,7 @@ export const listSync = (target, option = null) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -172,7 +176,7 @@ export const postDataSync = (targetUrl, jsonData) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 
@@ -188,7 +192,7 @@ export const getDataSync = (targetUrl) => {
     })
     .catch(function (error) {
       // handle error
-      return error.response;
+      return error.response.data;
     })
     .finally(function () {});
 

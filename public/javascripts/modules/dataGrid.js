@@ -181,14 +181,16 @@ const dataGrid = {
   refresh: function (component) {
     const table = component.querySelector(".table");
     const loaderWarpper = '.component[data-component="dataTable"] .table';
-    const currentActivePage = document.querySelector(
-      "#pagination ul.pages li.active"
-    );
-    if (currentActivePage) {
-      const pageNumber = currentActivePage.dataset.page;
-      const target = table.dataset.target;
-      ajaxFunction(component, target, { page: pageNumber, loaderWarpper });
-    }
+    const target = table.dataset.target;
+    ajaxFunction(component, target, { page: 1, loaderWarpper });
+    // const currentActivePage = document.querySelector(
+    //   "#pagination ul.pages li.active"
+    // );
+    // if (currentActivePage) {
+    //   const pageNumber = currentActivePage.dataset.page;
+
+    //   ajaxFunction(component, target, { page: 1, loaderWarpper });
+    // }
   },
 };
 export default dataGrid;

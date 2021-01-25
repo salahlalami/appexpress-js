@@ -1,7 +1,11 @@
 import axios from "axios";
 import { baseUrl } from "./config";
+import loader from "./loader";
 
-export const createSync = (target, jsonData) => {
+export const createSync = (target, jsonData, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .post(baseUrl + target + "/create", jsonData)
     .then((response) => {
@@ -11,13 +15,24 @@ export const createSync = (target, jsonData) => {
     })
     .catch(function (error) {
       // handle error
+      // const success = error.response.data.success;
+      // const result = error.response.data.result;
+      // const message = error.response.data.message;
+      // const data = { success, result, message };
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
-export const readSync = (target, id) => {
+export const readSync = (target, id, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .get(baseUrl + target + "/read/" + id)
     .then((response) => {
@@ -29,11 +44,18 @@ export const readSync = (target, id) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
-export const updateSync = (target, id, jsonData) => {
+export const updateSync = (target, id, jsonData, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .patch(baseUrl + target + "/update/" + id, jsonData)
     .then((response) => {
@@ -45,12 +67,19 @@ export const updateSync = (target, id, jsonData) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
 
-export const deleteSync = (target, id) => {
+export const deleteSync = (target, id, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .delete(baseUrl + target + "/delete/" + id)
     .then((response) => {
@@ -62,24 +91,30 @@ export const deleteSync = (target, id) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
 
-export const filterSync = (target, option = null) => {
-  let query = "";
-  if (option != null) {
-    let filter = "";
-    let equal = "";
-    if (option.filter) {
-      filter = "filter=" + option.filter;
-    }
-    if (option.equal) {
-      equal = "&equal=" + option.equal;
-    }
-    query = `?${filter}${equal}`;
+export const filterSync = (target, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
   }
+  let query = "";
+
+  let filter = "";
+  let equal = "";
+  if (option.filter) {
+    filter = "filter=" + option.filter;
+  }
+  if (option.equal) {
+    equal = "&equal=" + option.equal;
+  }
+  query = `?${filter}${equal}`;
 
   const result = axios
     .get(baseUrl + target + "/filter" + query)
@@ -92,7 +127,11 @@ export const filterSync = (target, option = null) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
@@ -102,9 +141,12 @@ export const axiosRequest = () => {
   const source = CancelToken.source();
   return source;
 };
-export const searchSync = (target, option = null, source) => {
+export const searchSync = (target, source, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   let query = "";
-  if (option != null) {
+  if (option != {}) {
     let fields = "";
     let question = "";
     if (option.fields) {
@@ -132,13 +174,20 @@ export const searchSync = (target, option = null, source) => {
         return error.response.data;
       }
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
-export const listSync = (target, option = null) => {
+export const listSync = (target, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   let query = "";
-  if (option != null) {
+  if (option != {}) {
     let page = "";
     let items = "";
     if (option.page) {
@@ -161,12 +210,19 @@ export const listSync = (target, option = null) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
 
-export const postDataSync = (targetUrl, jsonData) => {
+export const postDataSync = (targetUrl, jsonData, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .post(baseUrl + targetUrl, jsonData)
     .then((response) => {
@@ -178,11 +234,18 @@ export const postDataSync = (targetUrl, jsonData) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };
-export const getDataSync = (targetUrl) => {
+export const getDataSync = (targetUrl, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
   const result = axios
     .get(baseUrl + targetUrl)
     .then((response) => {
@@ -194,7 +257,11 @@ export const getDataSync = (targetUrl) => {
       // handle error
       return error.response.data;
     })
-    .finally(function () {});
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
 
   return result;
 };

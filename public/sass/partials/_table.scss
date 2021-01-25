@@ -26,9 +26,10 @@
 }
 
 .table {
-  display: table;
+  position: relative;
   font-family: "roboto";
   width: 100%;
+  min-height: 735px;
 }
 .tableTitle {
   font-size: 16px;

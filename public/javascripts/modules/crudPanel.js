@@ -5,6 +5,7 @@ import delegate from "../lib/delegate";
 import ajaxDataRead from "./ajaxDataRead";
 import consultationComponent from "./consultationComponent";
 import dataGrid from "./dataGrid";
+// import loader from "./loader";
 
 import {
   createSync,
@@ -282,10 +283,12 @@ export function ajaxForm(form, component) {
   const dataTable = document.querySelector(
     '.component[data-component="dataTable"]'
   );
-  var element = component.querySelector(".loaderWarpper");
-  const alertSuccess = component.querySelector(".alert-success");
-  // const alertError = component.querySelector(".alert-error");
-  element.classList.add("show");
+  const loaderWarpper = '.component[data-component="panel"] .panel';
+  // loader.init(loaderWarpper);
+  // var element = component.querySelector(".loaderWarpper");
+  // const alertSuccess = component.querySelector(".alert-success");
+  // // const alertError = component.querySelector(".alert-error");
+  // element.classList.add("show");
   const target = form.dataset.target || dataTable.dataset.target;
   const state = form.dataset.state || "create";
 
@@ -303,20 +306,19 @@ export function ajaxForm(form, component) {
   }
   let ajaxCall = null;
   if (state === "create") {
-    ajaxCall = createSync(target, json);
+    ajaxCall = createSync(target, json, { loaderWarpper });
   } else if (state === "update") {
     const id = form.dataset.id;
-    ajaxCall = updateSync(target, id, json);
+    ajaxCall = updateSync(target, id, json, { loaderWarpper });
   }
   if (ajaxCall != null) {
     ajaxCall.then(function (response) {
-      console.log("result success : " + response);
+      // loader.remove(loaderWarpper);
+      // console.log("result success : " + response);
       if (response === undefined || response.success === false) {
         return;
       }
 
-      alertSuccess.innerHTML = response.result;
-      element.classList.remove("show");
       // Refresh table when adding/updating an entry
       const activePaginationButton = document.querySelector(
         "#pagination > ul > li.active"
@@ -329,6 +331,8 @@ export function ajaxForm(form, component) {
       viewItem(target, json, formtype);
       form.reset();
     });
+  } else {
+    // loader.remove(loaderWarpper);
   }
 }
 
@@ -339,21 +343,6 @@ export function formSubmit(component, formName) {
     function () {
       activeTab(["read"]);
       form.reset();
-    },
-    false
-  );
-
-  component.querySelector(".alert").addEventListener(
-    "click",
-    function () {
-      this.classList.remove("show");
-    },
-    false
-  );
-  component.querySelector(".loaderWarpper").addEventListener(
-    "click",
-    function () {
-      this.classList.remove("show");
     },
     false
   );
@@ -411,7 +400,7 @@ export function searchItem(component, inputName) {
     let question = this.value || null;
     let fields = this.dataset.fields || null;
 
-    const ajaxCall = searchSync(target, { fields, question }, source);
+    const ajaxCall = searchSync(target, source, { fields, question });
     ajaxCall.then(function (response) {
       if (response === undefined || response.success === false) {
         return;

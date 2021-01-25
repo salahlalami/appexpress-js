@@ -9,6 +9,7 @@ import { valueByString } from "../helper";
 
 let render = {
   grid: function (response = {}, table, col) {
+    // render.loaderRemove();
     const datas = response.result;
     const paginationData = response.pagination;
 
@@ -84,34 +85,36 @@ let render = {
   },
 };
 
+const ajaxFunction = (component, target, option = {}) => {
+  const table = component.querySelector(".table");
+  const col = JSON.parse(table.dataset.col);
+  const ajaxCall = listSync(target, option);
+  ajaxCall.then(function (response) {
+    if (response === undefined || response.success === false) {
+      return;
+    }
+    render.grid(response, table, col);
+    render.pagination(response, table);
+    render.activePagination(response.pagination.page);
+  });
+};
 const dataGrid = {
   init: function (component) {
+    const loaderWarpper = '.component[data-component="dataTable"] .table';
     const form = document.querySelector('form.ajax[data-state="update"]');
     const table = component.querySelector(".table");
-    const col = JSON.parse(table.dataset.col);
     const viewType = table.dataset.viewtype;
     let items = table.dataset.items || null;
     const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
 
-    const ajaxCall = listSync(target, { items });
-    ajaxCall.then(function (response) {
-      if (response === undefined || response.success === false) {
-        return;
-      }
-      render.grid(response, table, col);
-      render.pagination(response, table);
-    });
+    // render.loaderInit();
+    ajaxFunction(component, target, { items, loaderWarpper });
+
     selectItems.addEventListener("change", function () {
       items = this.value;
-      const ajaxCall = listSync(target, { items });
-      ajaxCall.then(function (response) {
-        if (response === undefined || response.success === false) {
-          return;
-        }
-        render.grid(response, table, col);
-        render.pagination(response, table);
-      });
+      // render.loaderInit();
+      ajaxFunction(component, target, { items, loaderWarpper });
     });
 
     delegate(
@@ -151,14 +154,7 @@ const dataGrid = {
       "click",
       function (e) {
         const pageNumber = e.delegateTarget.dataset.page;
-        const result = listSync(target, { page: pageNumber });
-        result.then(function (response) {
-          if (response === undefined || response.success === false) {
-            return;
-          }
-          render.grid(response, table, col);
-          render.activePagination(response.pagination.page);
-        });
+        ajaxFunction(component, target, { page: pageNumber, loaderWarpper });
       },
       false
     );
@@ -167,14 +163,7 @@ const dataGrid = {
       "click",
       function () {
         const pageNumber = this.dataset.page;
-        const result = listSync(target, { page: pageNumber });
-        result.then(function (response) {
-          if (response === undefined || response.success === false) {
-            return;
-          }
-          render.grid(response, table, col);
-          render.activePagination(response.pagination.page);
-        });
+        ajaxFunction(component, target, { page: pageNumber, loaderWarpper });
       },
       false
     );
@@ -183,14 +172,7 @@ const dataGrid = {
       "click",
       function () {
         const pageNumber = this.dataset.page;
-        const result = listSync(target, { page: pageNumber });
-        result.then(function (response) {
-          if (response === undefined || response.success === false) {
-            return;
-          }
-          render.grid(response, table, col);
-          render.activePagination(response.pagination.page);
-        });
+        ajaxFunction(component, target, { page: pageNumber, loaderWarpper });
       },
       false
     );
@@ -198,22 +180,14 @@ const dataGrid = {
 
   refresh: function (component) {
     const table = component.querySelector(".table");
-    const col = JSON.parse(table.dataset.col);
+    const loaderWarpper = '.component[data-component="dataTable"] .table';
     const currentActivePage = document.querySelector(
       "#pagination ul.pages li.active"
     );
     if (currentActivePage) {
-      const result = listSync(table.dataset.target, {
-        page: currentActivePage.dataset.page,
-      });
-      result.then(function (response) {
-        if (response === undefined || response.success === false) {
-          return;
-        }
-        render.grid(response, table, col);
-        render.pagination(response, table);
-        render.activePagination(response.pagination.page);
-      });
+      const pageNumber = currentActivePage.dataset.page;
+      const target = table.dataset.target;
+      ajaxFunction(component, target, { page: pageNumber, loaderWarpper });
     }
   },
 };

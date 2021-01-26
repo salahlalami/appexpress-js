@@ -45,6 +45,6 @@ block content
         .model.modelSmall
             - const col = ['patient.name|patient.surname', 'date', 'appointment', 'total', 'payment', 'created']
             - const items = 10
-            - const header = ['Patient', 'Date', 'Appointment', 'Total', 'Payment', 'Created']
+            - const lists = ['Patient', 'Date', 'Appointment', 'Total', 'Payment', 'Created']
             +dataTable(target,lists,col,items,"Laboratory")
 

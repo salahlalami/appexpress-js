@@ -26,6 +26,7 @@ router.route("/").get(isLoggedIn, appController.dashboard);
 router.get("/dashboardDoctor", appController.dashboardDoctor);
 router.get("/dashboardSecretariat", appController.dashboardSecretariat);
 router.get("/account", appController.account);
+router.get("/user", appController.user);
 router.get("/patient", appController.patient);
 router.get("/employee", appController.employee);
 router.get("/department", appController.department);

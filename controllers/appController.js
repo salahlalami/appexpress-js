@@ -9,6 +9,9 @@ exports.login = (req, res) => {
 exports.account = (req, res) => {
   res.render("account", { title: "Edit Your Account" });
 };
+exports.user = (req, res) => {
+  res.render("user", { title: "Users Management" });
+};
 exports.dashboard = (req, res) => {
   res.render("index", {
     title: "Cedimed app",

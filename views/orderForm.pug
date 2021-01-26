@@ -30,6 +30,6 @@ block panelBody
 block content 
     .model.modelSmall
         - const col = ['number', 'date', 'client', 'dateExpired', 'supplier', 'total']
-        - const header = ['Number', 'Date', 'Client', 'Expired Date', 'fournisseur', 'Total']
+        - const lists = ['Number', 'Date', 'Client', 'Expired Date', 'fournisseur', 'Total']
         - const limit = 20
         +dataTable(target,lists,col,items,"Orders", displayFields)

@@ -1,34 +1,33 @@
 
 extends layout
 include mixins/_medicamentForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const searchAction = '/api/medicament/search?q='
-    - const get = '/api/medicament/get/'
-    - const read = '/api/medicament/read/'
-    - const remove = '/api/medicament/delete/'
-    - const titleColumn = 'name'
+    - const target = 'medicament'
+    - const fields = 'name'
+    - const displayFields = 'name'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, "medicament", titleColumn, read)
+        +searchForm(target,fields,displayFields)
 
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="medicament")
         .panel-body.hidden
-            +infoHeader(read, remove, "Medicament: ", titleColumn)
+            +infoHeader( "Medicament: ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'status',text:'En Service'}]
                     +information(listInfo)
                 .edit.hidden
-                    +medicamentForm('/api/medicament/')
+                    +medicamentForm(target,"update")
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -38,7 +37,7 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +medicamentForm('/api/medicament/')
+                +medicamentForm(target,"create")
 
 block content
     .medicamentPage    
@@ -47,4 +46,4 @@ block content
             - const col = ['name', 'description','status']  
             - const limit = 20
             - const header = ['Nom', 'Description','En Service']
-            +dataTable(header, get, read, remove, col, limit, "Medicaments", titleColumn)
+            +dataTable(target,lists,col,items,"Medicaments", displayFields)

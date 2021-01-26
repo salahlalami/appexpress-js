@@ -1,16 +1,14 @@
 include autocomplete/_patinetAutocomplete
 
-mixin consultationForm(actionForm={},consultationTypes={},doctor={})
-    .alert-success.alert Successfully udated
-    .alert-error.alert Oops there is error
+mixin consultationForm(target={},formState="create",consultationTypes={},doctor={})
+    
     .component(data-component="ajaxForm")
         //- - const specialtys = specialty
         
-        .alert-success.alert Successfully udated
-        .alert-error.alert Oops there is error
-        form.ajax(data-formtype="consultation" autocomplete="off" action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
-            .loaderWarpper
-                .loader
+        
+        
+        form.ajax(autocomplete="off" data-formtype="consultation" data-target=target  data-state=formState method="POST")
+            
             .col-24.alpha.omega  
                 label(for="patient") Patient
                 +patinetAutocomplete()

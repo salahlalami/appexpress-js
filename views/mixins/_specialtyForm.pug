@@ -1,11 +1,9 @@
 
-mixin specialtyForm(actionForm={})
+mixin specialtyForm(target={},formState="create")
     .component(data-component="ajaxForm")
-        .alert-success.alert Successfully udated
-        .alert-error.alert Oops there is error
-        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" method="POST")
-            .loaderWarpper
-                .loader
+        
+        form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
+            
 
             .col-12.alpha
                 label(for="name") Nom du Specialite

@@ -1,22 +1,21 @@
 
 extends layout
-include mixins/_searchForm
+include components/_searchForm
 include mixins/_taskForm
-include mixins/_dataTable
-include mixins/_information
+include components/_dataTable
+include components/_information
 include mixins/_consultation
 
 
 
 block panelHeader
-    - const get = 'api/task/get/'
-    - const read = 'api/task/read/'
-    - const remove ='api/task/delete/'
-    - const searchAction = 'api/task/search?q='
+    - const target = 'task'
+    - const fields = 'name'
+    - const displayFields = 'name'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, 'task', 'title', read)
+        +searchForm(target,fields,displayFields)
         
 block panelBody
     - const actionForm = 'api/task/'
@@ -45,7 +44,7 @@ block panelBody
                             - const listInfo = [{key:'title',text:'Title'},{key:'description',text:'Description'},{key:'status',text:'Status'}]
                             +information(listInfo)
                         .edit.hidden
-                            +taskForm(actionForm)
+                            +taskForm(target,"update")
 
 
 
@@ -59,12 +58,12 @@ block panelFooter
                     != h.icon('arrow-right')
             .whiteBg
             .box
-                +taskForm(actionForm)                                    
+                +taskForm(target,"create")                                    
 
 block content
     .model.modelSmall
         - const col = ['title','description']  
-        - const items = 20
+        - const items = 10
         - const lists = ['Title','Description']
         +dataTable(lists,get,read,remove,col,items, "Liste des tasks")
 

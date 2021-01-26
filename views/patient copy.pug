@@ -1,7 +1,7 @@
 
 extends layout
 include mixins/_patientForm
-include mixins/_dataTable
+include components/_dataTable
 
 
 //- Patient page copy
@@ -62,7 +62,7 @@ block content
         - const read = '/api/patient/read/'
         - const remove ='/api/patient/delete/'
         - const col = ['name','surname','sexe','birthday','tel']  
-        - const items = 20
+        - const items = 10
         - const lists = ['Nom','Prenom','Sexe','Date de Naissance','Telephone']
         +dataTable(lists,get,read,col,items, "Liste des patients" ,remove)
 

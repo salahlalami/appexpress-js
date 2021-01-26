@@ -185,11 +185,11 @@ table {
   opacity: 0.8;
 }
 
-.patient-table-header {
+.table-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  .meta-patient-name {
+  .meta-table-name {
     color: #259cd4;
     font-weight: 600;
   }

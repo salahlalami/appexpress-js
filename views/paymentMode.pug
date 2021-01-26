@@ -1,33 +1,33 @@
 extends layout 
 include mixins/_paymentModeForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const searchAction = '/api/paymentMode/search?q='
-    - const get = '/api/paymentMode/get/'
-    - const read = '/api/paymentMode/read/'
-    - const remove = '/api/paymentMode/delete/'
-    - const titleColumn = 'company'
+    - const target = 'paymentMode'
+    - const fields = 'name'
+    - const displayFields = 'company'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"paymentMode",titleColumn, read)
+        +searchForm(target,fields,displayFields)
+        
 
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="paymentMode")
         .panel-body.hidden
-            +infoHeader(read, remove, "Payment Mode: ", titleColumn)
+            +infoHeader( "Payment Mode: ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'enabled',text:'Activée'}]
                     +information(listInfo)
                 .edit.hidden
-                    +paymentModeForm('/api/paymentMode/')
+                    +paymentModeForm(target,"update")
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -37,11 +37,12 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +paymentModeForm('/api/paymentMode/')
+                +paymentModeForm(target,"create")
+                
 
 block content 
     .model.modelSmall
         - const col = ['name', 'description', 'enabled' ]
         - const header = ['nom', 'Description', 'Activée' ]
         - const limit = 20
-        +dataTable(header, get, read, remove, col, limit, "Payment Modes",titleColumn)
+        +dataTable(target,lists,col,items,"Payment Modes",displayFields)

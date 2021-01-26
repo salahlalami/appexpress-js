@@ -2,7 +2,7 @@
 mixin consultationList(actionForm={}, title='')
     .alert-success.alert Successfully udated
     .alert-error.alert Oops there is error  
-    form(class=formNameClass action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+    form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
         .loaderWarpper
             .loader
 

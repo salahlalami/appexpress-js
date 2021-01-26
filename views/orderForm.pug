@@ -1,35 +1,35 @@
 extends layout 
-include mixins/_searchForm
+include components/_searchForm
 include mixins/_orderForm
-include mixins/_dataTable
+include components/_dataTable
 
 //- Order Page
 
 block panelHeader
-    - const actionForm = '/api/orderForm/'
-    - const get = '/api/orderForm/get/'
-    - const read = '/api/orderForm/read'
-    - const remove = '/api/orderForm/delete'
-    - const titleColumn = 'number'
+    - const target = 'orderForm'
+    - const fields = 'name'
+    - const displayFields = 'number'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"orderForm", titleColumn, read)
+        +searchForm(target,fields,displayFields)
+        
 
 block panelBody 
     
     .clearfix
     .panelContent.component(data-component="view-details" data-page="orderForm")
         .panel-body.hidden
-            +infoHeader(read, remove, "Order: ", titleColumn)
+            +infoHeader( "Order: ", displayFields)
             .tab-content.is-active
                 .show 
                 .edit
-                    +orderForm(actionForm)
+                    +orderForm(target,"update")
+                    
 
 block content 
     .model.modelSmall
         - const col = ['number', 'date', 'client', 'dateExpired', 'supplier', 'total']
         - const header = ['Number', 'Date', 'Client', 'Expired Date', 'fournisseur', 'Total']
         - const limit = 20
-        +dataTable(header, get, read, remove, col, limit, "Orders", titleColumn)
+        +dataTable(target,lists,col,items,"Orders", displayFields)

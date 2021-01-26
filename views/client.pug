@@ -1,31 +1,30 @@
 extends layout 
 include mixins/_clientForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const get = '/api/client/get/'
-    - const read = '/api/client/read/'
-    - const remove ='/api/client/delete/'
-    - const searchAction = '/api/client/search?fields=company,managerName,managerSurname&q='
-    - const titleColumn = 'company'
+    - const target = 'client'
+    - const fields = 'company'
+    - const displayFields = 'company'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, 'client', titleColumn, read)
+        +searchForm(target,fields,displayFields)
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="company")
         .panel-body.hidden
-            +infoHeader(read, remove, "Clients: ", titleColumn)
+            +infoHeader( "Clients: ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'company',text:'Entreprise'},{key:'managerName',text:'Nom de Directeur'},{key:'managerSurname',text:'Prénom de Directeur'},{key:'bankAccount',text:'Compte CCB'},{key:'fax',text:'Fax'},{key:'cell',text:'Tel Mobile'},{key:'email',text:'Email'},{key:'website',text:'siteweb'}]
                     +information(listInfo)
                 .edit.hidden
-                    +clientForm('/api/client/')
+                    +clientForm(target,"update")
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -35,11 +34,11 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +clientForm('/api/client/')
+                +clientForm(target,"create")
         
 block content 
     .model.modelSmall
         - const col = ['company', 'managerName', 'managerSurname', 'bankAccount', 'fax', 'cell', 'email', 'website']
         - const list = ['entreprise', 'Nom de Directeur', 'Prénom de Directeur', 'Compte CCB', 'Fax', 'Tel Mobile', 'email', 'siteweb']
-        - const items = 20
-        +dataTable(list,get,read,remove,col,items, "Liste des clients", titleColumn)
+        - const items = 10
+        +dataTable(target,lists,col,items, "Liste des clients", displayFields)

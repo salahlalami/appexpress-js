@@ -1,14 +1,12 @@
 
 include _searchForm
 
-mixin mriForm(actionForm={},filter={},search={},specialty={},doctor={})
+mixin mriForm(target={},formState="create",specialty={},doctor={})
     //- .component(data-component="ajaxForm")
     .component(data-component="ajaxForm")
-        .alert-success.alert Successfully udated
-        .alert-error.alert Oops there is error
-        form.ajax(autocomplete="off" action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
-            .loaderWarpper
-                .loader
+        
+        form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
+            
 
             .space-25
             - const searchAction = '/api/patient/'

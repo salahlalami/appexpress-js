@@ -1,33 +1,33 @@
 extends layout 
 include mixins/_settingMedicalForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 
 block panelHeader
-    - const searchAction = '/api/settingMedical/search?q='
-    - const get = '/api/settingMedical/get/'
-    - const read = '/api/settingMedical/read/'
-    - const remove = '/api/settingMedical/delete/'
-    - const titleColumn = 'name'
+    - const target = 'settingMedical'
+    - const fields = 'name'
+    - const displayFields = 'name'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"settingMedical",titleColumn, read)
+        +searchForm(target,fields,displayFields)
+       
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="settingMedical")
         .panel-body.hidden
-            +infoHeader(read, remove, "Setting: ", titleColumn)
+            +infoHeader( "Setting: ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'name',text:'Name'},{key:'value',text:'Value'},{key:'tableName',text:'Table Name'},{key:'relationID',text:'Relation ID'}]
                     +information(listInfo)
                 .edit.hidden
-                    +settingMedicalForm('/api/settingMedical/')
+                    +settingMedicalForm(target,"update")
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -37,7 +37,7 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +settingMedicalForm('/api/settingMedical/')
+                +settingMedicalForm(target,"create")
 
 block content 
     .model.modelSmall
@@ -45,4 +45,4 @@ block content
         - const col = ['name', 'value', 'tableName', 'relationID']
         - const header = ['Name', 'Value', 'Table Name', 'Relation ID']
         - const limit = 20
-        +dataTable(header, get, read, remove, col, limit, "Medical setting", titleColumn)
+        +dataTable(target,lists,col,items,"Medical setting", displayFields)

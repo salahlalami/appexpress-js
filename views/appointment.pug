@@ -1,36 +1,33 @@
 
 extends layout
 include mixins/_appointmentForm
-include mixins/_searchForm
-include mixins/_information
-include mixins/_dataTable
+include components/_searchForm
+include components/_information
+include components/_dataTable
 include components/_infoHeader
 
 block panelHeader
-    - const get = '/api/appointment/get/'
-    - const read = '/api/appointment/read/'
-    - const remove ='/api/appointment/delete/'
-    - const searchAction = '/api/appointment/search?fields=patient.name,date&q='
-    - const titleColumn = 'patient.name|date'
+    - const target = 'appointment'
+    - const fields = 'patient.name,date'
+    - const displayFields = 'patient.name|date'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, 'appointment',titleColumn, read)
+        +searchForm(target,fields,displayFields)
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="appointment")
         .panel-body.hidden
-            +infoHeader(read, remove, "Appointment Date: ", 'date|time')
+            +infoHeader( "Appointment Date: ", 'date|time')
             .tab-content         
                 .read
                     - const listInfo = [{key:'patient.name',text:'Nom du patient'},{key:'patient.surname',text:'Prenom du patient'},{key:'doctor.name',text:'Nom du doctor'},{key:'doctor.surname',text:'Prenom du doctor'},{key:'date',text:'Date du RDV'},{key:'time',text:'Heure du RDV'}]
                     +information(listInfo)
                 .edit.hidden
-                    - const actionForm = '/api/appointment/'
-                    - const filter = '/api/doctor/find/specialty/'
-                    - const search = '/api/patient/search?q='
-                    +appointmentForm(actionForm,filter,search,specialty,1)
+                    - const idSelect = 1
+                    +appointmentForm(target,"update",specialty,idSelect)
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -40,14 +37,16 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +appointmentForm(actionForm,filter,search,specialty,2)
+                - const idSelect = 2
+                +appointmentForm(target,"create",specialty,idSelect)
+                
 
 block content
   .appointmentPage    
     .model.modelSmall
         - const col = ['patient.name|patient.surname','doctor.name|doctor.surname','specialty.name','date','time']  
-        - const items = 20
+        - const items = 10
         - const lists = ['Nom de Patient','Nom de Medecin','Specailite','Date de RDV','Heure']
-        +dataTable(lists,get,read,remove,col,items,"Liste des RDV", titleColumn)
+        +dataTable(target,lists,col,items,"Liste des RDV", displayFields)
 
     

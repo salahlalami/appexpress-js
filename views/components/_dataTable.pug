@@ -18,7 +18,7 @@ mixin dataTable(target={},lists={},tableCol={} ,items="10", title="", row_title=
                             != h.icon("delete-trash") 
                             a(href="#delete-record" class="record-action") Supprimer
             .boxHeader
-                .patient-table-header
+                .table-header
                     .tableTitle=title
                     .meta-table-actions
                         span.action-item 
@@ -27,12 +27,12 @@ mixin dataTable(target={},lists={},tableCol={} ,items="10", title="", row_title=
                                 option(value=20) 20 par page
                                 option(value=30) 30 par page
                                 option(value=40) 40 par page
-                        span.action-item
-                            button(type="submit" class="export-btn")!= h.icon('sort') 
-                                | Exporter en PDF
-                        span.action-item
-                            button(type="submit" class="export-btn")!= h.icon('sort') 
-                                | Trier
+                        //- span.action-item
+                        //-     button(type="submit" class="export-btn")!= h.icon('sort') 
+                        //-         | Exporter en PDF
+                        //- span.action-item
+                        //-     button(type="submit" class="export-btn")!= h.icon('sort') 
+                        //-         | Trier
 
             .line
             table    

@@ -1,8 +1,8 @@
 
 extends layout
 include mixins/_consultationForm
-include mixins/_dataTable
-include mixins/_searchForm
+include components/_dataTable
+include components/_searchForm
 include components/_prescriptionGrid
 include components/_infoHeader
 include components/_consultationInfo
@@ -11,15 +11,13 @@ include components/_consultationInfo
 
 
 block panelHeader
-    - const searchAction = '/api/consultation/search?fields=patient.name,date&q='
-    - const get = '/api/consultation/get/'
-    - const read = '/api/consultation/read/'
-    - const remove = '/api/consultation/delete/'
-    - const titleColumn = 'patient.name'
+    - const target = 'consultation'
+    - const fields = 'patient.name'
+    - const displayFields = 'patient.name'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"consultation",titleColumn, read)
+        +searchForm(target,fields,displayFields)
 
 block panelBody
     .clearfix
@@ -27,12 +25,13 @@ block panelBody
 
     .panelContent.component(data-component="view-details" data-page="consultation")
         .panel-body.hidden
-            +infoHeader(read, remove, "Consultation: ", titleColumn)
+            +infoHeader( "Consultation: ", displayFields)
             .tab-content
                 .read
                     +consultationInfo()    
                 .edit.hidden
-                    +consultationForm('/api/consultation/',consultationTypes,doctor)
+                    +consultationForm(target,"update",consultationTypes,doctor)
+
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -42,7 +41,7 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box 
-                +consultationForm('/api/consultation/',consultationTypes,doctor)
+                +consultationForm(target,"create",consultationTypes,doctor)
 
 
 block content
@@ -51,10 +50,10 @@ block content
         +prescriptionGrid('/api/prescription/', 'Ordonnance #1 - M. Sehnoun Sophian')
     .model.modelSmall(data-model="dataTable")
         - const col = ['patient.name|patient.surname','consultationType.name','date','total','paymentStatus']  
-        - const items = 20
+        - const items = 10
         - const lists = ['Nom de Patient','Type de Consultation','Date','Status de Paiement']
         - const viewType="consultation";
-        +dataTable(lists,get,read,remove,col,items,"Liste des RDV", titleColumn,viewType)
+        +dataTable(lists,get,read,remove,col,items,"Liste des RDV", displayFields,viewType)
     
 
     

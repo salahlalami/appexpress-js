@@ -1,33 +1,32 @@
 extends layout 
 include mixins/_quoteForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const searchAction = '/api/quote/search?q='
-    - const get = '/api/quote/get/'
-    - const read = '/api/quote/read/'
-    - const remove = '/api/quote/delete/'
-    - const titleColumn = 'number'
+    - const target = 'quote'
+    - const fields = 'name'
+    - const displayFields = 'number'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"quote",titleColumn, read)
+        +searchForm(target,fields,displayFields)
+       
 
 
 block panelBody
     .clearfix
         .panelContent.component(data-component="view-details" data-page="quote")
             .panel-body.hidden
-                +infoHeader(read, remove, "Quote: ", titleColumn)
+                +infoHeader( "Quote: ", displayFields)
                 .tab-content         
                     .read
                         - const listInfo = [{key:'number',text:'Number'},{key:'date',text:'Date'},{key:'client',text:'Client'},{key:'dateExpired',text:'Expired Date'},{key:'currency',text:'Unité'},{key:'total',text:'Total'}]
                         +information(listInfo)
                     .edit.hidden
-                        +quoteForm('/api/quote/', employees, currencies)
+                        +quoteForm(target,"update", employees, currencies)
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -37,11 +36,11 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +quoteForm('/api/quote/', employees, currencies)
+                +quoteForm(target,"create", employees, currencies)
 
 block content 
     .model.modelSmall
         - const col = ['number', 'date', 'client', 'dateExpired', 'total']
         - const header = ['Number', 'Date', 'Client', 'Expired Date', 'Total']
         - const limit = 20
-        +dataTable(header, get, read, remove, col, limit, "Quote", titleColumn)
+        +dataTable(target,lists,col,items,"Quote", displayFields)

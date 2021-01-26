@@ -1,8 +1,7 @@
 
 mixin mriContent(actionForm={}, title='')      
-    form(class=formNameClass action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
-        .loaderWarpper
-            .loader
+    form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
+        
         
         .page-container
             .page-header.d-flex

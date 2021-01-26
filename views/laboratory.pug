@@ -1,26 +1,26 @@
 extends layout
 include mixins/_laboratoryForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const get = '/api/laboratory/get/'
-    - const read = '/api/laboratory/read/'
-    - const remove = '/api/laboratory/delete/'
+    - const target = 'laboratory'
+    - const fields = 'patient.name'
+    - const displayFields = 'patient.name'
     - const searchAction = '/api/laboratory/search?q='
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"laboratory","analyse", read)
+        +searchForm(target,fields,displayFields)
 
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="laboratory")
         .panel-body.hidden
-            +infoHeader(read, remove, "laboratory Date :", 'date|_id')
+            +infoHeader( "laboratory Date :", 'date|_id')
             .tab-content
                 .read
                     - const listInfo = [{key:'patient.name',text:'Patient'}, {key:'date',text:'Date'},{key:'appointment',text:'Aappointment'},{key:'total',text:'Total'},{key:'payment',text:'payment.id'},{key:'credit',text:'Credit'},{key:'discount',text:'Discount'},{key:'paymentStatus',text:'Payment Status'},{key:'pdfPath',text:'PDFPath'},{key:'created',text:'Created'}]
@@ -44,7 +44,7 @@ block content
     .doctorPage    
         .model.modelSmall
             - const col = ['patient.name|patient.surname', 'date', 'appointment', 'total', 'payment', 'created']
-            - const items = 20
+            - const items = 10
             - const header = ['Patient', 'Date', 'Appointment', 'Total', 'Payment', 'Created']
-            +dataTable(header, get, read, remove, col, limit, "Laboratory")
+            +dataTable(target,lists,col,items,"Laboratory")
 

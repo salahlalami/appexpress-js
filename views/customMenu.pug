@@ -1,32 +1,30 @@
 extends layout 
 include mixins/_customMenuForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const searchAction = '/api/customMenu/search?q='
-    - const get = '/api/customMenu/get/'
-    - const read = '/api/customMenu/read/'
-    - const remove = '/api/customMenu/delete/'
-    - const titleColumn = 'title'
+    - const target = 'customMenu'
+    - const fields = 'title'
+    - const displayFields = 'title'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction,"customMenu",titleColumn, read)
+        +searchForm(target,fields,displayFields)
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="customMenu")
         .panel-body.hidden
-            +infoHeader(read, remove, "Custom Menu : ", titleColumn)
+            +infoHeader( "Custom Menu : ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'title',text:'Title'},{key:'slug',text:'Url'},{key:'parent.title',text:'Parent Menu'},{key:'icon',text:'Icon'},{key:'enabled',text:'Enabled'}]
                     +information(listInfo)
                 .edit.hidden
-                    +customMenuForm('/api/customMenu/')
+                    +customMenuForm(target,"update")
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -36,12 +34,12 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +customMenuForm('/api/customMenu/')
+                +customMenuForm(target,"create")
 
 block content 
     .model.modelSmall
         - const col = ["title", "slug", "parent.title", "icon", "enabled"]
         - const list = ["Title", "Url", "Parent Menu", "Icon", "Enabled"]
-        - const items = 20
-        +dataTable(list,get,read,remove,col,items, "Custom Menu", titleColumn)
+        - const items = 10
+        +dataTable(target,lists,col,items, "Custom Menu", displayFields)
 

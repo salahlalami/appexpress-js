@@ -2,8 +2,7 @@
 mixin prescriptionGrid(actionForm={}, title='')
     .component(data-component="prescriptionGrid")      
         form(action=actionForm+"create/" data-status="new" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" data-delete=actionForm+"delete/" method="POST")
-            .loaderWarpper
-                .loader
+            
             .orgMoreOption.hidden
                 .toggle
                     != h.icon("more")

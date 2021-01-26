@@ -1,33 +1,32 @@
 extends layout 
 include mixins/_expenseCategoryForm
-include mixins/_searchForm
-include mixins/_dataTable
-include mixins/_information
+include components/_searchForm
+include components/_dataTable
+include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const searchAction = '/api/expenseCategory/search?q='
-    - const get = '/api/expenseCategory/get/'
-    - const read = '/api/expenseCategory/read/'
-    - const remove = '/api/expenseCategory/delete/'
-    - const titleColumn = 'company'
+    - const target = 'expenseCategory'
+    - const fields = 'company'
+    - const displayFields = 'company'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(searchAction, "expenseCategory", titleColumn, read)
+        +searchForm(target,fields,displayFields)
 
 
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="expenseCategory")
         .panel-body.hidden
-            +infoHeader(read, remove, "Expense Category: ", titleColumn)
+            +infoHeader( "Expense Category: ", displayFields)
             .tab-content         
                 .read
                     - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'enabled',text:'Activée'}]
                     +information(listInfo)
                 .edit.hidden
-                    +expenseCategoryForm('/api/expenseCategory/')
+                    +expenseCategoryForm(target,"update")
+                    
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -37,7 +36,7 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +expenseCategoryForm('/api/expenseCategory/')
+                +expenseCategoryForm(target,"create")
 
 
 block content 
@@ -46,4 +45,4 @@ block content
         - const col = ['name', 'description', 'enabled']
         - const header = ['Nom', 'Description', 'Activée']
         - const limit = 20
-        +dataTable(header,get,read,remove,col,limit, "Expense Categories", titleColumn)
+        +dataTable(header,get,read,remove,col,limit, "Expense Categories", displayFields)

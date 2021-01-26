@@ -1,13 +1,11 @@
 
-mixin paymentForm(actionForm={}, employees=[], patients=[],currencies=[], paymentModes=[], doctors=[])
+mixin paymentForm(target={},formState="create", employees=[], patients=[],currencies=[], paymentModes=[], doctors=[])
 
     .component(data-component="ajaxForm")  
-        .alert-success.alert Successfully udated
-        .alert-error.alert Oops there is error
+        
       
-        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-read=actionForm+"read/" data-edit=actionForm+"update/" method="POST")
-            .loaderWarpper
-                .loader
+        form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
+            
           
             .col-12.alpha
                 label(for="number") Number

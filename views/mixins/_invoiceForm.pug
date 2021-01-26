@@ -1,9 +1,8 @@
 
-mixin invoiceForm(actionForm={})
+mixin invoiceForm(target={},formState="create")
     .component(data-component="ajaxForm")  
-        .alert-success.alert Successfully udated
-        .alert-error.alert Oops there is error
-        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" method="POST")
+        
+        form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
             #loaderWarpper
                 .loader
             .col-12.alpha

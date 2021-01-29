@@ -1,0 +1,21 @@
+mixin loginForm()
+  form.form(action="/login" method="POST")
+    .input-field
+      span.field-icon
+        != h.icon('login-user')
+      input(type="email" name="email" placeholder="Nom d'utilisateur")
+    .input-field
+      span.field-icon
+        != h.icon('login-password')
+      input(type="password" name="password" placeholder="Mot de passe")
+    label
+      input.remember-check-input(type='checkbox' value='' formcontrolname='agree_privacy')
+      span.form-check-sign
+        span.check  
+      span.remember-text
+        | Remember me
+    .input-field
+      button(type="submit" class="save")
+        span.field-icon.field-btn
+          != h.icon('login-start')
+        | Démarrer

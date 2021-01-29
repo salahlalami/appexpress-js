@@ -1,0 +1,72 @@
+
+mixin clientForm(actionForm={})
+
+    .component(data-component="ajaxForm")  
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        
+        form.ajax(autocomplete="off" action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+            .loaderWarpper
+                .loader
+
+            .col-24.alpha.omega
+                .col-24.alpha.omega
+                    label(for="company") Company
+                    input(type="text" name="company"  data-name="company" class="searchAjax" data-ajax=search autocomplete="off")
+
+                .col-12.alpha
+                    label(for="managerName") Manager Name
+                    input(name="managerName" data-name="managerName" type="text")
+                .col-12.omega
+                    label(for="managerSurname") Sur Name
+                    input(name="managerSurname" data-name="managerSurname" type="text")
+
+                .col-12.alpha
+                    label(for="email") Email
+                    input(name="email" data-name="email" type="email")
+                .col-12.omega
+                    label(for="tel") Telephone
+                    input(name="tel" data-name="tel" type="text")
+
+                .col-12.alpha
+                    label(for="cell") Cell
+                    input(name="cell" data-name="cell" type="text")
+                .col-12.omega
+                    label(for="fax") Fax
+                    input(name="fax" data-name="fax" type="text")
+
+                .col-24.alpha.omega
+                    label(for="bankAccount") Bank Account
+                    input(name="bankAccount" data-name="bankAccount" type="text")
+               
+                .col-12.alpha
+                    label(for="rc") RC
+                    input(name="RC" data-name="rc" type="text")
+                .col-12.omega
+                    label(for="ai") AI
+                    input(name="AI" data-name="ai" type="text")
+
+                .col-12.alpha
+                    label(for="nif") NIF
+                    input(name="NIF" data-name="nif" type="text")
+                .col-12.omega
+                    label(for="nis") NIS
+                    input(name="NIS" data-name="nis" type="text")
+
+                .col-24.alpha.omega
+                    label(for="website") Website
+                    input(name="website" data-name="website" type="text")
+
+                .col-24.alpha.omega
+                    label(for="address") Address
+                    textarea(name="address", rows="5" autocomplete="off")
+
+                .clearfix
+            
+                .col-12.alpha    
+                    button(type="submit" class="save")  Enregistrer  
+                .col-12.omega
+                    button(type="button" class="cancel")  Cancel  
+
+
+

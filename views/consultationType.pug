@@ -1,0 +1,50 @@
+extends layout 
+include mixins/_consultationTypeForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+//- Consultation Types
+
+
+block panelHeader
+    - const searchAction = '/api/consultationType/search?q='
+    - const get = '/api/consultationType/get/'
+    - const read = '/api/consultationType/read/'
+    - const remove = '/api/consultationType/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"consultationType",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="consultationType")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Consultation Type: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name', text:'nom'}, {key:'description', text:'observation'}, {key:'specialty.name', text:'specialty'}, {key:'price', text:'montan'}, {key:'status', text:'disponiblité'} ]
+                    +information(listInfo)
+                .edit.hidden
+                    +consultationTypeForm('/api/consultationType/',specialitys)
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +consultationTypeForm('/api/consultationType/',specialitys)
+
+block content 
+  .model.modelSmall
+    - const col = ['name','specialty.name', 'price', 'status']
+    - const list = ['Type de Consultation', 'specialty','Tarif','disponiblité']
+    - const items = 20
+    +dataTable(list,get,read,remove,col,items, "Liste des Consultation Type", titleColumn)

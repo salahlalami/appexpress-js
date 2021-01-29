@@ -1,0 +1,50 @@
+extends layout
+include mixins/_analysisTypeForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+
+block panelHeader
+    - const searchAction = '/api/analysisType/search?q='
+    - const get = '/api/analysisType/get/'
+    - const read = '/api/analysisType/read/'
+    - const remove = '/api/analysisType/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"analysisType","name", read)
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="analysisType")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Analysis Type: ", titleColumn)
+            .tab-content.is-active         
+                .read
+                    - const listInfo = [{key:'name',text:'type d\'analyse'},{key:'description',text:'Description'},{key:'reference',text:'Valeur optimal'},{key:'price',text:'Tarif'},{key:'status',text:'Disponiblité'},{key:'created',text:'Created'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +analysisTypeForm('/api/analysisType/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux Type d'analyse
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                 +analysisTypeForm('/api/analysisType/')
+
+block content
+  .appointmentPage    
+    .model.modelSmall
+        - const col = ['name','reference','price','status']
+        - const lists = ['type d\'analyse', 'Valeur optimal','Tarif','disponiblité']
+        - const items = 10
+        +dataTable(lists,get,read,remove,col,items,"Liste des Type d\'Analyse", titleColumn)
+
+    

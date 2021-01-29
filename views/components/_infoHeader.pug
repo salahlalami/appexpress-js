@@ -1,0 +1,30 @@
+mixin infoHeader(read, remove, prefix, key="_id", print=false)
+    .info-header
+        .info-title(data-prefix=prefix data-key=key)
+        .meta-actions
+            if print
+                span.meta-print
+                    != h.icon('printer')
+            span.meta-edit(data-action-url=read)
+                != h.icon('update-ico')
+                |Modifier
+            span.meta-remove(data-action-url=remove data-label=key) 
+                != h.icon('delete-trash')
+                |Supprimer
+                
+    //- .component(data-component="infoHeader")
+    //-     .clearfix
+    //-     .patient-header
+    //-         .meta-patient-name
+    //-             | Patient: M.Salah Eddine Lalami
+    //-         .meta-patient-actions
+    //-             span.meta-printer 
+    //-                 != h.icon('printer')
+    //-             span.meta-modifier
+    //-                 != h.icon('update-ico')
+    //-                 |Modifier
+    //-             span.meta-supperimer
+    //-                 != h.icon('delete-trash')
+    //-                 |Supprimer
+    //-     .line            
+

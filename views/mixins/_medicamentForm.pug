@@ -1,0 +1,28 @@
+
+mixin medicamentForm(actionForm={})
+    .component(data-component="ajaxForm")  
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+            .loaderWarpper
+                .loader
+
+            .col-24.alpha.omega
+                label(for="name") Nom du Medicament
+                input(type="text" name="name" data-name="name" autocomplete="off")
+            
+            .col-24.alpha.omega
+                label(for="description") Description du Medicament
+                input(name="description" data-name="description" autocomplete="off")
+            
+            .col-24.alpha.omega  
+                label(for="status") En Service
+                select(name='status' data-name="status")
+                    option(value='1') Oui
+                    option(value='0') Non
+
+            .clearfix
+            .col-12.alpha    
+                button(type="submit" class="save")  Enregistrer      
+            .col-12.omega
+                button(type="button" class="cancel")  Cancel 

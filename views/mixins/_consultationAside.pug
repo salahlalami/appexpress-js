@@ -1,0 +1,45 @@
+
+mixin consultationAside(actionForm={}, title='')
+        //- .component(data-component="ajaxForm")  
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error     
+        form(class=formNameClass action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+            .loaderWarpper
+                .loader
+            
+            .section
+                .section-header
+                    span Consultations / Aujourd'huit
+                .section-content
+                    .inner-item
+                        .value 20
+                        .description RDV
+                    .seperator
+                    .inner-item
+                        .value 10
+                        .description Venues
+                    .seperator
+                    .inner-item
+                        .value 05
+                        .description Passees
+            
+            .section
+                .section-header
+                    span Ticket #38
+                .section-content
+                    .inner-item
+                        .item-content Patient Actuelle:
+                        .item-content M. Belbachir Mohammed
+                        button(type="button" class="btn primary-btn mb-10 space-adj") Prochaine Patient
+            
+            .section
+                .section-header
+                    span Patient Exite Deja
+                .section-content
+                    .inner-item
+                        .item-content.text-color ID: 1 820219 99 190502 0:
+                        .item-content.text-color M. Belbachir Mohammed
+                        .item-content.text-color 19/02/1982
+                        button(type="button" class="btn primary-btn mb-10 space-adj") Voir Dossier Patient
+
+            button(type="button" class="btn primary-btn mb-10") Nouveau Patient

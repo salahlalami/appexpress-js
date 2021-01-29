@@ -1,0 +1,36 @@
+mixin navMenu()
+    div.nav-container
+        ul.navMenu
+            each item in menu
+                li(class=([...(item.submenu ? ['toggle'] : []), ...(item.class ? [item.class ]: [])].join(' ')))  
+                    a(href=item.slug, class=(currentPath.startsWith(item.slug) ? 'nav__active' : ''))
+                        != h.icon(item.icon)
+                        p #{item.title}
+                    if item.submenu
+                        ul.subMenu
+                            each subitem in item.submenu
+                                li
+                                    a(href=subitem.slug, class=(currentPath.startsWith(subitem.slug) ? 'nav__active' : ''))
+                                        if(item.icon)
+                                            != h.icon(item.icon)
+                                        p #{subitem.title}                                        
+        .hidden.close-icon
+            != h.icon('cross-circle') 
+
+            //-         ul.navMenu
+            //-   each item in h.menu
+            //-     li(class=(item.submenu ? 'subMenuToggle' : ''))
+            //-         if item.submenu
+            //-           != h.icon(item.icon)
+            //-           p #{item.title}
+            //-         else   
+            //-           a(href=item.slug, class=(currentPath.startsWith(item.slug) ? 'nav__active' : ''))
+            //-             != h.icon(item.icon)
+            //-             p #{item.title}
+            //-         if item.submenu
+            //-           ul.toggleOption
+            //-             each subitem in item.submenu
+            //-                 li
+            //-                   a(href=subitem.slug, class=(currentPath.startsWith(subitem.slug) ? 'nav__active' : ''))
+            //-                     p #{subitem.title}
+    

@@ -1,0 +1,199 @@
+doctype html
+html
+  head
+    link(rel="shortcut icon" type="image/png" href="/images/icons/favicon.png")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    style.
+      html{
+        box-sizing: border-box;
+      }
+      body{
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          height: 100%;
+          background: #ffffff;
+          font-family: sans-serif;
+      }
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      .invoice-container {
+        position: relative;
+        width: 21cm;
+        margin: 0 auto;
+        color: #001028;
+        background: #fff;
+        font-size: 12px;
+        padding: 40px 60px;
+      }
+      .top-area {
+        padding: 0px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .top-area .logo-invoice {
+        margin-bottom: 10px;
+      }
+      .top-area .logo-invoice img {
+        width: 225px;
+        margin-top: 15px;
+      }
+      .top-area .number-invoice {
+        text-align: right;
+      }
+      .top-area .number-invoice > h1 {
+        font-weight: 500;
+      }
+      .about-invoice {
+        padding: 0px 15px;
+        margin-top: 50px;
+        font-size: 13px;
+      }
+      .project-invoice {
+        float: left;
+        margin-bottom: 60px;
+      }
+      .project-invoice span {
+        color: #5d6975;
+        text-align: right;
+        width: 52px;
+        margin-right: 10px;
+        display: inline-block;
+        font-size: 0.8em;
+      }
+      .company-invoice {
+        float: right;
+        text-align: right;
+        margin-bottom: 60px;
+      }
+      .project-invoice div, .company-invoice div {
+        white-space: nowrap;
+        margin: 5px auto;
+      }
+      .table-invoice {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px;
+      }
+      .table-invoice tr:nth-child(2n-1) td {
+        background: #f2f5ff;
+      }
+      .table-invoice th, .table-invoice td {
+        text-align: center;
+      }
+      .table-invoice th {
+        padding: 8px 20px;
+        color: #000;
+        border-bottom: 1px solid #c1ced9;
+        white-space: nowrap;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .table-invoice .service, .table-invoice .desc {
+        text-align: left;
+      }
+      .table-invoice td {
+        padding: 20px;
+        text-align: right;
+      }
+      .table-invoice td.service, .table-invoice td.desc {
+        vertical-align: top;
+      }
+      .table-invoice td.unit, .table-invoice td.qty, .table-invoice td.total {
+        font-size: 1.2em;
+      }
+      .table-invoice td.grand {
+        border-top: 1px solid #5d6975;
+      }
+      .notice-invoice {
+        padding: 15px;
+      }
+      .notice-invoice .notice {
+        color: #5d6975;
+        font-size: 1.2em;
+      }
+      .footer-invoice {
+        color: #5d6975;
+        width: 95%;
+        position: absolute;
+        bottom: 0;
+        border-top: 1px solid #c1ced9;
+        padding: 20px 0;
+        text-align: center;
+      }
+ 
+  body
+    .invoice-container
+      header.clearfix
+        .top-area
+          .logo-invoice
+            img.invoice-logo(src=`/images/cedimed.jpg`)
+          .number-invoice
+            h1
+              | INVOICE #{model.number}
+
+        .about-invoice
+          .company-invoice
+            div #{model.client.company}
+            div
+              | #{model.client.address}
+            div #{model.client.tel}
+            div
+              a(href='mailto:company@example.com') #{model.client.email}
+          .project-invoice
+            div
+              span PROJECT
+              | Website development
+            div
+              span CLIENT
+              | #{model.client.managerSurname} #{model.client.managerName}
+            div
+              span ADDRESS
+              | #{model.client.address}
+            div
+              span EMAIL
+              a(href='mailto:john@example.com') #{model.client.email}
+            div
+              span DATE
+              | #{model.date}
+            div
+              span DUE DATE
+              | #{model.dateExpired}
+      main
+        table.table-invoice
+          thead
+            tr
+              th.service SERVICE
+              th.desc DESCRIPTION
+              th PRICE
+              th QTY
+              th TOTAL
+          tbody
+            each item in model.items
+              tr
+                td.service #{item.name}
+                td.desc
+                  | #{item.description}
+                td.unit $#{item.price}
+                td.qty #{item.quantity}
+                td.total $#{item.total}
+            tr
+              td(colspan='4') SUBTOTAL
+              td.total $#{model.subTotal}
+            tr
+              td(colspan='4') TAX #{model.taxRate}%
+              td.total $#{model.taxTotal}
+            tr
+              td.grand.total(colspan='4') GRAND TOTAL
+              td.grand.total $#{model.total}
+        .notice-invoice
+          div NOTICE:
+          .notice A finance charge of 1.5% will be made on unpaid balances after 30 days.
+      footer.footer-invoice
+        | Invoice was created on a computer and is valid without the signature and seal.
+          
+
+   

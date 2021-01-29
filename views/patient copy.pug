@@ -1,0 +1,69 @@
+
+extends layout
+include mixins/_patientForm
+include mixins/_dataTable
+
+
+//- Patient page copy
+
+block panelHeader
+    p.panelTitle #{title}
+block panelBody        
+    - const actionForm = '/api/patient/'
+    - const infoField = ['ID','Nom','Prenom','Sexe','Date de Naissance','Telephone']
+    - const infoId = ['_id','name','surname','sexe','birthday','tel']  
+    #tabs1.tab-contents.no-js
+        .tab-nav
+            a.tab-link.is-active(href='') Informations
+            a.tab-link(href='') RDV
+            a.tab-link(href='') Consultations
+            a.tab-link(href='') Analyses
+            .toggle
+                != h.icon("more")
+                .more.toggleOption
+                    a.tab-link(href='') IRM & Scanner
+                    a.tab-link(href='') Regelements
+        .panelContent                    
+            .tab-content.is-active
+                ul.info
+                    li      
+                        p Id
+                        p :
+                        p(data-field="id") 34453464557468   
+                    li      
+                        p Nom
+                        p :
+                        p(data-field="id") 34453464557468    
+                    li      
+                        p Nom
+                        p :
+                        p(data-field="id") 34453464557468               
+                .edit
+                    +patientForm(actionForm)
+            .tab-content
+                p
+                | All right, Derice. Let me lay out some difficulties for you. Snow: you don't have any. It's nine hundred degrees out there. Time: you don't have any. The Olympics are in three months. And me: you don't have me. As far as I'm concerned, the sport of bobsledding no longer exists. I don't want to do it, I don't want to coach it, and most of all, and I mean most of all, I don't want to be within two thousand miles of anybody who does. Now did you follow all that?
+            .tab-content
+                p
+                | All right, Derice. Let me lay out some difficulties for you. Snow: you don't have any. It's nine hundred degrees out there. Time: you don't have any. The Olympics are in three months. And me: you don't have me. As far as I'm concerned, the sport of bobsledding no longer exists. I don't want to do it, I don't want to coach it, and most of all, and I mean most of all, I don't want to be within two thousand miles of anybody who does. Now did you follow all that?
+            .tab-content
+                p
+                | All right, Derice. Let me lay out some difficulties for you.
+            .tab-content
+                p
+                | All right, Derice. Let me lay out some difficulties for you.
+            .tab-content
+                p
+                | All right, Derice. Let me lay out some difficulties for you.                
+
+block content
+    .model.modelSmall
+        - const get = '/api/patient/get/'
+        - const read = '/api/patient/read/'
+        - const remove ='/api/patient/delete/'
+        - const col = ['name','surname','sexe','birthday','tel']  
+        - const items = 20
+        - const lists = ['Nom','Prenom','Sexe','Date de Naissance','Telephone']
+        +dataTable(lists,get,read,col,items, "Liste des patients" ,remove)
+
+    

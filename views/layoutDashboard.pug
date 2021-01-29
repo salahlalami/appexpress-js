@@ -1,0 +1,62 @@
+include components/_navMenu
+
+doctype html
+html
+  head
+    title= `${title} | ${h.siteName}`
+    link(rel='stylesheet', href='/dist/style.css')
+    link(rel="shortcut icon" type="image/png" href="/images/icons/favicon.png")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+      block loginPage
+      
+
+      nav
+          .nav-container
+            a.link_logo(href="/")
+              .logo
+                  != h.icon('logo')
+                  .alphabetic-logo
+                      img.logo-text-only(src=`/images/photos/logo_text_only.png`)
+            +navMenu()
+
+      .panelButton.showSideBar.hide
+        != h.icon('menu')
+
+
+      .component.top-navbar(data-component="headerNav")
+        .headerNav
+            .nav-options
+                != h.icon('nav-options')
+                .hoverable-container
+                  .hovered-content
+                    a(href="#") This is test descs
+                    a(href="#") Lorem ipsem dummy text
+                    a(href="#") Azhar responded to email
+                    a(href="#") Hoverable conetent test
+                    a(href="#") Hey, Happy Ramazan
+            .bell-notification
+                .area-hoverable!= h.icon('bell-notification')
+                .hoverable-container
+                  .hovered-content
+                    a(href="#") You have 5 more tasks
+                    a(href="#") Your friend is in town
+                    a(href="#") Azhar responded to email
+                    a(href="#") You have 5 more tasks
+                    a(href="#") Your friend is in town
+                    a(href="#") Azhar responded to email
+            .nav-profile
+                img.profile-img(src=h.userPhotoUrl(user))
+                .hoverable-container
+                  .hovered-content
+                    a(href="#") Profile
+                    a(href="#") Settings
+                    a(href="#") Logout
+              
+      .dashboard
+            block content
+
+      block scripts
+         script(src="/dist/App.bundle.js")
+   
+   

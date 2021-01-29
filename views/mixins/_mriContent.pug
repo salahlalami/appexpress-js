@@ -1,0 +1,69 @@
+
+mixin mriContent(actionForm={}, title='')      
+    form(class=formNameClass action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+        .loaderWarpper
+            .loader
+        
+        .page-container
+            .page-header.d-flex
+                .page-title=title
+                .meta-table-actions
+                    span.action-item Opérateur
+                    span.action-item 
+                        select(name='type' class="consultation-header-dd")
+                            option(value='Ordonnance') Mme: Salima belarbi
+                            option(value='Ordonnance') Mme: Salima belarbi
+                            option(value='Ordonnance') Mme: Salima belarbi
+                            option(value='Ordonnance') Mme: Salima belarbi
+            .line
+
+            .page-content-container
+                .content-row
+                    .col-9
+                        label(for="irm_type") IRM Type
+                        select(name='irm_type')
+                            option(value='01') Scanner Global
+                            option(value='02') Scanner Other
+                            option(value='03') Scanner New
+                    .col-6
+                        label(for="additional_info") Info complémentaire
+                        input(type="text" name="additional_info" autocomplete="off")
+                    .col-7.mri-file-upload
+                        label(for="preview_file") Fichier d'aperçu
+                        .clickable!= h.icon('attachment') 
+                            |Sélectionner un fichier
+                        input(type="file" name="preview_file" autocomplete="off")
+                    .col-2
+                        button(type="button" class="icon-plus-btn plus-btn")!= h.icon('plus-circle')
+
+
+                .content-row.scan-images-row
+                    .col-9
+                        span Scanner Global
+                    .col-7
+                        span IRM 360 &deg;
+                    .col-6
+                        span 3 fichier d'imageria
+                    .col-2
+                        != h.icon("more")
+
+                    .col-8
+                        .irm-scan
+                            img.irm-image(src=`/images/photos/irm_scanner.png`)
+                    .col-8
+                        .irm-scan
+                            img.irm-image(src=`/images/photos/irm_scanner.png`)
+                    .col-8
+                        .irm-scan
+                            img.irm-image(src=`/images/photos/irm_scanner.png`)
+                
+                .space
+                .content-row
+                    .col-24
+                        .action-buttons
+                            .col-7.alpha
+                                button(type="submit" class="btn primary-btn icon-btn") Enregistrer
+                                    != h.icon('check-circle') 
+                            .col-7.omega
+                                button(type="submit" class="btn secondary-btn icon-btn") Enregistrer &amp; Imprimer
+                                    != h.icon('printer')

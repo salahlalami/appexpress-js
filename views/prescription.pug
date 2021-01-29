@@ -1,0 +1,47 @@
+extends layout 
+include mixins/_prescriptionForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/prescription/search?q='
+    - const get = '/api/prescription/get/'
+    - const read = '/api/prescription/read/'
+    - const remove = '/api/prescription/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"prescription",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+        .panelContent.component(data-component="view-details" data-page="prescription")
+            .panel-body.hidden
+                +infoHeader(read, remove, "Prescription: ", titleColumn)
+                .tab-content         
+                    .read
+                        - const listInfo = [{key:'name',text:'Nom'},{key:'symbol',text:'symbole'},{key:'decimalSeparator',text:'Séparateur décimal'},{key:'thousandSeparator',text:'Séparateur de milliers'},{key:'isDefault',text:'Est par défaut'}]
+                        +information(listInfo)
+                    .edit.hidden
+                        +prescriptionForm('/api/prescription/', consultations, doctors, patients)
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +prescriptionForm('/api/prescription/', consultations, doctors, patients)
+
+block content 
+    .model.modelSmall
+        - const col = ['name', 'consultation', 'type','notes']
+        - const list = ['Name','Consultation', 'Type','Notes']
+        - const items = 20
+        +dataTable(list,get,read,remove,col,items, "Prescriptions", titleColumn)

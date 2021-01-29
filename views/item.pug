@@ -1,0 +1,47 @@
+extends layout 
+include mixins/_itemForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/item/search?q=' 
+    - const get = '/api/item/get/'
+    - const read = '/api/item/read/'
+    - const remove = '/api/item/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"item",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="item")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Item: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'price',text:'Montant'},{key:'currency',text:'Unité'},{key:'enabled',text:'Activée'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +itemForm('/api/item/', currencies)
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +itemForm('/api/item/', currencies)
+
+block content 
+    .model.modelSmall
+        - const col = ['name','description', 'price', 'currency', 'enabled']
+        - const header = ['Nom', 'Description', 'Montant', 'Unité', 'Activée']
+        - const limit = 20
+        +dataTable(header, get, read, remove, col, limit, "Items", titleColumn)

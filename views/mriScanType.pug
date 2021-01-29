@@ -1,0 +1,48 @@
+extends layout 
+include mixins/_mriScanTypeForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/mriScanType/search?q='
+    - const get = '/api/mriScanType/get/'
+    - const read = '/api/mriScanType/read/'
+    - const remove = '/api/mriScanType/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"mriScanType", titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="mriScanType")
+        .panel-body.hidden
+            +infoHeader(read, remove, "MRI Scan Type: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Name'},{key:'reference',text:'Reference'},{key:'price',text:'Price'},{key:'status',text:'Statut'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +mriScanTypeForm('/api/mriScanType/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +mriScanTypeForm('/api/mriScanType/')
+ 
+block content 
+    .model.modelSmall
+        
+        - const col = ['name','reference', 'price', 'status']
+        - const header = ['name','Reference', 'Price', 'Statut']
+        - const limit = 20
+        +dataTable(header, get, read, remove, col, limit, "MRI Scan Types", titleColumn)

@@ -1,0 +1,48 @@
+extends layout 
+include mixins/_settingGlobalForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+
+block panelHeader
+    - const searchAction = '/api/settingCommercial/search?q='
+    - const get = '/api/settingCommercial/get/'
+    - const read = '/api/settingCommercial/read/'
+    - const remove = '/api/settingCommercial/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"settingCommercial",titleColumn, read)
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="settingCommercial")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Setting: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Name'},{key:'value',text:'Value'},{key:'tableName',text:'Table Name'},{key:'relationID',text:'Relation ID'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +settingGlobalForm('/api/settingCommercial/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +settingGlobalForm('/api/settingCommercial/')
+
+block content 
+  .model.modelSmall
+    
+    - const col = ['name', 'value', 'tableName', 'relationID']
+    - const header = ['Name', 'Value', 'Table Name', 'Relation ID']
+    - const limit = 20
+    +dataTable(header, get, read, remove, col, limit, "Globals Setting", titleColumn)

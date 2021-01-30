@@ -1,0 +1,17 @@
+extends layoutLogin
+include mixins/_dataTable
+
+//- Register Page 
+
+block loginPage
+    .background
+    .container
+        .col-24   
+            .loginBox
+                != h.icon('logo-cedimed')
+                form.form(action="/register" method="POST")
+                  input(type="text" name="name" placeholder="Name")
+                  input(type="email" name="email" placeholder="E-mail")
+                  input(type="password" name="password" placeholder="Password")
+                  input(type="password" name="password-confirm" placeholder="Confirm Password")
+                  button(type="submit" class="save")  Enregistrer

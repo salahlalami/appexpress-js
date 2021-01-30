@@ -1,0 +1,49 @@
+
+extends layout
+include mixins/_positionForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/position/search?q='
+    - const get = '/api/position/get/'
+    - const read = '/api/position/read/'
+    - const remove = '/api/position/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"position",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+        .panelContent.component(data-component="view-details" data-page="position")
+            .panel-body.hidden
+                +infoHeader(read, remove, "Position: ", titleColumn)
+                .tab-content         
+                    .read
+                        - const listInfo = [{key:'name',text:'Nom'}]
+                        +information(listInfo)
+                    .edit.hidden
+                        +positionForm('/api/position/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +positionForm('/api/position/')
+
+block content
+    .positionPage    
+        .model.modelSmall
+            - const col = ['name']  
+            - const limit = 20
+            - const header = ['Nom']
+            +dataTable(header, get, read, remove, col, limit, "Positions", titleColumn)

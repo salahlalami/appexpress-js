@@ -1,0 +1,52 @@
+
+extends layout
+include mixins/_employeeForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/employee/search?q='
+    - const get = '/api/employee/get/'
+    - const read = '/api/employee/read/'
+    - const remove = '/api/employee/delete/'
+    - const titleColumn = 'name|surname'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"employee",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="employee")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Employee: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Nom de famille'},{key:'email',text:'Email'},{key:'department',text:'département'},{key:'position',text:'Position'},{key:'tel',text:'Téléphone'},{key:'enabled',text:'Activée'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +employeeForm('/api/employee/', department, position, specialty)
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +employeeForm('/api/employee/', department, position, specialty)
+        
+
+block content
+  .employeePage    
+    .model.modelSmall
+        - const col = ['name', 'surname', 'email', 'department', 'position', 'tel', 'enabled']  
+        - const limit = 20
+        - const header = ['Nom', 'Nom de famille', 'Email', 'département', 'Position', 'Téléphone', 'Activée']
+        +dataTable(header, get, read, remove, col, limit, "Employees", titleColumn)
+
+    

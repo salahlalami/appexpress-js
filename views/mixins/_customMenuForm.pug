@@ -1,0 +1,40 @@
+include autocomplete/_customMenuAutocomplete
+
+mixin customMenuForm(actionForm={})
+
+    .component(data-component="ajaxForm")  
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+
+        form.ajax(autocomplete="off" action=actionForm+"create/" data-add=actionForm+"create/" data-read=actionForm+"read/" data-edit=actionForm+"update/" method="POST")
+            .loaderWarpper
+                .loader
+            .col-24.alpha.omega 
+                label(for="contact") Parent
+                +customMenuAutocomplete('parent')
+            .col-24.alpha.omega 
+                label(for="contact") Title
+                input(name="title" data-name="title" type="text")
+            .col-24.alpha.omega 
+                label(for="slug") Slug
+                input(name="slug" data-name="slug" type="text")
+            .col-24.alpha.omega 
+                label(for="icon") Icon
+                input(name="icon" data-name="icon" type="text")
+            .col-24.alpha.omega 
+                label(for="icon") Classes
+                input(name="class" data-name="class" type="text")
+            .col-24.alpha.omega 
+                label(for="status") Enabled
+                select(name="status")
+                    option(value="1") Enabled
+                    option(value="0") Disabled
+
+            .clearfix
+            .col-12.alpha
+                button(type="submit" class="save") enregistrer    
+            .col-12.omega
+                button(type="button" class="cancel")  Cancel 
+
+
+

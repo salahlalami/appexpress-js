@@ -1,0 +1,52 @@
+
+extends layout
+include mixins/_departmentForm
+include mixins/_searchForm
+include mixins/_dataTable
+include mixins/_information
+include components/_infoHeader
+
+block panelHeader
+    - const searchAction = '/api/department/search?q='
+    - const get = '/api/department/get/'
+    - const read = '/api/department/read/'
+    - const remove = '/api/department/delete/'
+    - const titleColumn = 'name'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchForm(searchAction,"department",titleColumn, read)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="department")
+        .panel-body.hidden
+            +infoHeader(read, remove, "Department: ", titleColumn)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'enabled',text:'Activée'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +departmentForm('/api/department/')
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux #{title}
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +departmentForm('/api/department/')
+
+
+block content
+  .departmentPage    
+    .model.modelSmall
+        - const col = ['name','enabled']  
+        - const items = 20
+        - const list = ['Nom','Activée']
+        +dataTable(list,get,read,remove,col,items, "Liste des Département", titleColumn)
+
+    

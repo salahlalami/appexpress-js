@@ -1,0 +1,40 @@
+html
+    head
+        title= 'Feed List'
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        link(href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css", rel="stylesheet")
+        link(href="//cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.css", rel="stylesheet")
+
+body
+    div.container
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js')
+        script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js')
+        script(src='//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js')
+        div#dataToShow
+            table#resultTable.table.table-hover
+                thead
+                    tr
+                        th='_id'
+                        th='Name'
+                        th='Email'
+                        th='Action'
+                    tbody
+                        for user in users
+                            tr
+                                td= user._id
+                                td= user.name
+                                td= user.email
+                                td
+script.     
+    $(document).ready(function() {
+        $('#resultTable').DataTable({
+            "columnDefs" : [
+                    {"targets":-1,"data": "user._id",
+                           "render": function ( data, type, row ) {
+                            return '<a href="/permissions/users/'+row[0]+'" target="_blank">Permissions</a>';
+                    }
+            }]
+            });
+    });

@@ -1,0 +1,79 @@
+
+mixin doctorForm(actionForm={},department={},specialty={})
+    .component(data-component="ajaxForm")
+        - const lists = ["01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum el-Bouaghi","05 - Batna","06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouïra","11 - Tamanghasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou","16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda","21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine","26 - Médéa","27 - Mostaganem","28 - Msila","29 - Mascara","30 - Ouargla","31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès","36 - El Taref","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela","41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma","46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane"];
+        - const departments = department;
+        - const specialtys = specialty;
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        
+        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-read=actionForm+"read/" data-edit=actionForm+"update/" method="POST")
+            .loaderWarpper
+                .loader
+
+            .col-12.alpha
+                label(for="name") Nom
+                input(type="text" required name="name" data-name="name" autocomplete="off")
+            .col-12.omega    
+                label(for="surname") Prenom
+                input(type="text" required name="surname" data-name="surname" autocomplete="off")
+            
+            .col-12.alpha
+                label(for="birthday") Date de naissance
+                input.datepicker(type="text" name="birthday" required data-name="birthday" autocomplete="off" class="date" maxlength="10")
+            .col-12.omega    
+                label(for="birthplace") Lieu de naissance
+                select(name='birthplace' data-name="birthplace")
+                    each list in lists
+                        option(value=list) #{list}
+
+            .col-12.alpha
+                label(for="sexe") Sexe
+                select(name='sexe' data-name="sexe" required)
+                    option(value='male') Femme
+                    option(value='female') Homme
+            .col-12.omega    
+                label(for="tel") Tel
+                input(type="text" name="tel" data-name="tel" autocomplete="off")
+
+            .col-12.alpha       
+                label(for="email") Email
+                input(type="email" name="email" data-name="email" autocomplete="off")  
+            .col-12.omega    
+                label(for="urgentContact") Personne ECU
+                input(type="text" name='urgentContact' data-name="urgentContact" autocomplete="off")     
+
+            .col-12.alpha
+                label(for="address") Adresse
+                input(type="text" name="address" data-name="address" autocomplete="off")
+            .col-12.omega    
+                label(for="state") Wilaya
+                select(name='state' data-name="state")
+                    each list in lists
+                        option(value=list) #{list}
+
+            .col-24.alpha.omega    
+                label(for="department") department
+                select(name='department' data-name="department" required)
+                    each department in departments
+                        option(value=department.name) #{department.name}
+
+            .col-12.alpha    
+                label(for="specialty") specialty
+                select(name='specialty' data-name="specialty")
+                    each specialty in specialtys
+                        option(value=specialty._id) #{specialty.name}
+            .col-12.omega    
+                label(for="status") status
+                select(name='status' data-name="status")
+                    option(value='1') En Service
+                    option(value='0') Demisioner
+
+
+            .clearfix
+            .col-12.alpha    
+                button(type="submit" class="save")  Enregistrer      
+            .col-12.omega
+                button(type="button" class="cancel")  Cancel 
+
+

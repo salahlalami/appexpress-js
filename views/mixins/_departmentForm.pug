@@ -1,0 +1,22 @@
+
+mixin departmentForm(actionForm={})
+    .component(data-component="ajaxForm")
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        form.ajax(action=actionForm+"create/" data-add=actionForm+"create/" data-read=actionForm+"read/"  data-edit=actionForm+"update/" method="POST")
+            .loaderWarpper
+                .loader
+            .col-12.alpha
+                label(for="name") Nom du Department
+                input(type="text" name="name" autocomplete="off")
+            .col-12.omega    
+                label(for="status") En Service
+                select(name='status')
+                    option(value='oui') Oui
+                    option(value='non') Non
+
+            .clearfix
+            .col-12.alpha    
+                button(type="submit" class="save")  Enregistrer      
+            .col-12.omega
+                button(type="button" class="cancel")  Cancel 

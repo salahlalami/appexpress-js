@@ -1,0 +1,14 @@
+extends layoutLogin
+
+include mixins/_loginForm
+include mixins/_forgot
+
+//- Login Page 
+
+block loginPage
+    .background
+    .container
+        .col-24 
+            .login-box
+                != h.icon('logo-cedimed')
+                +loginForm()

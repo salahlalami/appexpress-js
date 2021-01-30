@@ -1,0 +1,44 @@
+
+include _searchForm
+
+mixin mriForm(actionForm={},filter={},search={},specialty={},doctor={})
+    //- .component(data-component="ajaxForm")
+    .component(data-component="ajaxForm")
+        .alert-success.alert Successfully udated
+        .alert-error.alert Oops there is error
+        form.ajax(autocomplete="off" action=actionForm+"create/" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" method="POST")
+            .loaderWarpper
+                .loader
+
+            .space-25
+            - const searchAction = '/api/patient/'
+            +searchForm(searchAction)
+            .space-25
+        
+            .accordionFormHeader.form-header-extend
+                != h.icon('plus-circle') 
+                | Ajouter un enrigistrement
+                span.arrow-right
+                    != h.icon('arrow-down')
+
+            .space-15
+            .tab-container
+                .single-item.meta-title-row
+                    .item-row
+                        .item-data
+                            | ID: 1 820219 99 190502 0
+                        .item-data
+                            | M. Sehnoun Sophian
+
+                .space-15
+                .content-row
+                    .col-24.analyses-requested
+                        label(for="analyses_requestd") Analyse demandées par:
+                        input(type="text" name="analyses_requestd" autocomplete="off")
+                .space
+                .content-row
+                    .col-24
+                        .action-buttons
+                            .col-12.alpha
+                                button(type="submit" class="btn primary-btn icon-btn") Ajouter un Ordonnance
+                                    != h.icon('plus-circle')

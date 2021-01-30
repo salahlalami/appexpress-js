@@ -1,4 +1,0 @@
-mixin doctorAutocomplete(modelName="doctor", displayName="name|surname", search="/api/doctor/search?q=")
-    .component(data-component="ajaxSearch" data-error-message="No search doctor found")   
-        .autocomplete
-            input(type="text" data-component="search-input" class="component searchAjax" name=modelName data-disabled="true" data-name=modelName data-ajax=search autocomplete="off" placeholder="Rechercher" data-label=displayName)    

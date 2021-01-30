@@ -1,9 +1,0 @@
-
-mixin searchForm(search={}, modelName={},displayName="name|surname", read)
-
-    .col-21.alpha.component(data-component="ajaxSearch" data-error-message="No search result found")   
-        .autocomplete
-            input(type="text" data-component="search-input" class="component searchAjax search-input" name=modelName data-disabled="true" data-name=modelName data-read=read data-ajax=search autocomplete="off" placeholder="Rechercher" data-label=displayName data-change="true")    
-            
-    .col-3.alpha.omega    
-        .add-click()!= h.icon('plus-circle')  

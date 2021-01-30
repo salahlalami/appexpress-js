@@ -1,4 +1,0 @@
-mixin expenseCategoryAutocomplete(modelName="expenseCategory", displayName="name", search="/api/expenseCategory/search?q=")
-    .component(data-component="ajaxSearch" data-error-message="No search patient found")   
-        .autocomplete
-            input(type="text" data-component="search-input" class="component searchAjax" name=modelName data-disabled="true" data-name=modelName data-ajax=search autocomplete="off" placeholder="Rechercher" data-label=displayName)    

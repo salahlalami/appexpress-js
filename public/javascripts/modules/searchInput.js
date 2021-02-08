@@ -46,75 +46,87 @@ function searchInput(component, inputName) {
     a.setAttribute("class", "autocomplete-items");
     /*append the DIV element as a child of the autocomplete container:*/
     this.parentNode.appendChild(a);
+
+    /** Loading **/
+    b = document.createElement("DIV");
+    var loadingMessage = "Loading ...";
+    /*make the matching letters bold:*/
+    b.classList.add("no-select");
+    b.innerHTML = loadingMessage;
+    a.appendChild(b);
     /*for each item in the array...*/
 
     let question = this.value || null;
     let fields = this.dataset.fields || null;
     const ajaxCall = searchSync(target, source, { fields, question });
     ajaxCall.then(function (response) {
-      if (response === undefined || response.success === false) {
-        return;
-      }
-      let list = new Array(response.result.length);
-      let listID = new Array(response.result.length);
+      a.innerHTML = "";
+      if (
+        response != undefined &&
+        response.success === true &&
+        response.result.length > 0
+      ) {
+        let list = new Array(response.result.length);
+        let listID = new Array(response.result.length);
 
-      let arr = list;
-      if (arr.length > 0) {
-        for (let i = 0; i < response.result.length; i++) {
-          const data = response.result[i];
-          var displayLabel = "";
-          if (that.dataset.label) {
-            displayLabel = valueByString(
-              response.result[i],
-              that.dataset.label
-            );
-          } else if (response.result[i].name) {
-            displayLabel = response.result[i].name;
-          } else {
-            displayLabel = response.result[i].toString();
-          }
-          listID[i] = data[output];
-
-          b = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          b.innerHTML = displayLabel.substr(0, val.length);
-          b.innerHTML += displayLabel.substr(val.length);
-          /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML +=
-            "<input type='hidden' value='" +
-            displayLabel +
-            "' data-value='" +
-            listID[i] +
-            "'>";
-          /*execute a function when someone clicks on the item value (DIV element):*/
-
-          b.addEventListener("click", function () {
-            /*insert the value for the autocomplete text field:*/
-            inp.value = this.getElementsByTagName("input")[0].value;
-            inp.dataset.value = this.getElementsByTagName(
-              "input"
-            )[0].dataset.value;
-            const valOption = this.getElementsByTagName("input")[0].dataset
-              .value;
-            const textOption = this.getElementsByTagName("input")[0].value;
-            inpSelect.options[0] = new Option(textOption, valOption);
-            that.parentNode.appendChild(inpSelect);
-
-            if (inp.dataset.change) {
-              var event = new CustomEvent("select", {
-                detail: {
-                  display: displayLabel,
-                  id: data._id,
-                  data: data,
-                },
-              });
-              inp.dispatchEvent(event);
+        let arr = list;
+        if (arr.length > 0) {
+          for (let i = 0; i < response.result.length; i++) {
+            const data = response.result[i];
+            var displayLabel = "";
+            if (that.dataset.label) {
+              displayLabel = valueByString(
+                response.result[i],
+                that.dataset.label
+              );
+            } else if (response.result[i].name) {
+              displayLabel = response.result[i].name;
+            } else {
+              displayLabel = response.result[i].toString();
             }
-            /*close the list of autocompleted values,
-            (or any other open lists of autocompleted values:*/
-            closeAllLists();
-          });
-          a.appendChild(b);
+            listID[i] = data[output];
+
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = displayLabel.substr(0, val.length);
+            b.innerHTML += displayLabel.substr(val.length);
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML +=
+              "<input type='hidden' value='" +
+              displayLabel +
+              "' data-value='" +
+              listID[i] +
+              "'>";
+            /*execute a function when someone clicks on the item value (DIV element):*/
+
+            b.addEventListener("click", function () {
+              /*insert the value for the autocomplete text field:*/
+              inp.value = this.getElementsByTagName("input")[0].value;
+              inp.dataset.value = this.getElementsByTagName(
+                "input"
+              )[0].dataset.value;
+              const valOption = this.getElementsByTagName("input")[0].dataset
+                .value;
+              const textOption = this.getElementsByTagName("input")[0].value;
+              inpSelect.options[0] = new Option(textOption, valOption);
+              that.parentNode.appendChild(inpSelect);
+
+              if (inp.dataset.change) {
+                var event = new CustomEvent("select", {
+                  detail: {
+                    display: displayLabel,
+                    id: data._id,
+                    data: data,
+                  },
+                });
+                inp.dispatchEvent(event);
+              }
+              /*close the list of autocompleted values,
+               (or any other open lists of autocompleted values:*/
+              closeAllLists();
+            });
+            a.appendChild(b);
+          }
         }
       } else {
         b = document.createElement("DIV");

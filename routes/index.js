@@ -27,6 +27,8 @@ router.get("/dashboardDoctor", appController.dashboardDoctor);
 router.get("/dashboardSecretariat", appController.dashboardSecretariat);
 router.get("/account", appController.account);
 router.get("/user", appController.user);
+router.get("/role", appController.role);
+router.get("/permission", appController.permission);
 router.get("/patient", appController.patient);
 router.get("/employee", appController.employee);
 router.get("/department", appController.department);

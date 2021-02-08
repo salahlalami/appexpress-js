@@ -1,6 +1,6 @@
 extends layout 
 include mixins/_accountForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -14,7 +14,7 @@ include components/_infoHeader
 //-     p.panelTitle #{title}
 //-     .space-25
 //-     .search-container
-//-         +searchForm(searchAction, 'account', displayFields, read)
+//-         +searchItemCrud(searchAction, 'account', displayFields, read)
 //- block panelBody
 //-     .clearfix
 //-     .panelContent.component(data-component="view-details" data-page="account")

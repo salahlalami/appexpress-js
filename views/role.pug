@@ -1,19 +1,19 @@
 
 extends layout
 include mixins/_roleForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
 
 block panelHeader
     - const target = 'role'
-    - const fields = 'name'
-    - const displayFields = 'name'
+    - const fields = 'displayName'
+    - const displayFields = 'displayName'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "Role: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'status',text:'En Service'}]
+                    - const listInfo = [{key:'displayName',text:'Nom'},{key:'codeName',text:'Code du role'},{key:'dashboardType',text:'dashboard Type'},{key:'authorizedPages',text:'Pages'}]
                     +information(listInfo)
                 .edit.hidden
                     +roleForm(target,"update")
@@ -43,7 +43,7 @@ block content
     .rolePage    
         .model.modelSmall
 
-            - const col = ['name', 'permissions', 'created']  
+            - const col = ['displayName', 'codeName', 'dashboardType']  
             - const limit = 20
-            - const lists = ['Nom', 'permissions', 'created']
+            - const lists = ['Nom', 'Code', 'Dashboard Type']
             +dataTable(target,lists,col,items,"Roles", displayFields)

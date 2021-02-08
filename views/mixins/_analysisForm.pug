@@ -1,4 +1,4 @@
-include autocomplete/_patinetAutocomplete
+include autocomplete/_patientAutocomplete
 include autocomplete/_appointmentAutocomplete
 
 mixin analysisForm(target={},formState="create",analysesList={})
@@ -11,7 +11,7 @@ mixin analysisForm(target={},formState="create",analysesList={})
 
             .col-24.alpha.omega 
                 label(for="patient") Patient
-                +patinetAutocomplete()
+                +patientAutocomplete()
 
             .col-12.alpha.component(data-component="ajaxSearch")       
                 label(for="appointment") Appointment

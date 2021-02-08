@@ -35,7 +35,7 @@ mixin prescriptionGrid(actionForm={}, title='')
                         .col-7.omega.component(data-component="searchList")   
                             label(for="medicamentName") Medicament
                             .autocomplete
-                                input(type="text" name="medicamentName" data-name="medicamentName" data-label="name" data-output="name" class="searchAjax" data-ajax="/api/medicament/search?q=" data-disabled="true" autocomplete="off" required)
+                                input(type="text" name="medicamentName" data-name="medicamentName" data-label="name" data-output="name" class="searchList" data-ajax="/api/medicament/search?q=" data-disabled="true" autocomplete="off" required)
                         .col-3.omega
                             label(for="boxesNumber") Nbr. Boites
                             input(type="number" name="boxesNumber" data-disabled="true" autocomplete="off" required)

@@ -9,8 +9,15 @@ exports.login = (req, res) => {
 exports.account = (req, res) => {
   res.render("account", { title: "Edit Your Account" });
 };
-exports.user = (req, res) => {
-  res.render("user", { title: "Users Management" });
+exports.role = (req, res) => {
+  res.render("role", { title: "Roles Management" });
+};
+exports.permission = (req, res) => {
+  res.render("permission", { title: "Permissions Management" });
+};
+exports.user = async (req, res) => {
+  const [roles] = await Promise.all([getData("Role")]);
+  res.render("user", { title: "Users Management", roles });
 };
 exports.dashboard = (req, res) => {
   res.render("index", {
@@ -90,7 +97,7 @@ exports.appointment = async (req, res) => {
     getData("Doctor"),
     getData("Specialty"),
   ]);
-  res.render("appointment", { doctor, specialty, title: "appointment List" });
+  res.render("appointment", { specialty, title: "appointment List" });
 };
 
 exports.medicament = (req, res) => {

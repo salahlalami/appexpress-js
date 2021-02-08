@@ -1,7 +1,7 @@
 
 extends layout
 include mixins/_appointmentForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_information
 include components/_dataTable
 include components/_infoHeader
@@ -13,7 +13,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 block panelBody
     .clearfix
@@ -25,8 +25,8 @@ block panelBody
                     - const listInfo = [{key:'patient.name',text:'Nom du patient'},{key:'patient.surname',text:'Prenom du patient'},{key:'doctor.name',text:'Nom du doctor'},{key:'doctor.surname',text:'Prenom du doctor'},{key:'date',text:'Date du RDV'},{key:'time',text:'Heure du RDV'}]
                     +information(listInfo)
                 .edit.hidden
-                    - const idSelect = 1
-                    +appointmentForm(target,"update",specialty,idSelect)
+                    
+                    +appointmentForm(target,"update",specialty,1)
                     
 
 block panelFooter                    
@@ -37,8 +37,8 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                - const idSelect = 2
-                +appointmentForm(target,"create",specialty,idSelect)
+                
+                +appointmentForm(target,"create",specialty,2)
                 
 
 block content

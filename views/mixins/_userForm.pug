@@ -1,33 +1,37 @@
+include autocomplete/_employeeAutocomplete
+include autocomplete/_doctorAutocomplete
 
-mixin userForm(target={},formState="create")
+mixin userForm(target={},formState="create",roles=[])
     .component(data-component="ajaxForm")  
         
         form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
+        
             
-
-            .col-24.alpha.omega
-                label(for="name") Nom du User
-                input(type="text" name="name" data-name="name" autocomplete="off")
             
-            .col-24.alpha.omega
-                label(for="email") Email du User
-                input(type="email" name="email" data-name="email" autocomplete="off")
-                
-            .col-24.alpha.omega
-                label(for="permissions") Permissions
-                select(name='permissions' data-name="status")
-                    option(value='0') All
-                    option(value='1') View only
-                    option(value='2') Write
-                    
+            .component(data-component="selecttoggle")        
+                .col-24.alpha.omega
+                    label(for="accountType") Type de compte
+                    select(name='accountType' required)
+                        option(value="isDoctor") Doctor
+                        option(value="isEmployee") Employee
+                .col-24.alpha.omega.toggleDiv.isDoctor.isRequired
+                    +doctorAutocomplete({isRequired:true})           
+                .col-24.alpha.omega.toggleDiv.isEmployee.isRequired.hidden
+                    +employeeAutocomplete()
+                                      
             .col-24.alpha.omega  
                 label(for="role") Role
-                select(name='role' data-name="role")
-                    option(value='1') User
-                    option(value='2') Admin
-                    option(value='3') Doctor
-                    option(value='4') Patient
-
+                select(name='role')
+                    option(value="null")  selectionner le role d'utilisateur
+                    each role in roles
+                        option(value=role._id) #{role.displayName}
+            
+            .col-24.alpha.omega
+                label(for="email") E-mail
+                input(type="text" name="email" data-name="email" autocomplete="off" required)            
+            .col-24.alpha.omega
+                label(for="password") password
+                input(type="password" name="password" data-name="password" autocomplete="off" required)
             .clearfix
             .col-12.alpha    
                 button(type="submit" class="save")  Enregistrer      

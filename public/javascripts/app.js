@@ -3,13 +3,13 @@ import "../sass/style.scss";
 
 import docReady from "./lib/docReady";
 // import { $$ } from './lib/bling';
-
+import { modal, selectToggle } from "./core";
 import moreOption from "./modules/moreOption";
-import modal from "./modules/modal";
+
 import inputFunction from "./modules/inputFunction";
 import dataGrid from "./modules/dataGrid";
 import ajaxSelectInput from "./modules/ajaxSelectInput";
-import searchList from "./modules/searchList";
+import searchInput from "./modules/searchInput";
 import tabPanel from "./modules/tabPanel";
 import navApp from "./modules/navApp";
 import initSubMenuDrawer from "./modules/subMenuDrawer";
@@ -50,6 +50,9 @@ docReady(function () {
   const navigations = document.querySelectorAll(
     '.component[data-component="navigation"]'
   );
+  const selectToggleComp = document.querySelectorAll(
+    '.component[data-component="selecttoggle"]'
+  );
   const panels = document.querySelectorAll(
     '.component[data-component="panel"]'
   );
@@ -68,6 +71,7 @@ docReady(function () {
   );
 
   window.modal = modal;
+  // window.modal.init();
   moreOption();
   initSubMenuDrawer();
 
@@ -76,6 +80,9 @@ docReady(function () {
   });
 
   datepicker(".datepicker");
+  [].forEach.call(selectToggleComp, function (el) {
+    selectToggle(el);
+  });
 
   [].forEach.call(dataTables, function (dataTable) {
     dataGrid.init(dataTable);
@@ -98,7 +105,7 @@ docReady(function () {
   });
 
   [].forEach.call(searchLists, function (searchList) {
-    searchList(searchList, ".searchAjax");
+    searchInput(searchList, ".searchList");
   });
 
   [].forEach.call(navigations, function (navigation) {

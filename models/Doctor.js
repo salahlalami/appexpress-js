@@ -18,6 +18,10 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  email: {
+    type: String,
+    trim: true,
+  },
   birthday: {
     type: String,
     trim: true,
@@ -27,7 +31,7 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  sexe: {
+  gender: {
     type: String,
     required: true,
   },
@@ -47,11 +51,7 @@ const doctorSchema = new mongoose.Schema({
   state: {
     type: String,
   },
-  tel: {
-    type: String,
-    trim: true,
-  },
-  email: {
+  phone: {
     type: String,
     trim: true,
   },
@@ -59,10 +59,9 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  status: {
-    type: String,
-    default: 1,
-    required: true,
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

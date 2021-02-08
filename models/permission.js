@@ -6,12 +6,17 @@ const permissionSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  name: {
+  displayName: {
     type: String,
     trim: true,
     required: true,
   },
-  displayName: {
+  apiGroup: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  apiMethod: {
     type: String,
     trim: true,
     required: true,

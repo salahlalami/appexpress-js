@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const getOne = require("./helpersControllers/custom").getOne;
 
 exports.list = async (req, res) => {
   const page = req.query.page || 1;
@@ -201,10 +202,25 @@ exports.read = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
+    const accountType = req.body.accountType;
+    if (accountType === "isDoctor") {
+      req.body.isDoctor = true;
+      req.body.isEmployee = false;
+    } else if (accountType === "isEmployee") {
+      req.body.isEmployee = true;
+      req.body.isDoctor = false;
+    } else {
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "No Account Type have been entered.",
+      });
+    }
     let { email, password } = req.body;
-
     if (!email || !password)
-      return res.status(400).json({ msg: "Not all fields have been entered." });
+      return res.status(400).json({
+        msg: "Rmail or password fields they don't have been entered.",
+      });
 
     const existingUser = await User.findOne({ email: email });
 
@@ -221,6 +237,21 @@ exports.create = async (req, res) => {
     //   return res
     //     .status(400)
     //     .json({ msg: "Enter the same password twice for verification." });
+    let doctor;
+    let employee;
+    if (accountType === "isDoctor") {
+      req.body.isDoctor = true;
+      req.body.isEmployee = false;
+      doctor = await getOne("Doctor", req.body.doctor);
+      req.body.name = doctor.name;
+      req.body.surname = doctor.surname;
+    } else if (accountType === "isEmployee") {
+      req.body.isEmployee = true;
+      req.body.isDoctor = false;
+      employee = await getOne("Employee", req.body.employee);
+      req.body.name = employee.name;
+      req.body.surname = employee.surname;
+    }
     var newUser = new User();
     const passwordHash = newUser.generateHash(password);
     req.body.password = passwordHash;
@@ -239,11 +270,8 @@ exports.create = async (req, res) => {
         _id: result._id,
         enabled: result.enabled,
         email: result.email,
-        name: result.name,
-        surname: result.surname,
         photo: result.photo,
         accountType: result.accountType,
-        dashboardType: result.dashboardType,
         doctor: result.doctor,
         employee: result.employee,
       },
@@ -261,6 +289,20 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
+    const accountType = req.body.accountType;
+    if (accountType === "isDoctor") {
+      req.body.isDoctor = true;
+      req.body.isEmployee = false;
+    } else if (accountType === "isEmployee") {
+      req.body.isEmployee = true;
+      req.body.isDoctor = false;
+    } else {
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "No Account Type have been entered.",
+      });
+    }
     let { email } = req.body;
 
     if (email) {
@@ -271,7 +313,21 @@ exports.update = async (req, res) => {
           .status(400)
           .json({ message: "An account with this email already exists." });
     }
-
+    let doctor;
+    let employee;
+    if (accountType === "isDoctor") {
+      req.body.isDoctor = true;
+      req.body.isEmployee = false;
+      doctor = await getOne("Doctor", req.body.doctor);
+      req.body.name = doctor.name;
+      req.body.surname = doctor.surname;
+    } else if (accountType === "isEmployee") {
+      req.body.isEmployee = true;
+      req.body.isDoctor = false;
+      employee = await getOne("Employee", req.body.employee);
+      req.body.name = employee.name;
+      req.body.surname = employee.surname;
+    }
     // Find document by id and updates with the required fields
     const result = await User.findOneAndUpdate(
       { _id: req.params.id, removed: false },

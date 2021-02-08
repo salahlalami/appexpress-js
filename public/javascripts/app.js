@@ -19,7 +19,7 @@ import accordionModel from "./modules/accordionModel";
 import FileUpload from "./modules/fileUpload";
 import consultationComponent from "./modules/consultationComponent";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
-import patientFolder from "./modules/patientFolder";
+// import patientFolder from "./modules/patientFolder";
 import { initCrudPanel, formSubmit, searchItem } from "./modules/crudPanel";
 
 docReady(function () {
@@ -136,7 +136,7 @@ docReady(function () {
     FileUpload(el);
   });
 
-  [].forEach.call(itemListComponent, function (el) {
-    patientFolder(el);
-  });
+  // [].forEach.call(itemListComponent, function (el) {
+  //   patientFolder(el);
+  // });
 });

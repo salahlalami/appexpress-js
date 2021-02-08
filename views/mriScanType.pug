@@ -1,6 +1,6 @@
 extends layout 
 include mixins/_mriScanTypeForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -12,7 +12,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -42,6 +42,6 @@ block content
     .model.modelSmall
         
         - const col = ['name','reference', 'price', 'status']
-        - const header = ['name','Reference', 'Price', 'Statut']
+        - const lists = ['name','Reference', 'Price', 'Statut']
         - const limit = 20
         +dataTable(target,lists,col,items,"MRI Scan Types", displayFields)

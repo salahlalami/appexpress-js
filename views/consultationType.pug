@@ -1,6 +1,6 @@
 extends layout 
 include mixins/_consultationTypeForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -15,7 +15,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody

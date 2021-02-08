@@ -1,5 +1,5 @@
 extends layout 
-include components/_searchForm
+include components/_searchItemCrud
 include mixins/_orderForm
 include components/_dataTable
 
@@ -12,7 +12,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
         
 
 block panelBody 
@@ -30,6 +30,6 @@ block panelBody
 block content 
     .model.modelSmall
         - const col = ['number', 'date', 'client', 'dateExpired', 'supplier', 'total']
-        - const header = ['Number', 'Date', 'Client', 'Expired Date', 'fournisseur', 'Total']
+        - const lists = ['Number', 'Date', 'Client', 'Expired Date', 'fournisseur', 'Total']
         - const limit = 20
         +dataTable(target,lists,col,items,"Orders", displayFields)

@@ -1,4 +1,4 @@
-const permission = require("../models/permission");
+const permission = require("../models/Permission");
 
 const HasPermission = (perm) => {
   return async (req, res, next) => {

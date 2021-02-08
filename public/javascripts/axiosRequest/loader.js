@@ -2,7 +2,7 @@ const loader = {
   init: function (warpper) {
     const loaderWarpper = document.createElement("div");
     loaderWarpper.classList.add("loaderWarpper");
-    const htmlLoader = `   <div class="loader"></div>`;
+    const htmlLoader = `<div class="loader"></div>`;
     loaderWarpper.innerHTML = htmlLoader;
     const htmlWarpper = document.body.querySelector(warpper);
     htmlWarpper.prepend(loaderWarpper);

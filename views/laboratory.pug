@@ -1,6 +1,6 @@
 extends layout
 include mixins/_laboratoryForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -13,7 +13,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -45,6 +45,6 @@ block content
         .model.modelSmall
             - const col = ['patient.name|patient.surname', 'date', 'appointment', 'total', 'payment', 'created']
             - const items = 10
-            - const header = ['Patient', 'Date', 'Appointment', 'Total', 'Payment', 'Created']
+            - const lists = ['Patient', 'Date', 'Appointment', 'Total', 'Payment', 'Created']
             +dataTable(target,lists,col,items,"Laboratory")
 

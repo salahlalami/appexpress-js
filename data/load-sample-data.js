@@ -23,7 +23,7 @@ async function deleteData() {
 
 async function loadData() {
   try {
-    await Patient.insertMany(patients);
+    await Item.insertMany(patients);
     console.log("👍👍👍👍👍👍👍👍 Done!");
     process.exit();
   } catch (e) {

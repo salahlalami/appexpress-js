@@ -1,6 +1,6 @@
 extends layout 
 include mixins/_settingGlobalForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -13,7 +13,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-         +searchForm(target,fields,displayFields)
+         +searchItemCrud(target,fields,displayFields)
          
 
 block panelBody
@@ -38,9 +38,9 @@ block panelFooter
             .box
                 +settingGlobalForm(target,"create")
 
-block content 
+block content
     .model.modelSmall
         - const col = ['name', 'value', 'tableName', 'relationID']
-        - const header = ['Name', 'Value', 'Table Name', 'Relation ID']
+        - const lists = ['Name', 'Value', 'Table Name', 'Relation ID']
         - const limit = 20
         +dataTable(target,lists,col,items,"Globals Setting", displayFields)

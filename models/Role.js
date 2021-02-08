@@ -6,11 +6,22 @@ const roleSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  name: {
+  codeName: {
+    type: String,
+    lowercase: true,
+    trim: true,
+    required: true,
+  },
+  displayName: {
     type: String,
     trim: true,
     required: true,
   },
+  dashboardType: {
+    type: String,
+    trim: true,
+  },
+  authorizedPages: [{ type: String, lowercase: true, trim: true }],
   permissions: [{ type: mongoose.Schema.ObjectId, ref: "Permission" }],
   created: {
     type: Date,

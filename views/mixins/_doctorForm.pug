@@ -26,13 +26,13 @@ mixin doctorForm(target={},formState="create",department={},speciality={})
                         option(value=list) #{list}
 
             .col-12.alpha
-                label(for="sexe") Sexe
-                select(name='sexe' data-name="sexe" required)
-                    option(value='male') Femme
-                    option(value='female') Homme
+                label(for="Gender") Gender
+                select(name='Gender' data-name="sexe" required)
+                    option(value='Femme') Femme
+                    option(value='Homme') Homme
             .col-12.omega    
-                label(for="tel") Tel
-                input(type="text" name="tel" data-name="tel" autocomplete="off")
+                label(for="phone") phone
+                input(type="text" name="phone" data-name="phone" autocomplete="off")
 
             .col-12.alpha       
                 label(for="email") Email

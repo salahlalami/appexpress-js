@@ -1,19 +1,19 @@
 
 extends layout
 include mixins/_userForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const target = 'mriScanType'
+    - const target = 'user'
     - const fields = 'name'
     - const displayFields = 'name'
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -23,10 +23,10 @@ block panelBody
             +infoHeader( "User: ", displayFields)
             .tab-content
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'status',text:'En Service'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'email',text:'email'},{key:'enabled',text:'Compte Active'}]
                     +information(listInfo)
                 .edit.hidden
-                    +userForm(target,"update")
+                    +userForm(target,"update",roles)
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -36,12 +36,14 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +userForm(target,"create")
+                +userForm(target,"create",roles)
 
 block content
     .userPage    
         .model.modelSmall
-            - const col = ['name', 'email','role']  
+
+  
+            - const col = ['name', 'surname','email','role']  
             - const limit = 20
-            - const header = ['Nom', 'Email','Role']
+            - const lists = ['Nom','Prenom', 'Email','Role']
             +dataTable(target,lists,col,items,"Users", displayFields)

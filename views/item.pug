@@ -1,6 +1,6 @@
 extends layout 
 include mixins/_itemForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -12,7 +12,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -42,6 +42,6 @@ block panelFooter
 block content 
     .model.modelSmall
         - const col = ['name','description', 'price', 'currency', 'enabled']
-        - const header = ['Nom', 'Description', 'Montant', 'Unité', 'Activée']
+        - const lists = ['Nom', 'Description', 'Montant', 'Unité', 'Activée']
         - const limit = 20
         +dataTable(target,lists,col,items,"Items", displayFields)

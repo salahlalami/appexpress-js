@@ -23,25 +23,19 @@ const userSchema = new Schema({
     trim: true,
     required: true,
   },
-  name: {
-    type: String,
-    trim: true,
-  },
-  surname: {
-    type: String,
-    trim: true,
-  },
+  name: { type: String, required: true },
+  surname: { type: String, required: true },
   photo: {
     type: String,
     trim: true,
   },
-  dashboardType: {
-    type: String,
-    trim: true,
+  isDoctor: {
+    type: Boolean,
+    default: false,
   },
-  accountType: {
-    type: String,
-    trim: true,
+  isEmployee: {
+    type: Boolean,
+    default: false,
   },
   doctor: {
     type: mongoose.Schema.ObjectId,
@@ -55,12 +49,16 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
+  role: { type: mongoose.Schema.ObjectId, ref: "Role", autopopulate: true },
+  hasCustomPermissions: {
+    type: Boolean,
+    default: false,
+  },
   permissions: [{ type: mongoose.Schema.ObjectId, ref: "Permission" }],
-  role: { type: mongoose.Schema.ObjectId, ref: "Role" },
   customMenu: [{ type: mongoose.Schema.ObjectId, ref: "CustomMenu" }],
 });
+
+userSchema.plugin(require("mongoose-autopopulate"));
 
 // generating a hash
 userSchema.methods.generateHash = function (password) {

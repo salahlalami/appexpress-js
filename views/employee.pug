@@ -1,7 +1,7 @@
 
 extends layout
 include mixins/_employeeForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -13,7 +13,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -45,7 +45,7 @@ block content
     .model.modelSmall
         - const col = ['name', 'surname', 'email', 'department', 'position', 'tel', 'enabled']  
         - const limit = 20
-        - const header = ['Nom', 'Nom de famille', 'Email', 'département', 'Position', 'Téléphone', 'Activée']
+        - const lists = ['Nom', 'Nom de famille', 'Email', 'département', 'Position', 'Téléphone', 'Activée']
         +dataTable(target,lists,col,items,"Employees", displayFields)
 
     

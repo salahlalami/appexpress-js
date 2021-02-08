@@ -40,10 +40,10 @@ export const initCrudPanel = (component) => {
     },
     false
   );
-
-  const searchInput = document.querySelector(
-    '.component[data-component="search-input"]'
+  const searcAjax = document.querySelector(
+    '.component[data-component="ajaxSearch"]'
   );
+  const searchInput = searcAjax.querySelector(".searchAjax");
   if (searchInput) {
     searchInput.addEventListener(
       "select",
@@ -396,18 +396,30 @@ export function searchItem(component, inputName) {
     /*append the DIV element as a child of the autocomplete container:*/
     this.parentNode.appendChild(a);
     /*for each item in the array...*/
-
+    /** Loading **/
+    b = document.createElement("DIV");
+    var loadingMessage = "Loading ...";
+    /*make the matching letters bold:*/
+    b.classList.add("no-select");
+    b.innerHTML = loadingMessage;
+    /*execute a function when someone clicks on the item value (DIV element):*/
+    a.appendChild(b);
     let question = this.value || null;
     let fields = this.dataset.fields || null;
 
     const ajaxCall = searchSync(target, source, { fields, question });
     ajaxCall.then(function (response) {
-      if (response === undefined || response.success === false) {
-        return;
-      }
-      let list = new Array(response.result.length);
-      let listID = new Array(response.result.length);
-      if (response.result.length) {
+      // if (response != undefined && response.success === true && response.result.length > 0) {
+      //   return;
+      // }
+      a.innerHTML = "";
+      if (
+        response != undefined &&
+        response.success === true &&
+        response.result.length > 0
+      ) {
+        let list = new Array(response.result.length);
+        let listID = new Array(response.result.length);
         for (let i = 0; i < response.result.length; i++) {
           const data = response.result[i];
           var displayLabel = "";

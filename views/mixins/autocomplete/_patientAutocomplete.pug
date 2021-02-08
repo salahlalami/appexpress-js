@@ -1,0 +1,12 @@
+
+mixin patientAutocomplete(props={})
+    - const target=props.target || 'patient'
+    - const fieldsSearch=props.fieldsSearch || 'name,surname,birthday'
+    - const displayFields=props.displayFields || 'name|surname|birthday'
+    - const inputName=props.inputName || 'patient'
+    - const outputValue=props.outputValue || '_id'
+    - const isRequired= props.isRequired ||false
+    .component(data-component="searchList" data-error-message="No search patient found")   
+        .autocomplete
+            input(type="text" data-target =target  class="searchList" data-output=outputValue name=inputName data-disabled="true" data-name=inputName data-fields=fieldsSearch data-label=displayFields autocomplete="off" placeholder="Rechercher un patient" required=isRequired )    
+                                                

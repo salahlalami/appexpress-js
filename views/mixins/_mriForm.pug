@@ -1,5 +1,5 @@
 
-include _searchForm
+include _searchItemCrud
 
 mixin mriForm(target={},formState="create",specialty={},doctor={})
     //- .component(data-component="ajaxForm")
@@ -10,7 +10,7 @@ mixin mriForm(target={},formState="create",specialty={},doctor={})
 
             .space-25
             - const searchAction = '/api/patient/'
-            +searchForm(searchAction)
+            +searchItemCrud(searchAction)
             .space-25
         
             .accordionFormHeader.form-header-extend

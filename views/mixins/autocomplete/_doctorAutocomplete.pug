@@ -1,4 +1,11 @@
-mixin doctorAutocomplete(modelName="doctor", displayName="name|surname", search="/api/doctor/search?q=")
-    .component(data-component="ajaxSearch" data-error-message="No search doctor found")   
+
+mixin doctorAutocomplete(props={})
+    - const target=props.target || 'doctor'
+    - const fieldsSearch=props.fieldsSearch || 'name,surname,birthday'
+    - const displayFields=props.displayFields || 'name|surname|birthday'
+    - const inputName=props.inputName || 'doctor'
+    - const outputValue=props.outputValue || '_id'
+    - const isRequired= props.isRequired ||false
+    .component(data-component="searchList" data-error-message="No search doctor found")   
         .autocomplete
-            input(type="text" data-component="search-input" class="component searchAjax" name=modelName data-disabled="true" data-name=modelName data-ajax=search autocomplete="off" placeholder="Rechercher" data-label=displayName)    
+            input(type="text" data-target =target  class="searchList" data-output=outputValue name=inputName data-disabled="true" data-name=inputName data-fields=fieldsSearch data-label=displayFields autocomplete="off" placeholder="Rechercher un doctor" required=isRequired )    

@@ -1,4 +1,4 @@
-include autocomplete/_patinetAutocomplete
+include autocomplete/_patientAutocomplete
 
 mixin laboratoryForm(target={},formState="create",consultationTypes=[],curentDoctor={}) 
     
@@ -10,7 +10,7 @@ mixin laboratoryForm(target={},formState="create",consultationTypes=[],curentDoc
             
             .col-24.alpha.omega  
                 label(for="patient") Patient
-                +patinetAutocomplete()
+                +patientAutocomplete()
 
             .col-24.alpha.omega
                 label(for="consultationType") Consultation Type

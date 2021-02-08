@@ -1,3 +1,49 @@
+
+extends layout
+include mixins/_permissionForm
+include components/_searchItemCrud
+include components/_dataTable
+include components/_information
+include components/_infoHeader
+
+block panelHeader
+    - const target = 'permission'
+    - const fields = 'displayName'
+    - const displayFields = 'displayName'
+    p.panelTitle #{title}
+    .space-25
+    .search-container
+        +searchItemCrud(target,fields,displayFields)
+
+
+block panelBody
+    .clearfix
+    .panelContent.component(data-component="view-details" data-page="permission")
+        .panel-body.hidden
+            +infoHeader( "Permission: ", displayFields)
+            .tab-content         
+                .read
+                    - const listInfo = [{key:'displayName',text:'Nom du permission'},{key:'apiGroup',text:'Api Group'},{key:'apiMethod',text:'Api Method'}]
+                    +information(listInfo)
+                .edit.hidden
+                    +permissionForm(target,"update")
+                    
+
+block panelFooter                    
+    .component(data-component="accordionForm")
+        .accordionForm
+            .accordionFormHeader 
+                | Ajouter un nouveaux Permissions
+                != h.icon('plus-circle') 
+            .whiteBg
+            .box
+                +permissionForm(target,"create")
+
 block content
-  .inner
-    h2 You do not have permission
+    .rolePage    
+        .model.modelSmall
+
+            - const col = ['displayName', 'apiGroup','apiMethod']  
+            - const limit = 20
+            - const lists = ['Nom du permission', 'api Groupe','api Methode']
+            +dataTable(target,lists,col,items,"Permissions", displayFields)

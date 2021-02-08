@@ -1,5 +1,5 @@
 extends layout
-include components/_searchForm
+include components/_searchItemCrud
 include mixins/_patientForm
 include components/_dataTable
 include mixins/patient/_information
@@ -12,7 +12,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 block panelBody
     .clearfix
     .panelContent.component(data-component="view-details" data-page="patient")

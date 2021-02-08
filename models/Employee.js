@@ -29,7 +29,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  sexe: {
+  gender: {
     type: String,
     required: true,
   },
@@ -52,7 +52,7 @@ const employeeSchema = new mongoose.Schema({
   state: {
     type: String,
   },
-  tel: {
+  phone: {
     type: String,
     trim: true,
   },

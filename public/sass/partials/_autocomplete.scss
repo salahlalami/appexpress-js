@@ -13,7 +13,8 @@
   top: 45px;
   left: 0;
   right: 0;
-  box-shadow: 0 8px 20px 0 rgba(0, 163, 240, 0.05);
+  box-shadow: 0 8px 20px 0 rgba(0, 163, 240, 0.1);
+  overflow: hidden;
 }
 .autocomplete-items div {
   padding: 10px;

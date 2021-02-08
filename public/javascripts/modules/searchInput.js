@@ -1,11 +1,12 @@
-import ajaxGetData from "./ajaxGetData";
 import { valueByString } from "../helper";
-
-function searchList(component, inputName) {
+import { searchSync, axiosRequest } from "../axiosRequest";
+function searchInput(component, inputName) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
   const inp = component.querySelector(inputName);
   var currentFocus;
+  const target = inp.dataset.target;
+  let source = null;
 
   inp.addEventListener("setValue", function ({ detail }) {
     let inpSelect = document.createElement("SELECT");
@@ -19,7 +20,10 @@ function searchList(component, inputName) {
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function () {
     removeHiddenSelect();
-
+    if (source) {
+      source.cancel();
+    }
+    source = axiosRequest();
     let that = this;
     var a,
       b,
@@ -44,23 +48,30 @@ function searchList(component, inputName) {
     this.parentNode.appendChild(a);
     /*for each item in the array...*/
 
-    const actionClic = this.dataset.ajax + this.value;
-    const result = ajaxGetData(actionClic);
-    result.then(function (res) {
-      let list = new Array(res.data.length);
-      let listID = new Array(res.data.length);
+    let question = this.value || null;
+    let fields = this.dataset.fields || null;
+    const ajaxCall = searchSync(target, source, { fields, question });
+    ajaxCall.then(function (response) {
+      if (response === undefined || response.success === false) {
+        return;
+      }
+      let list = new Array(response.result.length);
+      let listID = new Array(response.result.length);
 
       let arr = list;
       if (arr.length > 0) {
-        for (let i = 0; i < res.data.length; i++) {
-          const data = res.data[i];
+        for (let i = 0; i < response.result.length; i++) {
+          const data = response.result[i];
           var displayLabel = "";
           if (that.dataset.label) {
-            displayLabel = valueByString(res.data[i], that.dataset.label);
-          } else if (res.data[i].name) {
-            displayLabel = res.data[i].name;
+            displayLabel = valueByString(
+              response.result[i],
+              that.dataset.label
+            );
+          } else if (response.result[i].name) {
+            displayLabel = response.result[i].name;
           } else {
-            displayLabel = res.data[i].toString();
+            displayLabel = response.result[i].toString();
           }
           listID[i] = data[output];
 
@@ -192,4 +203,4 @@ function searchList(component, inputName) {
   });
 }
 
-export default searchList;
+export default searchInput;

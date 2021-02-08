@@ -1,7 +1,7 @@
 
 extends layout
 include mixins/_medicamentForm
-include components/_searchForm
+include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
@@ -13,7 +13,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 
 block panelBody
@@ -45,5 +45,5 @@ block content
 
             - const col = ['name', 'description','status']  
             - const limit = 20
-            - const header = ['Nom', 'Description','En Service']
+            - const lists = ['Nom', 'Description','En Service']
             +dataTable(target,lists,col,items,"Medicaments", displayFields)

@@ -1,19 +1,19 @@
 
-mixin roleForm(target={},formState="create")
+mixin permissionForm(target={},formState="create")
     .component(data-component="ajaxForm")  
         
         form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
             
 
             .col-24.alpha.omega
-                label(for="displayName") Role d'utilisateur
+                label(for="displayName") Permission d'utilisateur
                 input(type="text" name="displayName" autocomplete="off")
             .col-24.alpha.omega
-                label(for="codeName") Code du Role
-                input(type="text" name="codeName" autocomplete="off")
+                label(for="apiGroup") Api Groupe
+                input(type="text" name="apiGroup" autocomplete="off")
             .col-24.alpha.omega
-                label(for="dashboardType") Dashboard Type
-                input(type="text" name="dashboardType" autocomplete="off")
+                label(for="apiMethod") Api Methode
+                input(type="text" name="apiMethod" autocomplete="off")
         
             .clearfix
             .col-12.alpha    

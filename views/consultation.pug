@@ -2,7 +2,7 @@
 extends layout
 include mixins/_consultationForm
 include components/_dataTable
-include components/_searchForm
+include components/_searchItemCrud
 include components/_prescriptionGrid
 include components/_infoHeader
 include components/_consultationInfo
@@ -17,7 +17,7 @@ block panelHeader
     p.panelTitle #{title}
     .space-25
     .search-container
-        +searchForm(target,fields,displayFields)
+        +searchItemCrud(target,fields,displayFields)
 
 block panelBody
     .clearfix

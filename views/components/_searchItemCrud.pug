@@ -1,0 +1,9 @@
+
+mixin searchItemCrud(target={},fieldsSearch={},displayFields="name")
+
+    .col-21.alpha.component(data-component="ajaxSearch" data-error-message="No search result found")   
+        .autocomplete
+            input(type="text" class="searchAjax" name=target  data-name=target data-target=target data-fields=fieldsSearch autocomplete="off" placeholder="Rechercher" data-label=displayFields data-change="true" data-disabled="true")    
+            
+    .col-3.alpha.omega    
+        .add-click()!= h.icon('plus-circle')  

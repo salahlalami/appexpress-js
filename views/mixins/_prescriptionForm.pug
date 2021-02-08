@@ -1,4 +1,4 @@
-include autocomplete/_patinetAutocomplete
+include autocomplete/_patientAutocomplete
 include autocomplete/_consultationAutocomplete
 include autocomplete/_doctorAutocomplete
 
@@ -15,7 +15,7 @@ mixin prescriptionForm(target={},formState="create")
 
             .col-24.alpha.omega  
                 label(for="patient") Patient
-                +patinetAutocomplete()
+                +patientAutocomplete()
 
             .col-24.alpha.omega  
                 label(for="patient") Doctor

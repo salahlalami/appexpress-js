@@ -1,10 +1,10 @@
-import ajaxGetData from "./ajaxGetData";
+import { filterSync } from "../axiosRequest";
 
 function ajaxSelectInput(component, ajaxSelectName, ajaxResultName) {
   const ajaxSelect = component.querySelector(ajaxSelectName);
   const resultId = ajaxSelect.dataset.id;
   const className = ajaxResultName + '[data-id="' + resultId + '"]';
-  const ajaxResult = document.querySelector(className);
+  const ajaxResult = component.querySelector(className);
 
   ajaxSelect.addEventListener(
     "change",
@@ -12,18 +12,24 @@ function ajaxSelectInput(component, ajaxSelectName, ajaxResultName) {
       console.log(`e.target.value = ${this.value}`);
       // const id =this.dataset.id;
 
-      const actionClic = this.dataset.ajax + this.value;
-
       ajaxResult.disabled = true;
       ajaxResult.selectedIndex = 0;
       ajaxResult.options.length = 0;
 
-      const result = ajaxGetData(actionClic);
+      const target = this.dataset.target;
+      const filter = this.dataset.filter;
+      const equal = this.value;
+      const ajaxCall = filterSync(target, { filter, equal });
+      ajaxCall.then(function (response) {
+        if (response === undefined || response.success === false) {
+          return;
+        }
+      });
 
-      result.then(function (res) {
-        if (res.success == 1) {
-          const datas = res.data;
-          for (const data of datas) {
+      ajaxCall.then(function (response) {
+        if (response.success == 1) {
+          const results = response.result;
+          for (const data of results) {
             ajaxResult.options[ajaxResult.options.length] = new Option(
               data.name + " " + data.surname,
               data._id

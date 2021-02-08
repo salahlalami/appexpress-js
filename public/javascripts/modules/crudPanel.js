@@ -69,6 +69,19 @@ export const toForm = (response, form) => {
   if (!form) {
     return;
   }
+  form.reset();
+  // rest all autocompletes
+  const autocompletes = form.querySelectorAll(".autocomplete");
+  [].forEach.call(autocompletes, function (autocomplete) {
+    const selects = autocomplete.querySelectorAll("select");
+    [].forEach.call(selects, function (select) {
+      if (select != null) {
+        if (select.parentNode) {
+          select.parentNode.removeChild(select);
+        }
+      }
+    });
+  });
   const elements = form.querySelectorAll("input, select, textarea");
   for (let i = 0; i < elements.length; ++i) {
     const element = elements[i];
@@ -83,7 +96,7 @@ export const toForm = (response, form) => {
           const e = new Event("change");
           element.dispatchEvent(e);
         }, 100);
-      } else if (element.classList.contains("searchAjax")) {
+      } else if (element.classList.contains("searchList")) {
         var _id = response.result[element.name];
         // var variable = "";
         if (
@@ -130,8 +143,8 @@ export const editItem = (form, target, json) => {
   }
   const data = JSON.parse(json);
   form.dataset.id = data._id;
-  form.dataset.target = target;
-  form.dataset.state = "update";
+  // form.dataset.target = target;
+  // form.dataset.state = "update";
   // const result = readSync(target, json._id);
 
   const objResult = JSON.parse(json);
@@ -284,11 +297,7 @@ export function ajaxForm(form, component) {
     '.component[data-component="dataTable"]'
   );
   const loaderWarpper = '.component[data-component="panel"] .panel';
-  // loader.init(loaderWarpper);
-  // var element = component.querySelector(".loaderWarpper");
-  // const alertSuccess = component.querySelector(".alert-success");
-  // // const alertError = component.querySelector(".alert-error");
-  // element.classList.add("show");
+
   const target = form.dataset.target || dataTable.dataset.target;
   const state = form.dataset.state || "create";
 
@@ -331,8 +340,6 @@ export function ajaxForm(form, component) {
       viewItem(target, json, formtype);
       form.reset();
     });
-  } else {
-    // loader.remove(loaderWarpper);
   }
 }
 

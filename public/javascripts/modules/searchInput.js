@@ -111,16 +111,16 @@ function searchInput(component, inputName) {
               inpSelect.options[0] = new Option(textOption, valOption);
               that.parentNode.appendChild(inpSelect);
 
-              if (inp.dataset.change) {
-                var event = new CustomEvent("select", {
-                  detail: {
-                    display: displayLabel,
-                    id: data._id,
-                    data: data,
-                  },
-                });
-                inp.dispatchEvent(event);
-              }
+              // if (inp.dataset.change) {
+              //   var event = new CustomEvent("select", {
+              //     detail: {
+              //       display: displayLabel,
+              //       id: data._id,
+              //       data: data,
+              //     },
+              //   });
+              //   inp.dispatchEvent(event);
+              // }
               /*close the list of autocompleted values,
                (or any other open lists of autocompleted values:*/
               closeAllLists();

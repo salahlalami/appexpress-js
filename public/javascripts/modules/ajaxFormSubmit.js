@@ -1,4 +1,3 @@
-import axios from "axios";
 import activeTab from "./activeTab";
 import { viewItem } from "./crudPanel";
 import dataGrid from "./dataGrid";

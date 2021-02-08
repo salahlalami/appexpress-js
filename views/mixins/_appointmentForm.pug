@@ -12,17 +12,17 @@ mixin appointmentForm(target={},formState="create",specialty={},id={})
             .col-24.alpha.omega.component(data-component="searchList")   
                 label(for="patient") Patient
                 +patientAutocomplete()
-                
-            .col-12.alpha.component(data-component="ajaxSelect")
-                label(for="specialty") specialty
-                select(name='specialty' class="ajaxSelect" data-id=id data-ajax=filter)
-                    option(value="null")  selectionner la specialite
-                    each specialty in specialtys
-                        option(value=specialty.id) #{specialty.name}
-            .col-12.omega    
-                label(for="doctor") doctor
-                select(name='doctor' class="ajaxResult" data-id=id disabled)
-                    option(disabled) select an option     
+            .component(data-component="ajaxSelect")      
+                .col-12.alpha
+                    label(for="specialty") specialty
+                    select(name='specialty' class="ajaxSelect" data-id=id data-filter="specialty" data-target="doctor")
+                        option(value="null")  selectionner la specialite
+                        each specialty in specialtys
+                            option(value=specialty.id) #{specialty.name}
+                .col-12.omega    
+                    label(for="doctor") doctor
+                    select(name='doctor' class="ajaxResult" data-id=id disabled)
+                        option(disabled) select an option     
             .col-12.alpha    
                 label(for="Date") Date
                 input(type="text" name="date" class="datepicker" autocomplete="off")    

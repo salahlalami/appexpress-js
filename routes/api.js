@@ -47,7 +47,7 @@ const taskController = require("../controllers/taskController");
 const customMenuController = require("../controllers/customMenuController");
 
 // Middlewares_______________________________________________________________________
-const permissionMiddleware = require("../middlewares/permissionMiddleware");
+// const permissionMiddleware = require("../middlewares/permissionMiddleware");
 // const settingMiddleware = require("../middlewares/settingMiddleware");
 
 // //_______________________________ User management_______________________________

@@ -1,6 +1,89 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const Role = mongoose.model("Role");
 const getOne = require("./helpersControllers/custom").getOne;
+
+// exports.listOld = async (req, res) => {
+//   const page = req.query.page || 1;
+//   const limit = parseInt(req.query.items) || 10;
+//   const skip = page * limit - limit;
+//   try {
+//     //  Query the database for a list of all results
+//     const resultsPromise = User.aggregate([
+//       {
+//         $match: {
+//           removed: false,
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 1,
+//           enabled: 1,
+//           email: 1,
+//           name: 1,
+//           surname: 1,
+//           accountType: 1,
+//           role: 1,
+//           employee: 1,
+//           doctor: 1,
+//         },
+//       },
+//     ])
+//       .skip(skip)
+//       .limit(limit)
+//       .sort({ created: "desc" });
+
+//     // Counting the total documents
+//     const countPromise = User.count({ removed: false });
+//     const rolePromise = Role.find();
+//     // Resolving both promises
+//     const [result, count, roles] = await Promise.all([
+//       resultsPromise,
+//       countPromise,
+//       rolePromise,
+//     ]);
+
+//     for (let user of result) {
+//       let found = null;
+//       for (let userRole of roles) {
+//         if (JSON.stringify(userRole._id) == JSON.stringify(user.role)) {
+//           found = userRole;
+//           console.log("found : " + found);
+//           break;
+//         }
+//       }
+//       if (found != null) user.role = found;
+//     }
+//     const pages = Math.ceil(count / limit);
+
+//     // Getting Pagination Object
+//     const pagination = { page, pages, count };
+//     if (count > 0) {
+//       return res.status(200).json({
+//         success: true,
+//         result,
+//         pagination,
+//         message: "Successfully found all documents",
+//       });
+//     } else {
+//       return res.status(203).json({
+//         success: false,
+//         result: [],
+//         pagination,
+//         message: "Collection is Empty",
+//       });
+//     }
+//   } catch {
+//     return res
+//       .status(500)
+//       .json({ success: false, result: [], message: "Oops there is an Error" });
+//   }
+// };
+/**
+ *  Get all documents of a Model
+ *  @param {Object} req.params
+ *  @returns {Object} Results with pagination
+ */
 
 exports.list = async (req, res) => {
   const page = req.query.page || 1;
@@ -8,40 +91,26 @@ exports.list = async (req, res) => {
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = User.aggregate([
-      {
-        $match: {
-          removed: false,
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          enabled: 1,
-          email: 1,
-          name: 1,
-          surname: 1,
-          photo: 1,
-          accountType: 1,
-          dashboardType: 1,
-          doctor: 1,
-          employee: 1,
-        },
-      },
-    ])
+    const resultsPromise = User.find({ removed: false })
       .skip(skip)
       .limit(limit)
-      .sort({ created: "desc" });
+      .sort({ created: "desc" })
+      .populate();
     // Counting the total documents
     const countPromise = User.count({ removed: false });
     // Resolving both promises
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
-
+    // Calculating total pages
     const pages = Math.ceil(count / limit);
 
     // Getting Pagination Object
     const pagination = { page, pages, count };
     if (count > 0) {
+      for (let user of result) {
+        user.password = undefined;
+        user.customMenu = undefined;
+        user.permissions = undefined;
+      }
       return res.status(200).json({
         success: true,
         result,
@@ -62,7 +131,6 @@ exports.list = async (req, res) => {
       .json({ success: false, result: [], message: "Oops there is an Error" });
   }
 };
-
 exports.profile = async (req, res) => {
   try {
     //  Query the database for a list of all results
@@ -203,35 +271,28 @@ exports.read = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const accountType = req.body.accountType;
-    if (accountType === "isDoctor") {
-      req.body.isDoctor = true;
-      req.body.isEmployee = false;
-    } else if (accountType === "isEmployee") {
-      req.body.isEmployee = true;
-      req.body.isDoctor = false;
-    } else {
-      return res.status(400).json({
-        success: false,
-        result: null,
-        message: "No Account Type have been entered.",
-      });
-    }
     let { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({
-        msg: "Rmail or password fields they don't have been entered.",
+        success: false,
+        result: null,
+        message: "Email or password fields they don't have been entered.",
       });
 
     const existingUser = await User.findOne({ email: email });
 
     if (existingUser)
-      return res
-        .status(400)
-        .json({ msg: "An account with this email already exists." });
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "An account with this email already exists.",
+      });
 
     if (password.length < 8)
       return res.status(400).json({
-        msg: "The password needs to be at least 8 characters long.",
+        success: false,
+        result: null,
+        message: "The password needs to be at least 8 characters long.",
       });
     // if (password !== passwordCheck)
     //   return res
@@ -239,16 +300,14 @@ exports.create = async (req, res) => {
     //     .json({ msg: "Enter the same password twice for verification." });
     let doctor;
     let employee;
-    if (accountType === "isDoctor") {
-      req.body.isDoctor = true;
-      req.body.isEmployee = false;
+    if (accountType === "doctor") {
       doctor = await getOne("Doctor", req.body.doctor);
+      req.body.employee = undefined;
       req.body.name = doctor.name;
       req.body.surname = doctor.surname;
-    } else if (accountType === "isEmployee") {
-      req.body.isEmployee = true;
-      req.body.isDoctor = false;
+    } else if (accountType === "employee") {
       employee = await getOne("Employee", req.body.employee);
+      req.body.doctor = undefined;
       req.body.name = employee.name;
       req.body.surname = employee.surname;
     }
@@ -275,6 +334,7 @@ exports.create = async (req, res) => {
         doctor: result.doctor,
         employee: result.employee,
       },
+      message: "User document save correctly",
     });
   } catch {
     return res.status(500).json({ success: false, message: "there is error" });
@@ -290,19 +350,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const accountType = req.body.accountType;
-    if (accountType === "isDoctor") {
-      req.body.isDoctor = true;
-      req.body.isEmployee = false;
-    } else if (accountType === "isEmployee") {
-      req.body.isEmployee = true;
-      req.body.isDoctor = false;
-    } else {
-      return res.status(400).json({
-        success: false,
-        result: null,
-        message: "No Account Type have been entered.",
-      });
-    }
+
     let { email } = req.body;
 
     if (email) {
@@ -316,14 +364,10 @@ exports.update = async (req, res) => {
     let doctor;
     let employee;
     if (accountType === "isDoctor") {
-      req.body.isDoctor = true;
-      req.body.isEmployee = false;
       doctor = await getOne("Doctor", req.body.doctor);
       req.body.name = doctor.name;
       req.body.surname = doctor.surname;
     } else if (accountType === "isEmployee") {
-      req.body.isEmployee = true;
-      req.body.isDoctor = false;
       employee = await getOne("Employee", req.body.employee);
       req.body.name = employee.name;
       req.body.surname = employee.surname;

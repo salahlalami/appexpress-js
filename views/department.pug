@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "Department: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'enabled',text:'Activée'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'}]
                     +information(listInfo)
                 .edit.hidden
                     +departmentForm(target,"update")
@@ -44,9 +44,9 @@ block panelFooter
 block content
   .departmentPage    
     .model.modelSmall
-        - const col = ['name','enabled']  
+        - const col = ['name','description']  
         - const items = 10
-        - const list = ['Nom','Activée']
+        - const list = ['Nom','description']
         +dataTable(target,lists,col,items, "Liste des Département", displayFields)
 
     

@@ -4,17 +4,14 @@ mixin departmentForm(target={},formState="create")
         
         form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
             
-            .col-12.alpha
+            .col-24.alpha.omega
                 label(for="name") Nom du Department
                 input(type="text" name="name" autocomplete="off")
-            .col-12.omega    
-                label(for="status") En Service
-                select(name='status')
-                    option(value='oui') Oui
-                    option(value='non') Non
-
+            .col-24.alpha.omega
+                label(for="description") Description
+                input(type="text" name="description" autocomplete="off")
             .clearfix
-            .col-12.alpha    
+            .col-12.alpha   
                 button(type="submit" class="save")  Enregistrer      
             .col-12.omega
                 button(type="button" class="cancel")  Cancel 

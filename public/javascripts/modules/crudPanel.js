@@ -1,15 +1,14 @@
+/* eslint-disable no-prototype-builtins */
 import activeTab from "./activeTab";
 import { accordionBar } from "./accordionModel";
 import { valueByString } from "../helper";
 import delegate from "../lib/delegate";
-import ajaxDataRead from "./ajaxDataRead";
 import consultationComponent from "./consultationComponent";
 import dataGrid from "./dataGrid";
 // import loader from "./loader";
 
 import {
   createSync,
-  readSync,
   updateSync,
   deleteSync,
   searchSync,
@@ -62,6 +61,31 @@ export const initCrudPanel = (component) => {
     );
   }
 };
+
+export function standardView(component, divResultName, response) {
+  const divResult = component.querySelector(divResultName);
+  const list = divResult.dataset.listinfos;
+  divResult.innerHTML = "";
+
+  const data = response.result;
+  const obj = JSON.parse(list);
+
+  for (let i = 0; i < obj.length; ++i) {
+    let listItem = document.createElement("li");
+    const propKey = obj[i].key;
+    const propText = obj[i].text;
+    let textItem = document.createElement("p");
+    let point = document.createElement("p");
+    let valueItem = document.createElement("p");
+    textItem.textContent = propText;
+    point.textContent = ":";
+    listItem.appendChild(textItem);
+    listItem.appendChild(point);
+    valueItem.textContent = valueByString(data, propKey);
+    listItem.appendChild(valueItem);
+    divResult.appendChild(listItem);
+  }
+}
 export const toForm = (response, form) => {
   if (!form) {
     form = document.querySelector("form.ajax");
@@ -121,6 +145,7 @@ export const toForm = (response, form) => {
         element.parentNode.appendChild(inpSelect);
       } else {
         const name = element.dataset.name || element.name;
+        console.log(name);
         variable = valueByString(response.result, name);
         //const json =  JSON.stringify(variable);
 
@@ -174,7 +199,7 @@ export const viewItem = (target, json, viewType = ["standard"]) => {
       '.component[data-component="information"]'
     );
     [].forEach.call(infoDivs, function (infoDiv) {
-      ajaxDataRead(infoDiv, "ul.info", response);
+      standardView(infoDiv, "ul.info", response);
     });
   }
 };
@@ -291,7 +316,7 @@ export function toJson(form) {
   return obj;
 }
 
-export function ajaxForm(form, component) {
+export function ajaxForm(form) {
   //e.preventDefault();
   const dataTable = document.querySelector(
     '.component[data-component="dataTable"]'
@@ -359,7 +384,7 @@ export function formSubmit(component, formName) {
   // const target = form.dataset.target;
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    ajaxForm(form, component);
+    ajaxForm(form);
   });
 }
 
@@ -372,7 +397,7 @@ export function searchItem(component, inputName) {
   var currentFocus;
 
   /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function (e) {
+  inp.addEventListener("input", function () {
     removeHiddenSelect();
     if (source) {
       source.cancel();
@@ -382,7 +407,6 @@ export function searchItem(component, inputName) {
     let that = this;
     var a,
       b,
-      i,
       val = this.value;
     let inpSelect = document.createElement("SELECT");
     inpSelect.name = this.dataset.name;
@@ -425,7 +449,6 @@ export function searchItem(component, inputName) {
         response.success === true &&
         response.result.length > 0
       ) {
-        let list = new Array(response.result.length);
         let listID = new Array(response.result.length);
         for (let i = 0; i < response.result.length; i++) {
           const data = response.result[i];
@@ -453,7 +476,7 @@ export function searchItem(component, inputName) {
             "'>";
           /*execute a function when someone clicks on the item value (DIV element):*/
 
-          b.addEventListener("click", function (e) {
+          b.addEventListener("click", function () {
             /*insert the value for the autocomplete text field:*/
             inp.value = this.getElementsByTagName("input")[0].value;
             inp.dataset.value = this.getElementsByTagName(

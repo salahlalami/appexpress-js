@@ -66,12 +66,12 @@ docReady(function () {
   const prescriptions = document.querySelectorAll(
     '.component[data-component="prescriptionGrid"]'
   );
-  const itemListComponent = document.querySelectorAll(
-    '.component[data-component="item-list"]'
-  );
+  // const itemListComponent = document.querySelectorAll(
+  //   '.component[data-component="item-list"]'
+  // );
 
   window.modal = modal;
-  // window.modal.init();
+
   moreOption();
   initSubMenuDrawer();
 

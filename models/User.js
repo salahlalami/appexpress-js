@@ -29,21 +29,19 @@ const userSchema = new Schema({
     type: String,
     trim: true,
   },
-  isDoctor: {
-    type: Boolean,
-    default: false,
-  },
-  isEmployee: {
-    type: Boolean,
-    default: false,
+  accountType: {
+    type: String,
+    trim: true,
   },
   doctor: {
     type: mongoose.Schema.ObjectId,
     ref: "Doctor",
+    autopopulate: true,
   },
   employee: {
     type: mongoose.Schema.ObjectId,
     ref: "Employee",
+    autopopulate: true,
   },
   createdAt: {
     type: Date,

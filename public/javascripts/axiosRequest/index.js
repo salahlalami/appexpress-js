@@ -3,6 +3,7 @@ import { baseUrl } from "./config";
 import loader from "./loader";
 
 export const createSync = (target, jsonData, option = {}) => {
+  console.info("Create Api Data :  " + JSON.stringify(jsonData));
   if (option.loaderWarpper) {
     loader.init(option.loaderWarpper);
   }
@@ -203,7 +204,7 @@ export const listSync = (target, option = {}) => {
     .get(baseUrl + target + "/list" + query)
     .then((response) => {
       // returning the data here allows the caller to get it through another .then(...)
-      //console.log(response.data);
+      console.log(response.data);
       return response.data;
     })
     .catch(function (error) {

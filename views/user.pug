@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "User: ", displayFields)
             .tab-content
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'email',text:'email'},{key:'enabled',text:'Compte Active'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'email',text:'email'},{key:'role.displayName',text:'Role d\'utilisateur'}]
                     +information(listInfo)
                 .edit.hidden
                     +userForm(target,"update",roles)
@@ -43,7 +43,7 @@ block content
         .model.modelSmall
 
   
-            - const col = ['name', 'surname','email','role']  
+            - const col = ['name', 'surname','email','role.displayName']  
             - const limit = 20
-            - const lists = ['Nom','Prenom', 'Email','Role']
+            - const lists = ['Nom','Prenom', 'Email','Role d\'utilisateur']
             +dataTable(target,lists,col,items,"Users", displayFields)

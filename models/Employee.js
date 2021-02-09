@@ -38,11 +38,15 @@ const employeeSchema = new mongoose.Schema({
     trim: true,
   },
   department: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Department",
+    autopopulate: true,
     required: true,
   },
   position: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Position",
+    autopopulate: true,
     required: true,
   },
   address: {
@@ -67,14 +71,13 @@ const employeeSchema = new mongoose.Schema({
   status: {
     type: String,
     default: 1,
-    required: true,
   },
   created: {
     type: Date,
     default: Date.now,
   },
 });
-
+employeeSchema.plugin(require("mongoose-autopopulate"));
 employeeSchema.index({
   name: "text",
   surname: "text",

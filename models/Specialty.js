@@ -14,11 +14,6 @@ const specialtySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  status: {
-    type: String,
-    default: 1,
-    required: true,
-  },
 });
 
 module.exports = mongoose.model("Specialty", specialtySchema);

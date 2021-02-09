@@ -7,6 +7,9 @@ mixin positionForm(target={},formState="create")
             .col-24.alpha
                 label(for="name") Nom du Position
                 input(type="text" name="name" autocomplete="off")
+            .col-24.alpha
+                label(for="description") Description de Position
+                input(type="text" name="description" autocomplete="off")
             .clearfix
             .col-12.alpha    
                 button(type="submit" class="save")  Enregistrer      

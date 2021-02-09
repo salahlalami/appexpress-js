@@ -22,13 +22,6 @@ methods.create = async (req, res) => {
     // Birthday State Code
     let birthdayStateCode;
 
-    // Finding a state matched in list of states
-    // console.log(states.lists);
-    // const matches = states.lists.filter(state => state.includes(req.body.birthday));
-    // console.log(matches);
-
-    // if (!matches) birthdayStateCode = '99';
-    // else birthdayStateCode = matches.toString().slice(0, 2);
     birthdayStateCode = req.body.birthplace || 99;
     // Current Date Code
 

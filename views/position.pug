@@ -24,7 +24,7 @@ block panelBody
                 +infoHeader( "Position: ", displayFields)
                 .tab-content         
                     .read
-                        - const listInfo = [{key:'name',text:'Nom'}]
+                        - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'}]
                         +information(listInfo)
                     .edit.hidden
                         +positionForm(target,"update")
@@ -44,7 +44,7 @@ block panelFooter
 block content
     .positionPage    
         .model.modelSmall
-            - const col = ['name']  
+            - const col = ['name','description']  
             - const limit = 20
-            - const lists = ['Nom']
+            - const lists = ['Nom','Description']
             +dataTable(target,lists,col,items,"Positions", displayFields)

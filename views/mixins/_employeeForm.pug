@@ -1,24 +1,21 @@
 
 
-mixin employeeForm(target={},formState="create",position={},department={},speciality={})
+mixin employeeForm(target={},formState="create",departmentsList={},positionsList={})
     .component(data-component="ajaxForm")
         - const lists = ["01 - Adrar","02 - Chlef","03 - Laghouat","04 - Oum el-Bouaghi","05 - Batna","06 - Béjaïa","07 - Biskra","08 - Béchar","09 - Blida","10 - Bouïra","11 - Tamanghasset","12 - Tébessa","13 - Tlemcen","14 - Tiaret","15 - Tizi Ouzou","16 - Alger","17 - Djelfa","18 - Jijel","19 - Sétif","20 - Saïda","21 - Skikda","22 - Sidi Bel Abbès","23 - Annaba","24 - Guelma","25 - Constantine","26 - Médéa","27 - Mostaganem","28 - Msila","29 - Mascara","30 - Ouargla","31 - Oran","32 - El Bayadh","33 - Illizi","34 - Bordj Bou Arréridj","35 - Boumerdès","36 - El Taref","37 - Tindouf","38 - Tissemsilt","39 - El Oued","40 - Khenchela","41 - Souk Ahras","42 - Tipaza","43 - Mila","44 - Aïn Defla","45 - Naâma","46 - Aïn Témouchent","47 - Ghardaïa","48 - Relizane"];
-        - const departments = department;
-        - const positions = position;
-        - const specialtys = specialty;
-        
-        
+
+            
         form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")
             
 
             .col-12.alpha
                 label(for="name") Nom
                     abbr *
-                input(type="text" required name="name" data-name="name" autocomplete="off")
+                input(type="text"  name="name" data-name="name" autocomplete="off" required)
             .col-12.omega    
                 label(for="surname") Prenom
                     abbr *
-                input(type="text" required name="surname" data-name="surname" autocomplete="off")
+                input(type="text"  name="surname" data-name="surname" autocomplete="off" required)
             
             .col-12.alpha
                 label(for="birthday") Date de naissance
@@ -37,15 +34,16 @@ mixin employeeForm(target={},formState="create",position={},department={},specia
                     option(value='Femme') Femme
                     option(value='Homme') Homme
             .col-12.omega    
-                label(for="tel") Tel
-                input(type="text" name="tel" data-name="tel" autocomplete="off")
+                label(for="urgentContact") Personne ECU
+                input(type="text" name='urgentContact' data-name="urgentContact" autocomplete="off")                         
+            .col-12.alpha    
+                label(for="phone") Tel
+                input(type="text" name="phone" data-name="phone" autocomplete="off" required)
 
-            .col-12.alpha       
+            .col-12.omega       
                 label(for="email") Email
                 input(type="email" name="email" data-name="email" autocomplete="off")  
-            .col-12.omega    
-                label(for="urgentContact") Personne ECU
-                input(type="text" name='urgentContact' data-name="urgentContact" autocomplete="off")     
+         
 
             .col-12.alpha
                 label(for="address") Adresse
@@ -59,32 +57,19 @@ mixin employeeForm(target={},formState="create",position={},department={},specia
             .col-12.alpha    
                 label(for="department") department
                     abbr *
-                select(name='department' data-name="department" required)
-                    each department in departments
-                        option(value=department.name) #{department.name}
+                select(name='department' data-name="department._id" required)
+                    each department in departmentsList
+                        option(value=department._id) #{department.name}
             .col-12.omega    
                 label(for="position") position
                     abbr *
-                select(name='position' data-name="position" required)
-                    each position in positions
-                        option(value=position.name) #{position.name}
+                select(name='position' data-name="position._id" required)
+                    each position in positionsList
+                        option(value=position._id) #{position.name}
 
-            .col-12.alpha    
-                label(for="specialty") specialty
-                select(name='specialty' data-name="specialty")
-                    each specialty in specialtys
-                        option(value=specialty.name) #{specialty.name}
-            .col-12.omega    
-                label(for="status") status
-                select(name='status' data-name="status")
-                    option(value='1') En Service
-                    option(value='0') Demisioner
+           
 
-            .col-12.alpha    
-                label(for="enabled") Activée
-                select(name='enabled')
-                    option(value='true') Oui
-                    option(value='false') Non
+    
 
             .clearfix
             .col-12.alpha    

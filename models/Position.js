@@ -10,7 +10,9 @@ const positionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // min salary & max salary
+  description: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Position", positionSchema);

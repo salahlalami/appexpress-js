@@ -6,13 +6,12 @@ const departmentSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  enabled: {
-    type: Boolean,
-    default: true,
-  },
   name: {
     type: String,
     required: true,
+  },
+  description: {
+    type: String,
   },
 });
 

@@ -47,15 +47,15 @@ exports.patient = (req, res) => {
 };
 
 exports.employee = async (req, res) => {
-  const [department, position, specialty] = await Promise.all([
+  const [departmentsList, positionsList, specialtysList] = await Promise.all([
     getData("Department"),
     getData("Position"),
     getData("Specialty"),
   ]);
   res.render("employee", {
-    department,
-    position,
-    specialty,
+    departmentsList,
+    positionsList,
+    specialtysList,
     title: "employees List",
   });
 };

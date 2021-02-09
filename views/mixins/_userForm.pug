@@ -11,17 +11,17 @@ mixin userForm(target={},formState="create",roles=[])
             .component(data-component="selecttoggle")        
                 .col-24.alpha.omega
                     label(for="accountType") Type de compte
-                    select(name='accountType' required)
-                        option(value="isDoctor") Doctor
-                        option(value="isEmployee") Employee
-                .col-24.alpha.omega.toggleDiv.isDoctor.isRequired
+                    select(name='accountType' class="selecttoggle" required)
+                        option(value="doctor") Doctor
+                        option(value="employee") Employee
+                .col-24.alpha.omega.toggleDiv.doctor.isRequired
                     +doctorAutocomplete({isRequired:true})           
-                .col-24.alpha.omega.toggleDiv.isEmployee.isRequired.hidden
+                .col-24.alpha.omega.toggleDiv.employee.isRequired.hidden
                     +employeeAutocomplete()
                                       
             .col-24.alpha.omega  
                 label(for="role") Role
-                select(name='role')
+                select(name='role' data-name="role._id")
                     option(value="null")  selectionner le role d'utilisateur
                     each role in roles
                         option(value=role._id) #{role.displayName}

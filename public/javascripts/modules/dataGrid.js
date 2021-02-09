@@ -1,7 +1,3 @@
-// import viewItem from "./viewItem";
-// import editItem from "./editItem";
-// import removeItem from "./removeItem";
-
 import { viewItem, editItem, removeItem } from "./crudPanel";
 import delegate from "../lib/delegate";
 import { listSync } from "../axiosRequest";
@@ -9,15 +5,14 @@ import { valueByString } from "../helper";
 
 let render = {
   grid: function (response = {}, table, col) {
-    // render.loaderRemove();
-    const datas = response.result;
+    const results = response.result;
     const paginationData = response.pagination;
 
     table.querySelector("tbody.tableBody").innerHTML = "";
     table.querySelector("#pagination .prev").dataset.page = "";
     table.querySelector("#pagination .next").dataset.page = "";
 
-    for (const data of datas) {
+    for (const data of results) {
       let listItem = document.createElement("tr");
       listItem.dataset.id = data._id;
       listItem.dataset.json = JSON.stringify(data);
@@ -107,13 +102,10 @@ const dataGrid = {
     let items = table.dataset.items || null;
     const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
-
-    // render.loaderInit();
     ajaxFunction(component, target, { items, loaderWarpper });
 
     selectItems.addEventListener("change", function () {
       items = this.value;
-      // render.loaderInit();
       ajaxFunction(component, target, { items, loaderWarpper });
     });
 
@@ -183,14 +175,6 @@ const dataGrid = {
     const loaderWarpper = '.component[data-component="dataTable"] .table';
     const target = table.dataset.target;
     ajaxFunction(component, target, { page: 1, loaderWarpper });
-    // const currentActivePage = document.querySelector(
-    //   "#pagination ul.pages li.active"
-    // );
-    // if (currentActivePage) {
-    //   const pageNumber = currentActivePage.dataset.page;
-
-    //   ajaxFunction(component, target, { page: 1, loaderWarpper });
-    // }
   },
 };
 export default dataGrid;

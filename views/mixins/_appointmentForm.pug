@@ -18,7 +18,7 @@ mixin appointmentForm(target={},formState="create",specialty={},id={})
                     select(name='specialty' class="ajaxSelect" data-id=id data-filter="specialty" data-target="doctor")
                         option(value="null")  selectionner la specialite
                         each specialty in specialtys
-                            option(value=specialty.id) #{specialty.name}
+                            option(value=specialty._id) #{specialty.name}
                 .col-12.omega    
                     label(for="doctor") doctor
                     select(name='doctor' class="ajaxResult" data-id=id disabled)

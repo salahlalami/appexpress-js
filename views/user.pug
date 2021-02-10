@@ -23,10 +23,26 @@ block panelBody
             +infoHeader( "User: ", displayFields)
             .tab-content
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'email',text:'email'},{key:'role.displayName',text:'Role d\'utilisateur'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'email',text:'email'},{key:'accountType',text:'Type de Compte'},{key:'role.displayName',text:'Role d\'utilisateur'}]
                     +information(listInfo)
                 .edit.hidden
-                    +userForm(target,"update",roles)
+                    .component(data-component="ajaxForm")  
+                        form.ajax(autocomplete="off" data-target=target  data-state="update" method="POST")                        
+                            .col-24.alpha.omega  
+                                label(for="role") Role
+                                select(name='role' data-name="role._id")
+                                    option(value="null")  selectionner le role d'utilisateur
+                                    each role in roles
+                                        option(value=role._id) #{role.displayName}
+                            
+                            .col-24.alpha.omega
+                                label(for="email") E-mail
+                                input(type="text" name="email" data-name="email" autocomplete="off" required)            
+                            .clearfix
+                            .col-12.alpha    
+                                button(type="submit" class="save")  Enregistrer      
+                            .col-12.omega
+                                button(type="button" class="cancel")  Cancel 
 
 block panelFooter                    
     .component(data-component="accordionForm")
@@ -43,7 +59,7 @@ block content
         .model.modelSmall
 
   
-            - const col = ['name', 'surname','email','role.displayName']  
+            - const col = ['name|surname','email','accountType','role.displayName']  
             - const limit = 20
-            - const lists = ['Nom','Prenom', 'Email','Role d\'utilisateur']
+            - const lists = ['Nom Prenom', 'Email','Type de Compte','Role d\'utilisateur']
             +dataTable(target,lists,col,items,"Users", displayFields)

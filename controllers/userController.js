@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
-const Role = mongoose.model("Role");
 const getOne = require("./helpersControllers/custom").getOne;
 
 // exports.listOld = async (req, res) => {
@@ -149,7 +148,7 @@ exports.profile = async (req, res) => {
       surname: req.user.surname,
       photo: req.user.photo,
       accountType: req.user.accountType,
-      dashboardType: req.user.dashboardType,
+      role: req.user.role,
       doctor: req.user.doctor,
       employee: req.user.employee,
     };
@@ -197,7 +196,7 @@ exports.photo = async (req, res) => {
         surname: tmpResult.surname,
         photo: tmpResult.photo,
         accountType: tmpResult.accountType,
-        dashboardType: tmpResult.dashboardType,
+        role: tmpResult.role,
         doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
@@ -241,7 +240,7 @@ exports.read = async (req, res) => {
         surname: tmpResult.surname,
         photo: tmpResult.photo,
         accountType: tmpResult.accountType,
-        dashboardType: tmpResult.dashboardType,
+        role: tmpResult.role,
         doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
@@ -329,8 +328,11 @@ exports.create = async (req, res) => {
         _id: result._id,
         enabled: result.enabled,
         email: result.email,
+        name: result.name,
+        surname: result.surname,
         photo: result.photo,
         accountType: result.accountType,
+        role: result.role,
         doctor: result.doctor,
         employee: result.employee,
       },
@@ -349,8 +351,6 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const accountType = req.body.accountType;
-
     let { email } = req.body;
 
     if (email) {
@@ -361,21 +361,16 @@ exports.update = async (req, res) => {
           .status(400)
           .json({ message: "An account with this email already exists." });
     }
-    let doctor;
-    let employee;
-    if (accountType === "isDoctor") {
-      doctor = await getOne("Doctor", req.body.doctor);
-      req.body.name = doctor.name;
-      req.body.surname = doctor.surname;
-    } else if (accountType === "isEmployee") {
-      employee = await getOne("Employee", req.body.employee);
-      req.body.name = employee.name;
-      req.body.surname = employee.surname;
-    }
+
+    let updates = {
+      role: req.body.role,
+      email: req.body.email,
+    };
+
     // Find document by id and updates with the required fields
     const result = await User.findOneAndUpdate(
       { _id: req.params.id, removed: false },
-      req.body,
+      { $set: updates },
       {
         new: true, // return the new result instead of the old one
       }
@@ -398,7 +393,6 @@ exports.update = async (req, res) => {
         surname: result.surname,
         photo: result.photo,
         accountType: result.accountType,
-        dashboardType: result.dashboardType,
         doctor: result.doctor,
         employee: result.employee,
       },
@@ -461,7 +455,7 @@ exports.updatePassword = async (req, res) => {
         surname: result.surname,
         photo: result.photo,
         accountType: result.accountType,
-        dashboardType: result.dashboardType,
+        role: result.role,
         doctor: result.doctor,
         employee: result.employee,
       },

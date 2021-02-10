@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "Doctor: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Nom de famille'},{key:'email',text:'Email'},{key:'department',text:'département'},{key:'position',text:'Position'},{key:'tel',text:'Téléphone'},{key:'enabled',text:'Activée'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Nom de famille'},{key:'birthday',text:'Date de Naissance'},{key:'birthplace',text:'lieu de naissance'},{key:'specialty.name',text:'Specialite'},{key:'email',text:'Email'},{key:'tel',text:'Téléphone'}]
                     +information(listInfo)
                 .edit.hidden
                     +doctorForm(target,"update", department, specialty)
@@ -44,9 +44,9 @@ block panelFooter
 block content
   .doctorPage    
     .model.modelSmall
-        - const col = ['name', 'surname', 'email', 'specialty.name', 'tel']  
+        - const col = ['name|surname', 'email', 'specialty.name', 'tel']  
         - const limit = 20
-        - const lists = ['Nom', 'Prenom', 'Email', 'Specialty', 'Téléphone']
+        - const lists = ['Nom Prenom', 'Email', 'Specialty', 'Téléphone']
         +dataTable(target,lists,col,items,"Doctors", displayFields)
 
     

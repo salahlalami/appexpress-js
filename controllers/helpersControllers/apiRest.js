@@ -25,7 +25,7 @@ exports.read = async (Model, req, res) => {
         message: "we found this document by this id: " + req.params.id,
       });
     }
-  } catch {
+  } catch (err) {
     // Server Error
     return res.status(500).json({
       success: false,
@@ -54,13 +54,20 @@ exports.create = async (Model, req, res) => {
     });
   } catch (err) {
     // If err is thrown by Mongoose due to required validations
-
-    // Server Error
-    return res.status(500).json({
-      success: false,
-      result: null,
-      message: "Oops there is an Error",
-    });
+    if (err.name == "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "Required fields are not supplied",
+      });
+    } else {
+      // Server Error
+      return res.status(500).json({
+        success: false,
+        result: null,
+        message: "Oops there is an Error",
+      });
+    }
   }
 };
 

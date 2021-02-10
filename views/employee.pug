@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "Employee: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'email',text:'Email'},{key:'department.name',text:'département'},{key:'position.name',text:'Position'},{key:'phone',text:'Téléphone'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'birthday',text:'Date de Naissance'},{key:'birthplace',text:'lieu de naissance'},{key:'email',text:'Email'},{key:'department.name',text:'département'},{key:'position.name',text:'Position'},{key:'phone',text:'Téléphone'}]
                     +information(listInfo)
                 .edit.hidden
                     +employeeForm(target,"update", departmentsList,positionsList)
@@ -43,9 +43,9 @@ block panelFooter
 block content
   .employeePage    
     .model.modelSmall
-        - const col = ['name', 'surname', 'email', 'department.name', 'position.name', 'phone']  
+        - const col = ['name|surname', 'email', 'department.name', 'position.name', 'phone']  
         - const limit = 20
-        - const lists = ['Nom', 'Prenom', 'Email', 'département', 'Position', 'Téléphone']
+        - const lists = ['Nom Prenom', 'Email', 'département', 'Position', 'Téléphone']
         +dataTable(target,lists,col,items,"Employees", displayFields)
 
     

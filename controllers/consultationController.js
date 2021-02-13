@@ -178,9 +178,4 @@ methods.getUnpaidConsultationCount = async (req, res) => {
   }
 };
 
-methods.generatePDF = require("./helpersControllers/custom").generatePDF(
-  "Doctor",
-  { filename: "Doctor-report", format: "A5" }
-);
-
 module.exports = methods;

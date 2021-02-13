@@ -12,8 +12,10 @@ include components/_consultationInfo
 
 block panelHeader
     - const target = 'consultation'
+    - const targetPrescription = '/api/prescription/'
+    - const targetRecoder = 'audiorecording'
     - const fields = 'patient.name'
-    - const displayFields = 'patient.name'
+    - const displayFields = 'patient.name|patient.surname'
     p.panelTitle #{title}
     .space-25
     .search-container
@@ -28,7 +30,7 @@ block panelBody
             +infoHeader( "Consultation: ", displayFields)
             .tab-content
                 .read
-                    +consultationInfo()    
+                    +consultationInfo(targetRecoder)    
                 .edit.hidden
                     +consultationForm(target,"update",consultationTypes,doctor)
 
@@ -47,13 +49,14 @@ block panelFooter
 block content
   .consultationPage    
     .model.modelSmall.hidden(data-model="prescription")
-        +prescriptionGrid('/api/prescription/', 'Ordonnance #1 - M. Sehnoun Sophian')
+        +prescriptionGrid(targetPrescription, 'Ordonnance #1 - M. Sehnoun Sophian')
     .model.modelSmall(data-model="dataTable")
         - const col = ['patient.name|patient.surname','consultationType.name','date','total','paymentStatus']  
         - const items = 10
         - const lists = ['Nom de Patient','Type de Consultation','Date','Status de Paiement']
         - const viewType="consultation";
-        +dataTable(lists,get,read,remove,col,items,"Liste des RDV", displayFields,viewType)
+        +dataTable(target,lists,col,items, "Liste des Consultations", displayFields,viewType)
+       
     
 
     

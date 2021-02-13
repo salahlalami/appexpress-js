@@ -20,13 +20,16 @@ function ajaxSelectInput(component, ajaxSelectName, ajaxResultName) {
       const filter = this.dataset.filter;
       const equal = this.value;
       const ajaxCall = filterSync(target, { filter, equal });
+      // ajaxCall.then(function (response) {
+      //   if (response === undefined || response.success === false) {
+      //     return;
+      //   }
+      // });
+
       ajaxCall.then(function (response) {
         if (response === undefined || response.success === false) {
           return;
         }
-      });
-
-      ajaxCall.then(function (response) {
         if (response.success == 1) {
           const results = response.result;
           for (const data of results) {

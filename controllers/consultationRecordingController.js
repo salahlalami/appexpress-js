@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Model = mongoose.model("ConsultationRecording");
 const Consultation = mongoose.model("Consultation");
-const custom = require("./helpersControllers/custom");
 
 const crudController = require("./helpersControllers/crudController");
 let methods = crudController.createCRUDController("ConsultationRecording");
@@ -15,8 +14,8 @@ methods.create = async (req, res) => {
 
     // Returning successfull response
     res.status(200).json({
-      success: 1,
-      data: result,
+      success: true,
+      result,
       message: "Successfully Created the document in Model ",
     });
 
@@ -33,8 +32,8 @@ methods.create = async (req, res) => {
     // If err is thrown by Mongoose due to required validations
     if (err.name == "ValidationError") {
       res.status(400).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Required fields are not supplied",
       });
     } else {

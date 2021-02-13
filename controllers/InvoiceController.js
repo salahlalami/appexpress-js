@@ -65,31 +65,6 @@ methods.create = async (req, res) => {
     })
       .populate("client")
       .exec();
-
-    await custom.pdfGenerater(
-      "Invoice",
-      { filename: "Invoice report", format: "A5" },
-      result,
-      function (callback) {
-        if (callback.hasOwnProperty("success") && callback.success) {
-          let { data } = callback;
-
-          // Returning successfull response
-          res.status(200).json({
-            success: 1,
-            data: data,
-            message: "Successfully created the Invoice in Model",
-          });
-        } else {
-          // Server Error
-          return res.status(500).json({
-            success: 0,
-            data: null,
-            message: "Oops there is an Error",
-          });
-        }
-      }
-    );
   } catch (err) {
     console.log(err);
 
@@ -163,7 +138,7 @@ methods.update = async (req, res) => {
       .populate("client")
       .exec();
 
-    await custom.pdfGenerater(
+    await custom.generatePdf(
       "Invoice",
       { filename: "Invoice report", format: "A5" },
       result,
@@ -205,10 +180,5 @@ methods.update = async (req, res) => {
     }
   }
 };
-
-methods.generatePDF = require("./helpersControllers/custom").generatePDF(
-  "Invoice",
-  { filename: "Invoice report", format: "A5" }
-);
 
 module.exports = methods;

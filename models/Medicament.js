@@ -17,11 +17,6 @@ const medicamentSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  status: {
-    type: String,
-    default: 1,
-    required: true,
-  },
 });
 
 module.exports = mongoose.model("Medicament", medicamentSchema);

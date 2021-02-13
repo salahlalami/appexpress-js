@@ -113,7 +113,7 @@ exports.menu = [
   { slug: "/patient", title: "Patients", icon: "patients" },
   { slug: "/appointment", title: "Appointment", icon: "appointment" },
   {
-    slug: "/consultation/5f9daae8012603af2f0a6cfe",
+    slug: "/consultation/5f9dab87012603af2f0a6d01",
     title: "Consultation",
     icon: "accounting",
   },

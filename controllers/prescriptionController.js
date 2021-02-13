@@ -40,13 +40,13 @@ methods.create = async (req, res) => {
       result
     );
 
-    const [updatedPath, consultationUpdated] = await Promise.all([
+    const [updatedResult, consultationUpdated] = await Promise.all([
       updatePath,
       consultationUpdate,
     ]);
     res.status(200).json({
       success: true,
-      result: updatedPath,
+      result: updatedResult,
       message: "Successfully Created the document in Model ",
     });
   } catch (err) {
@@ -77,7 +77,7 @@ methods.update = async (req, res) => {
       new: true,
     }).exec();
     const fileId = "prescription-report-" + result._id + ".pdf";
-    const updatedPath = await Model.findOneAndUpdate(
+    const updatedResult = await Model.findOneAndUpdate(
       { _id: result._id },
       { pdfPath: fileId },
       {
@@ -86,7 +86,7 @@ methods.update = async (req, res) => {
     ).exec();
     // Returning successfull response
 
-    await custom.generatePdf(
+    custom.generatePdf(
       "Prescription",
       { filename: "prescription-report", format: "A5" },
       result
@@ -94,7 +94,7 @@ methods.update = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      result: updatedPath,
+      result: updatedResult,
       message: "Successfully Created the document in Model ",
     });
   } catch (err) {
@@ -121,8 +121,8 @@ methods.generatePDF = async (req, res) => {
   try {
     const { id } = req.params;
     const Model = mongoose.model("Prescription");
-    const prescription = await Model.findById(id);
-    if (!prescription) {
+    const result = await Model.findById(id);
+    if (!result) {
       // Server Error
       return res.status(500).json({
         success: false,
@@ -130,17 +130,25 @@ methods.generatePDF = async (req, res) => {
         message: "Oops there is an Error sdsd",
       });
     }
-    const getPug =
-      prescription.type === "perscription" ? "Prescription" : "letter";
-    await custom.generatePDF(
+
+    const fileId = "prescription-report-" + result._id + ".pdf";
+    const updatedResult = await Model.findOneAndUpdate(
+      { _id: result._id },
+      { pdfPath: fileId },
+      {
+        new: true,
+      }
+    ).exec();
+
+    await custom.generatePdf(
       "Prescription",
-      { filename: "Prescription report", format: "A5" },
-      getPug
+      { filename: "prescription-report", format: "A5" },
+      result
     );
     //Returning successfull response
     res.status(200).json({
       success: true,
-      data: [],
+      result: updatedResult,
       message: "Successfully pdf generated",
     });
   } catch (error) {

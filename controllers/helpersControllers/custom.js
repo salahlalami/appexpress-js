@@ -71,7 +71,7 @@ exports.search = async (Model, req, res) => {
  * Pdf Generate New Method
  * This method only generate PDF in the folder, not download the PDF
  */
-exports.generatePdf = async (
+exports.generatePdf = (
   modelName,
   info = { filename: "pdf_file", format: "A5" },
   result
@@ -89,7 +89,7 @@ exports.generatePdf = async (
     model: result,
     moment: moment,
   });
-  await pdf
+  pdf
     .create(html, {
       format: info.format,
       orientation: "portrait",

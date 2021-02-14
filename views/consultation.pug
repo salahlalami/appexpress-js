@@ -13,6 +13,7 @@ include components/_consultationInfo
 block panelHeader
     - const target = 'consultation'
     - const targetPrescription = '/api/prescription/'
+    - const actionForm= '/api/prescription/'
     - const targetRecoder = 'audiorecording'
     - const fields = 'patient.name'
     - const displayFields = 'patient.name|patient.surname'
@@ -49,7 +50,7 @@ block panelFooter
 block content
   .consultationPage    
     .model.modelSmall.hidden(data-model="prescription")
-        +prescriptionGrid(targetPrescription, 'Ordonnance #1 - M. Sehnoun Sophian')
+        +prescriptionGrid({targetPrescription, actionForm,title:'Ordonnance #1 - M. Sehnoun Sophian'})
     .model.modelSmall(data-model="dataTable")
         - const col = ['patient.name|patient.surname','consultationType.name','date','total','paymentStatus']  
         - const items = 10

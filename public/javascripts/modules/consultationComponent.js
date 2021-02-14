@@ -357,7 +357,8 @@ const prescriptionGrid = {
     const prescriptionItemList = component.querySelector(
       ".prescriptionItemList"
     );
-    // prescriptionItemList.dataset.nbr=0;
+    prescriptionItemList.dataset.nbr = 0;
+    prescriptionItemList.innerHTML = "";
     for (const data of datas) {
       console.log(data);
       let prescriptionItem = orgprescriptionItem.cloneNode(true);
@@ -539,6 +540,8 @@ const reportGrid = {
   renderList: function (component, datas) {
     const orgreport = component.querySelector(".template .report");
     const reportItemList = component.querySelector(".reportItemList");
+    reportItemList.innerHTML = "";
+    reportItemList.dataset.nbr = 0;
     for (const data of datas) {
       // console.log(data)
       const report = orgreport.cloneNode(true);

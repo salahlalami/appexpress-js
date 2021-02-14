@@ -1,5 +1,8 @@
 
-mixin prescriptionGrid(actionForm={}, title='')
+mixin prescriptionGrid(props={})
+    - const targetPrescription=props.targetPrescription ||  ""
+    - const actionForm=props.actionForm || ""
+    - const title= props.title || "" 
     .component(data-component="prescriptionGrid")      
         form(action=actionForm+"create/" data-status="new" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" data-delete=actionForm+"delete/" method="POST")
             

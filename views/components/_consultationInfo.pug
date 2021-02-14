@@ -1,4 +1,4 @@
-mixin consultationInfo(listInfos={})
+mixin consultationInfo(targetRecoder={},targetPrescription={})
     - const uploadAudio = "/api/audiorecording/create/"
     - const removeAudioRecord = "/api/audiorecording/delete/"
     .component(data-component="consultationInfo")
@@ -62,11 +62,11 @@ mixin consultationInfo(listInfos={})
 
 
         .tab-container
-            .prescriptionItemList
+            .prescriptionItemList(data-target-prescription=targetPrescription)
 
-            .reportItemList(data-remove-action=removeAudioRecord)
+            .reportItemList(data-target-recoder=targetRecoder data-remove-action=removeAudioRecord)
 
-            .recordingList
+            .recordingList(data-target-recoder=targetRecoder)
                 .single-item.template.hidden
                     .item-row
                         .item-data

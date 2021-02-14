@@ -285,7 +285,10 @@ const consultationAudioUpload = multer({ storage: consultationAudioStorage });
 
 router
   .route("/audiorecording/create")
-  .post(catchErrors(consultationRecordingController.create));
+  .post(
+    [consultationAudioUpload.single("audioFile"), setFilePathToBody],
+    catchErrors(consultationRecordingController.create)
+  );
 router
   .route("/audiorecording/read/:id")
   .get(catchErrors(consultationRecordingController.read));

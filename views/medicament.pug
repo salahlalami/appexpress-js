@@ -23,7 +23,7 @@ block panelBody
             +infoHeader( "Medicament: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'status',text:'En Service'}]
+                    - const listInfo = [{key:'name',text:'Nom'},{key:'description',text:'Description'},{key:'enabled',text:'Disponibilite'}]
                     +information(listInfo)
                 .edit.hidden
                     +medicamentForm(target,"update")
@@ -43,7 +43,7 @@ block content
     .medicamentPage    
         .model.modelSmall
 
-            - const col = ['name', 'description','status']  
+            - const col = ['name', 'description']  
             - const limit = 20
-            - const lists = ['Nom', 'Description','En Service']
+            - const lists = ['Nom', 'Description']
             +dataTable(target,lists,col,items,"Medicaments", displayFields)

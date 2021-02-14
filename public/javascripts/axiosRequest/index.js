@@ -219,6 +219,31 @@ export const listSync = (target, option = {}) => {
 
   return result;
 };
+export const uploadSync = (target, jsonData, option = {}) => {
+  console.info("Create Api Data :  " + JSON.stringify(jsonData));
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
+  const result = axios
+    .post(baseUrl + target + "/create", jsonData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch(function (error) {
+      return error.response.data;
+    })
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
+
+  return result;
+};
 
 export const postDataSync = (targetUrl, jsonData, option = {}) => {
   if (option.loaderWarpper) {

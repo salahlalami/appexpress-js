@@ -14,10 +14,10 @@ mixin medicamentForm(target={},formState="create")
                 input(name="description" data-name="description" autocomplete="off")
             
             .col-24.alpha.omega  
-                label(for="status") En Service
-                select(name='status' data-name="status")
-                    option(value='1') Oui
-                    option(value='0') Non
+                label(for="enabled") Disponible
+                select(name='enabled' data-name="enabled")
+                    option(value="true") Oui
+                    option(value="false") Non
 
             .clearfix
             .col-12.alpha    

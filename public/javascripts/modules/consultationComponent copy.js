@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars */
-
 import axios from "axios";
+import {
+  uploadSync,
+  createSync,
+  updateSync,
+  readSync,
+  filterSync,
+  deleteSync,
+} from "../axiosRequest";
 import activeTab from "./activeTab";
 import { uniqueid } from "../helper";
 import { formatDate } from "../helper";
@@ -241,19 +248,19 @@ const prescriptionGrid = {
     console.log(`editPrescription : ${id}`);
     const form = component.querySelector("form");
     const prescriptionType = component.querySelector(".prescriptionType");
-    const action = form.dataset.read + id;
-    axios.get(action).then((response) => {
-      // Rest all prescriptionForm
-      // [].forEach.call(prescriptionForms, function(prescriptionForm) {
-      //   reset(currentRow);
-      //   resetForm(prescriptionForm);
-      // });
-      console.log(response.data);
-      if (response.data.success == 1) {
-        console.log(response.data);
+    const target = form.dataset.targetprescription;
+    const action = "api/" + target + "/" + id;
+    const ajaxCall = updateSync(target, id);
+
+    ajaxCall.then((response) => {
+      if (response === undefined || response.success === false) {
+        return;
+      }
+      if (response.success == 1) {
+        console.log(response);
         activeModel("prescription");
 
-        // form.dataset.consultationId = response.data.result.consultation._id;
+        // form.dataset.consultationId = response.result.consultation._id;
 
         const consultation = component.querySelector(
           'input[name="consultation"]'
@@ -262,34 +269,31 @@ const prescriptionGrid = {
         const doctor = component.querySelector('input[name="doctor"]');
         const prescriptionTitle = component.querySelector(".page-title");
         const letterFrom = component.querySelector(`.letter`);
-        consultation.value = response.data.result.consultation._id;
-        patient.value = response.data.result.patient._id;
-        doctor.value = response.data.result.doctor._id;
-        consultation.dataset.id = response.data.result.consultation._id;
-        patient.dataset.id = response.data.result.patient._id;
-        doctor.dataset.id = response.data.result.doctor._id;
+        consultation.value = response.result.consultation._id;
+        patient.value = response.result.patient._id;
+        doctor.value = response.result.doctor._id;
+        consultation.dataset.id = response.result.consultation._id;
+        patient.dataset.id = response.result.patient._id;
+        doctor.dataset.id = response.result.doctor._id;
         prescriptionTitle.innerHTML = `Ordonnance #1 ${
-          response.data.result.patient.name +
-          " " +
-          response.data.result.patient.surname
+          response.result.patient.name + " " + response.result.patient.surname
         }`;
 
-        const type = response.data.result.type;
+        const type = response.result.type;
 
         if (type == "letter") {
           prescriptionType.value = type;
           prescriptionType.dispatchEvent(new Event("change"));
           form.action = form.dataset.edit + id;
           form.dataset.status = "update";
-          letterFrom.querySelector("textarea").value =
-            response.data.result.letter;
+          letterFrom.querySelector("textarea").value = response.result.letter;
         } else {
           prescriptionType.value = type;
           console.log(prescriptionType.value);
           prescriptionType.dispatchEvent(new Event("change"));
           form.action = form.dataset.edit + id;
           form.dataset.status = "update";
-          medicamentGrid.render(component, response.data.result);
+          medicamentGrid.render(component, response.result);
         }
       }
     });
@@ -298,7 +302,7 @@ const prescriptionGrid = {
     const prescriptionType = component.querySelector(".prescriptionType");
     const form = component.querySelector("form");
     const id = element.dataset.id;
-    const action = form.dataset.delete + id;
+    const target = form.dataset.targetprescription;
 
     document
       .getElementById("delete-record")
@@ -323,12 +327,17 @@ const prescriptionGrid = {
       }
     }
     function prescriptionDeleteConfirm() {
-      axios.delete(action).then((response) => {
+      const ajaxCall = deleteSync(target, id);
+
+      ajaxCall.then((response) => {
         //Rest all prescriptionForm
+        if (response === undefined || response.success === false) {
+          return;
+        }
         prescriptionType.dispatchEvent(new Event("change"));
         form.action = form.dataset.add;
         form.dataset.status = "new";
-        if (response.data.success == 1) {
+        if (response.success == 1) {
           const className = `.prescriptionItem[data-id="${id}"]`;
           console.log(className);
           const selected = document.querySelector(className);
@@ -346,7 +355,7 @@ const prescriptionGrid = {
     const link = element.dataset.path + "-" + id + ".pdf";
     console.log(link);
     window.open(link, "_blank");
-    //prescriptionItem.setAttribute('href',`/api/prescription/pdf/${response.data.result._id}`)
+    //prescriptionItem.setAttribute('href',`/api/prescription/pdf/${response.result._id}`)
   },
   renderList: function (component, datas) {
     console.log(datas);
@@ -433,36 +442,50 @@ const reportGrid = {
 
     function createDownloadLink(blob, encoding) {
       // const name = new Date().toISOString() + '.' + encoding;
-      if (component.dataset.saveAction) {
+      if (component.dataset.target) {
         var formData = new FormData();
 
         formData.append("name", `Recording ${recordingIndex}`);
         recordingIndex++;
         formData.append("audioFile", blob);
         formData.append("consultation", component.dataset.id);
-
-        axios
-          .post(component.dataset.saveAction, formData, {
-            // onUploadProgress: function (progressEvent) {
-            //     var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            //     recordingsList.querySelector('.upload-progress').innerHTML = "Uploading " + percentCompleted + "%";
-            // },
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then(function (response) {
-            // recordingsList.querySelector('.upload-progress').innerHTML = "";
-            // console.log(response)
-            const datas = [];
-            datas.push(response.data.result);
-            const consultation = document.querySelector(
-              '.component[data-component="consultationInfo"]'
-            );
-            if (consultation) {
-              reportGrid.renderList(consultation, datas);
-            }
-          });
+        const targetrecoder = component.dataset.targetrecoder;
+        const ajaxCall = uploadSync(targetrecoder, formData);
+        ajaxCall.then(function (response) {
+          if (response === undefined || response.success === false) {
+            return;
+          }
+          const datas = [];
+          datas.push(response.result);
+          const consultation = document.querySelector(
+            '.component[data-component="consultationInfo"]'
+          );
+          if (consultation) {
+            reportGrid.renderList(consultation, datas);
+          }
+        });
+        // axios
+        //   .post(component.dataset.saveAction, formData, {
+        //     // onUploadProgress: function (progressEvent) {
+        //     //     var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        //     //     recordingsList.querySelector('.upload-progress').innerHTML = "Uploading " + percentCompleted + "%";
+        //     // },
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //     },
+        //   })
+        //   .then(function (response) {
+        //     // recordingsList.querySelector('.upload-progress').innerHTML = "";
+        //     // console.log(response)
+        //     const datas = [];
+        //     datas.push(response.result.data);
+        //     const consultation = document.querySelector(
+        //       '.component[data-component="consultationInfo"]'
+        //     );
+        //     if (consultation) {
+        //       reportGrid.renderList(consultation, datas);
+        //     }
+        //   });
       }
     }
   },
@@ -521,19 +544,34 @@ const reportGrid = {
       }
     }
     function reportDeleteConfirm() {
-      axios.delete(action).then((response) => {
-        console.log(response);
-        if (response.data.success == 1) {
-          const className = `.report[data-id="${response.data.result._id}"]`;
-          console.log(className);
-          const selected = document.querySelector(className);
-          console.log(selected);
-          if (selected) {
-            selected.parentNode.removeChild(selected);
-          }
-          window.modal.close();
+      const targetrecoder = element.dataset.targetrecoder;
+      const id = element.dataset.id;
+      const ajaxCall = deleteSync(targetrecoder, id);
+      ajaxCall.then(function (response) {
+        if (response === undefined || response.success === false) {
+          return;
         }
+        const className = `.report[data-id="${response.result._id}"]`;
+        console.log(className);
+        const selected = document.querySelector(className);
+        console.log(selected);
+        if (selected) {
+          selected.parentNode.removeChild(selected);
+        }
+        window.modal.close();
       });
+      // axios.get(action).then((res) => {
+      //   if (response.result.success == 1) {
+      //     const className = `.report[data-id="${response.result._id}"]`;
+      //     console.log(className);
+      //     const selected = document.querySelector(className);
+      //     console.log(selected);
+      //     if (selected) {
+      //       selected.parentNode.removeChild(selected);
+      //     }
+      //     window.modal.close();
+      //   }
+      // });
     }
   },
   renderList: function (component, datas) {
@@ -558,12 +596,11 @@ const reportGrid = {
         playComponent.dataset.src = "/" + data.audioFile;
         reportGrid.play(playComponent);
       }
-
       if (removeRecord) {
         removeRecord.dataset.id = data._id;
         removeRecord.dataset.displaylabel = data.audioFile;
-        removeRecord.dataset.removeAction =
-          reportItemList.dataset.removeAction + data._id;
+        removeRecord.dataset.targetrecoder =
+          reportItemList.dataset.targetrecoder;
       }
 
       reportItemList.appendChild(report);
@@ -720,6 +757,7 @@ const consultationComponent = {
         let prescriptionData = prescriptionGrid.formToObject(form);
         const type = prescriptionType.value;
         const status = form.dataset.status;
+        const target = form.dataset.targetprescription;
 
         if (type == "letter") {
           const letter = letterFrom.querySelector("textarea");
@@ -739,13 +777,7 @@ const consultationComponent = {
 
           prescriptionData.medicamentsList = medicamentList;
         }
-        let ajaxCall = null;
-        if (form.dataset.status === "new") {
-          ajaxCall = axios.post(form.action, prescriptionData);
-        } else {
-          ajaxCall = axios.patch(form.action, prescriptionData);
-        }
-
+        const ajaxCall = createSync(target, prescriptionData);
         ajaxCall.then((response) => {
           // Rest all prescriptionForm
           form.action = form.dataset.add;
@@ -754,12 +786,12 @@ const consultationComponent = {
             medicamentGrid.reset(component);
             prescriptionGrid.resetForm(prescriptionForm);
           });
-          if (response.data.success == 1) {
+          if (response.success == 1) {
             activeModel("dataTable");
             activeTab(["read"]);
             if (status == "new") {
               const datas = [];
-              datas.push(response.data.result);
+              datas.push(response.result);
               const consultation = document.querySelector(
                 '.component[data-component="consultationInfo"]'
               );
@@ -775,7 +807,6 @@ const consultationComponent = {
     );
   },
   info: function (component, response, filter = ["new"]) {
-    console.log(response);
     const patientIds = component.querySelectorAll(".item-data[data-patientId]");
     const patientNames = component.querySelectorAll(
       ".item-data[data-patientName]"
@@ -790,11 +821,9 @@ const consultationComponent = {
     const reportItemList = component.querySelector(".reportItemList");
 
     const prescriptionApi =
-      "/api/prescription/filter/?filter=consultation&equal=" +
-      response.result._id;
+      "/api/prescription/find/consultation/" + response.result._id;
     const reportApi =
-      "/api/audiorecording/filter/?filter=consultation&equal=" +
-      response.result._id;
+      "/api/consultation-recording/find/consultation/" + response.result._id;
 
     console.log(prescriptionApi);
     activeModel("dataTable");
@@ -814,32 +843,54 @@ const consultationComponent = {
       });
       prescriptionItemList.innerHTML = "";
       prescriptionItemList.dataset.nbr = 0;
-      axios
-        .get(prescriptionApi)
-        .then((response) => {
-          console.log(response);
-          const datas = response.data.result;
-          prescriptionGrid.renderList(component, datas);
-          // prescriptionGrid.renderList(component,datas);
-        })
-        .catch(function (error) {
-          // handle error
-          return error.response;
-        });
+      const targetprescription =
+        prescriptionGridComponent.dataset.targetprescription;
+      const filter = "consultation";
+      const equal = response.result._id;
+      const ajaxCall = filterSync(targetprescription, { filter, equal });
+
+      ajaxCall.then(function (response) {
+        if (response === undefined || response.success === false) {
+          return;
+        }
+        prescriptionGrid.renderList(component, response.result);
+      });
+      // axios
+      //   .get(prescriptionApi)
+      //   .then((response) => {
+      //     console.log(response);
+      //     const datas = response.result.data;
+      //     prescriptionGrid.renderList(component, datas);
+      //     // prescriptionGrid.renderList(component,datas);
+      //   })
+      //   .catch(function (error) {
+      //     // handle error
+      //     return error.response;
+      //   });
 
       reportItemList.innerHTML = "";
       reportItemList.dataset.nbr = 0;
-      axios
-        .get(reportApi)
-        .then((response) => {
-          console.log(response);
-          const datas = response.data.result;
-          reportGrid.renderList(component, datas);
-        })
-        .catch(function (error) {
-          // handle error
-          return error.response;
-        });
+      const targetrecoder = reportItemList.dataset.targetrecoder;
+
+      const ajaxCallRecorder = filterSync(targetrecoder, { filter, equal });
+
+      ajaxCallRecorder.then(function (response) {
+        if (response === undefined || response.success === false) {
+          return;
+        }
+        reportGrid.renderList(component, response.result);
+      });
+      // axios
+      //   .get(reportApi)
+      //   .then((response) => {
+      //     console.log(response);
+      //     const datas = response.result.data;
+      //     reportGrid.renderList(component, datas);
+      //   })
+      //   .catch(function (error) {
+      //     // handle error
+      //     return error.response;
+      //   });
     }
 
     // if (filter.includes('saved')) {
@@ -850,8 +901,6 @@ const consultationComponent = {
       newPrescription.addEventListener(
         "click",
         function () {
-          console.log(response);
-
           if (prescriptionGridComponent) {
             const form = prescriptionGridComponent.querySelector("form");
             form.dataset.consultationId = response.result._id;

@@ -1,7 +1,7 @@
-mixin consultationInfo(listInfos={})
-    - const uploadAudio = "/api/audiorecording/create/"
-    - const removeAudioRecord = "/api/audiorecording/delete/"
-    .component(data-component="consultationInfo")
+mixin consultationInfo(targetRecoder)
+    //- - const uploadAudio = "/api/consultation-recording/create/"
+    //- - const removeAudioRecord = "/api/consultation-recording/delete/"
+    .component(data-component="consultationInfo" )
         .tab-container.headerInfo
             .single-item.meta-title-row
                 .item-row
@@ -24,7 +24,7 @@ mixin consultationInfo(listInfos={})
                     .toggle
                         != h.icon("more")
                         ul.toggleOption
-                            li.download(data-path='/download/prescription/prescription-report')
+                            li.download(data-path='/download/Prescription/prescription-report')
                                 != h.icon("option-edit") 
                                 | Telecharger
                             li.edit
@@ -64,9 +64,9 @@ mixin consultationInfo(listInfos={})
         .tab-container
             .prescriptionItemList
 
-            .reportItemList(data-remove-action=removeAudioRecord)
+            .reportItemList(data-targetrecoder=targetRecoder data-remove-action=removeAudioRecord)
 
-            .recordingList
+            .recordingList(data-targetrecoder=targetRecoder)
                 .single-item.template.hidden
                     .item-row
                         .item-data
@@ -101,7 +101,7 @@ mixin consultationInfo(listInfos={})
                             button(id="newPrescription" type="submit" class="btn primary-btn icon-btn") Ajouter un Ordonnance
                                 != h.icon('plus-circle') 
                         .col-12.omega
-                            button(type="submit" class="btn secondary-btn icon-btn component" data-component="recorder-toggle" data-list-selector=".recordingList" data-save-action=uploadAudio data-remove-action=removeAudioRecord) Ajouter Compte Rendue
+                            button(type="submit" class="btn secondary-btn icon-btn component" data-component="recorder-toggle" data-targetrecoder=targetRecoder data-list-selector=".recordingList") Ajouter Compte Rendue
                                 != h.icon('consult-report') 
 
 

@@ -29,12 +29,12 @@ delete methods["update"];
 //       }
 //     ).exec();
 
-//     await custom.pdfGenerater(
+//     await custom.generatePdf(
 //       "Prescription",
 //       { filename: "prescription-report", format: "A5" },
 //       result
 //     );
-//     // await custom.pdfGenerater('Prescription', { filename: 'prescription-report', format:'A5' }, result, function (callback) {
+//     // await custom.generatePdf('Prescription', { filename: 'prescription-report', format:'A5' }, result, function (callback) {
 //     //   // if (callback.hasOwnProperty('success') && callback.success) {
 //     //   //     let { data } = callback;
 //     //   // }

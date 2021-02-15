@@ -8,6 +8,7 @@ import {
   readSync,
   filterSync,
   deleteSync,
+  multiSync,
 } from "../axiosRequest";
 import activeTab from "./activeTab";
 import { uniqueid, formatDate, activeModel } from "../helper";
@@ -247,6 +248,7 @@ const prescriptionGrid = {
     const form = component.querySelector("form");
     const prescriptionType = component.querySelector(".prescriptionType");
     const targetPrescription = component.dataset.targetPrescription;
+    const json = element.dataset.json;
     const ajaxCall = readSync(targetPrescription, id);
     ajaxCall.then((response) => {
       if (response.success == true) {
@@ -290,7 +292,7 @@ const prescriptionGrid = {
     const form = component.querySelector("form");
     const targetPrescription = component.dataset.targetPrescription;
     const id = element.dataset.id;
-    const action = form.dataset.delete + id;
+    const loaderWarpper = '.component[data-component="panel"] .panel';
 
     document
       .getElementById("delete-record")
@@ -315,7 +317,8 @@ const prescriptionGrid = {
       }
     }
     function prescriptionDeleteConfirm() {
-      const ajaxCall = deleteSync(targetPrescription, id);
+      window.modal.close();
+      const ajaxCall = deleteSync(targetPrescription, id, { loaderWarpper });
 
       ajaxCall.then((response) => {
         //Rest all prescriptionForm
@@ -335,7 +338,6 @@ const prescriptionGrid = {
           if (selected) {
             selected.parentNode.removeChild(selected);
           }
-          window.modal.close();
         }
       });
     }
@@ -373,6 +375,7 @@ const prescriptionGrid = {
         "span[data-prescriptionDate]"
       ).innerHTML = formatDate(date);
       prescriptionItem.dataset.id = data._id;
+      prescriptionItem.dataset.json = data;
       prescriptionItem.querySelector(".edit").dataset.id = data._id;
       prescriptionItem.querySelector(".download").dataset.id = data._id;
       prescriptionItem.querySelector(".remove").dataset.id = data._id;
@@ -388,6 +391,7 @@ const reportGrid = {
     var recordingIndex = 1;
     var recordButton = recorderToggle;
     var oldLabel = recordButton.innerHTML;
+    const loaderWarpper = '.component[data-component="panel"] .panel';
     // var recordingsList = document.querySelector(recorderToggle.dataset.listSelector);
     // var template = recordingsList.querySelector('.single-item.template');
     var recordingsStatus = recorderToggle;
@@ -434,7 +438,7 @@ const reportGrid = {
       recordingIndex++;
       formData.append("audioFile", blob);
       formData.append("consultation", recorderToggle.dataset.id);
-      const ajaxCall = uploadSync(targetRecorder, formData);
+      const ajaxCall = uploadSync(targetRecorder, formData, { loaderWarpper });
       ajaxCall.then(function (response) {
         const datas = [];
         datas.push(response.result);
@@ -486,6 +490,7 @@ const reportGrid = {
   remove: function (component, element) {
     const id = element.dataset.id;
     const targetRecorder = component.dataset.targetRecorder;
+    const loaderWarpper = '.component[data-component="panel"] .panel';
 
     document
       .getElementById("delete-record")
@@ -502,7 +507,8 @@ const reportGrid = {
       }
     }
     function reportDeleteConfirm() {
-      const ajaxCall = deleteSync(targetRecorder, id);
+      window.modal.close();
+      const ajaxCall = deleteSync(targetRecorder, id, { loaderWarpper });
 
       ajaxCall.then((response) => {
         //Rest all prescriptionForm
@@ -518,7 +524,6 @@ const reportGrid = {
           if (selected) {
             selected.parentNode.removeChild(selected);
           }
-          window.modal.close();
         }
       });
     }
@@ -605,6 +610,8 @@ const consultationComponent = {
       '.component[data-component="recorder-toggle"]'
     );
     const form = component.querySelector("form");
+
+    const loaderWarpper = '.model[data-model="prescription"]';
 
     delegate(
       document.body,
@@ -699,10 +706,10 @@ const consultationComponent = {
       "click",
       function (event) {
         event.preventDefault();
-        medicamentGrid.reset(component); // make new medicament row empty
+
         const calculationRows = component.querySelectorAll(".calculation-row");
         const letterFrom = component.querySelector(`.letter`);
-        // const infoDivs = document.querySelectorAll('.component[data-component="consultationInfo"]');
+
         const form = component.querySelector("form");
         let prescriptionData = prescriptionGrid.formToObject(form);
         const type = prescriptionType.value;
@@ -734,26 +741,31 @@ const consultationComponent = {
         ) {
           let ajaxCall = null;
           if (form.dataset.status === "new") {
-            ajaxCall = createSync(targetPrescription, prescriptionData);
+            ajaxCall = createSync(targetPrescription, prescriptionData, {
+              loaderWarpper,
+            });
           } else {
             const idPrescription = form.dataset.idPrescription || "";
             ajaxCall = updateSync(
               targetPrescription,
               idPrescription,
-              prescriptionData
+              prescriptionData,
+              {
+                loaderWarpper,
+              }
             );
           }
 
           ajaxCall.then((response) => {
             // Rest all prescriptionForm
 
-            form.dataset.status = "new";
-            form.dataset.idPrescription = null;
-            [].forEach.call(prescriptionForms, function (prescriptionForm) {
-              medicamentGrid.reset(component);
-              prescriptionGrid.resetForm(prescriptionForm);
-            });
-            if (response.success == true) {
+            if (response != undefined && response.success == true) {
+              form.dataset.status = "new";
+              form.dataset.idPrescription = null;
+              [].forEach.call(prescriptionForms, function (prescriptionForm) {
+                medicamentGrid.reset(component);
+                prescriptionGrid.resetForm(prescriptionForm);
+              });
               activeModel("dataTable");
               activeTab(["read"]);
               if (status == "new") {
@@ -792,6 +804,7 @@ const consultationComponent = {
       ".prescriptionItemList"
     );
     const reportItemList = component.querySelector(".reportItemList");
+    const loaderWarpper = '.component[data-component="panel"] .panel';
 
     activeModel("dataTable");
 
@@ -819,12 +832,12 @@ const consultationComponent = {
         equal,
       });
 
-      ajaxCallPrescription.then(function (response) {
-        if (response === undefined || response.success === false) {
-          return;
-        }
-        prescriptionGrid.renderPrescription(component, response.result);
-      });
+      // ajaxCallPrescription.then(function (response) {
+      //   if (response === undefined || response.success === false) {
+      //     return;
+      //   }
+      //   prescriptionGrid.renderPrescription(component, response.result);
+      // });
 
       reportItemList.innerHTML = "";
       reportItemList.dataset.nbr = 0;
@@ -832,12 +845,35 @@ const consultationComponent = {
 
       const ajaxCallRecorder = filterSync(targetRecorder, { filter, equal });
 
-      ajaxCallRecorder.then(function (response) {
-        if (response === undefined || response.success === false) {
-          return;
-        }
-        reportGrid.renderRecord(component, response.result);
+      const resultSync = multiSync([ajaxCallPrescription, ajaxCallRecorder], {
+        loaderWarpper,
       });
+      resultSync.then(function (responses) {
+        const responsePrescription = responses[0];
+        const responseRecorder = responses[1];
+        if (
+          responsePrescription != undefined &&
+          responsePrescription.success === true
+        ) {
+          prescriptionGrid.renderPrescription(
+            component,
+            responsePrescription.result
+          );
+        }
+
+        if (
+          responseRecorder != undefined &&
+          responseRecorder.success === true
+        ) {
+          reportGrid.renderRecord(component, responseRecorder.result);
+        }
+      });
+      // ajaxCallRecorder.then(function (response) {
+      //   if (response === undefined || response.success === false) {
+      //     return;
+      //   }
+      //   reportGrid.renderRecord(component, response.result);
+      // });
     }
 
     if (newPrescription) {

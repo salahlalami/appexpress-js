@@ -245,6 +245,24 @@ export const uploadSync = (target, jsonData, option = {}) => {
   return result;
 };
 
+export const multiSync = (promisseArray, option = {}) => {
+  if (option.loaderWarpper) {
+    loader.init(option.loaderWarpper);
+  }
+
+  const result = Promise.all(promisseArray)
+    .then(function (responses) {
+      return responses;
+    })
+    .finally(function () {
+      if (option.loaderWarpper) {
+        loader.remove(option.loaderWarpper);
+      }
+    });
+
+  return result;
+};
+
 export const postDataSync = (targetUrl, jsonData, option = {}) => {
   if (option.loaderWarpper) {
     loader.init(option.loaderWarpper);

@@ -314,12 +314,11 @@ exports.task = (req, res) => {
  */
 exports.consultation = async (req, res) => {
   const Model = mongoose.model("ConsultationType");
-  console.log("you are on consultation page");
+
   const doctorParam = req.params.doctorParam || null;
   let doctor = 0;
   let idSpecialty = null;
   let consultationTypes = [];
-  console.log(req.params.doctorParam);
 
   if (doctorParam != null) {
     try {
@@ -341,8 +340,7 @@ exports.consultation = async (req, res) => {
     //   getData("ConsultationType"),
     // ]);
   }
-  console.log(doctor);
-  console.log(consultationTypes);
+
   res.render("consultation", {
     consultationTypes,
     doctor,

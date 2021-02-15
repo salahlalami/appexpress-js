@@ -248,8 +248,8 @@ const prescriptionGrid = {
     const form = component.querySelector("form");
     const prescriptionType = component.querySelector(".prescriptionType");
     const targetPrescription = component.dataset.targetPrescription;
-    const json = element.dataset.json;
-    const ajaxCall = readSync(targetPrescription, id);
+    const loaderWarpper = '.model[data-model="prescription"]';
+    const ajaxCall = readSync(targetPrescription, id, { loaderWarpper });
     ajaxCall.then((response) => {
       if (response.success == true) {
         activeModel("prescription");
@@ -375,7 +375,6 @@ const prescriptionGrid = {
         "span[data-prescriptionDate]"
       ).innerHTML = formatDate(date);
       prescriptionItem.dataset.id = data._id;
-      prescriptionItem.dataset.json = data;
       prescriptionItem.querySelector(".edit").dataset.id = data._id;
       prescriptionItem.querySelector(".download").dataset.id = data._id;
       prescriptionItem.querySelector(".remove").dataset.id = data._id;

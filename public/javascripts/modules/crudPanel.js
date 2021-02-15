@@ -50,7 +50,7 @@ export const initCrudPanel = (component) => {
         // const url = searchInput.dataset.read;
         const target = searchInput.dataset.target;
         const form = document.querySelector('form.ajax[data-state="update"]');
-        const viewType = form.dataset.viewType;
+        const viewType = form.dataset.formtype || "standard";
         const { detail } = event;
         if (detail === undefined || detail.success === false) {
           return;

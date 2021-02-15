@@ -1,7 +1,7 @@
-mixin consultationInfo(targetRecoder={},targetPrescription={})
-    - const uploadAudio = "/api/audiorecording/create/"
-    - const removeAudioRecord = "/api/audiorecording/delete/"
-    .component(data-component="consultationInfo")
+mixin consultationInfo(props={})
+    - const targetPrescription=props.targetPrescription ||  "prescription"
+    - const targetRecoder=props.targetRecoder ||  "audiorecording"
+    .component(data-component="consultationInfo" data-target-recorder=targetRecoder data-target-prescription=targetPrescription)
         .tab-container.headerInfo
             .single-item.meta-title-row
                 .item-row
@@ -64,9 +64,9 @@ mixin consultationInfo(targetRecoder={},targetPrescription={})
         .tab-container
             .prescriptionItemList(data-target-prescription=targetPrescription)
 
-            .reportItemList(data-target-recoder=targetRecoder data-remove-action=removeAudioRecord)
+            .reportItemList(data-target-recorder=targetRecoder)
 
-            .recordingList(data-target-recoder=targetRecoder)
+            .recordingList(data-target-recorder=targetRecoder)
                 .single-item.template.hidden
                     .item-row
                         .item-data
@@ -101,7 +101,7 @@ mixin consultationInfo(targetRecoder={},targetPrescription={})
                             button(id="newPrescription" type="submit" class="btn primary-btn icon-btn") Ajouter un Ordonnance
                                 != h.icon('plus-circle') 
                         .col-12.omega
-                            button(type="submit" class="btn secondary-btn icon-btn component" data-component="recorder-toggle" data-list-selector=".recordingList" data-save-action=uploadAudio data-remove-action=removeAudioRecord) Ajouter Compte Rendue
+                            button(type="submit" class="btn secondary-btn icon-btn component" data-component="recorder-toggle" data-target-recorder=targetRecoder data-list-selector=".recordingList" ) Ajouter Compte Rendue
                                 != h.icon('consult-report') 
 
 

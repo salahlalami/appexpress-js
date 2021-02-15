@@ -179,15 +179,16 @@ export const editItem = (form, target, json) => {
   toForm(response, form);
 };
 
-export const viewItem = (target, json, viewType = ["standard"]) => {
+export const viewItem = (target, json, viewType = "standard") => {
   // const result = readSync(target, id);
+  console.log(json);
   const objResult = JSON.parse(json);
   const response = { result: objResult };
   setCurrentRecord(target, response);
   activeTab(["read"]);
   // toForm(response);
 
-  if (viewType.includes("consultation")) {
+  if (viewType == "consultation") {
     const infoDivs = document.querySelectorAll(
       '.component[data-component="consultationInfo"]'
     );

@@ -1,10 +1,11 @@
 
 mixin prescriptionGrid(props={})
-    - const targetPrescription=props.targetPrescription ||  ""
+    - const targetPrescription=props.targetPrescription ||  "prescription"
+    - const targetRecoder=props.targetRecoder || "audiorecording"
     - const actionForm=props.actionForm || ""
     - const title= props.title || "" 
-    .component(data-component="prescriptionGrid")      
-        form(action=actionForm+"create/" data-status="new" data-add=actionForm+"create/" data-edit=actionForm+"update/" data-read=actionForm+"read/" data-delete=actionForm+"delete/" method="POST")
+    .component(data-component="prescriptionGrid" data-target-prescription=targetPrescription data-target-recorder=targetRecoder)      
+        form(data-status="new" method="POST")
             
             .orgMoreOption.hidden
                 .toggle
@@ -38,7 +39,7 @@ mixin prescriptionGrid(props={})
                         .col-7.omega.component(data-component="searchList")   
                             label(for="medicamentName") Medicament
                             .autocomplete
-                                input(type="text" name="medicamentName" data-name="medicamentName" data-label="name" data-output="name" class="searchList" data-ajax="/api/medicament/search?q=" data-disabled="true" autocomplete="off" required)
+                                input(type="text" data-target="medicament" name="medicamentName" data-name="medicamentName" data-label="name" data-output="name" class="searchList" data-ajax="/api/medicament/search?q=" data-disabled="true" autocomplete="off" required)
                         .col-3.omega
                             label(for="boxesNumber") Nbr. Boites
                             input(type="number" name="boxesNumber" data-disabled="true" autocomplete="off" required)

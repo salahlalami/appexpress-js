@@ -39,8 +39,8 @@ methods.create = async (req, res) => {
     } else {
       // Server Error
       res.status(500).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Oops there is an Error",
       });
     }

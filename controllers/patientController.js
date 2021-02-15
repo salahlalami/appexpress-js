@@ -145,23 +145,23 @@ methods.create = async (req, res) => {
 //     ).exec();
 
 //     res.status(200).json({
-//       success: 1,
-//       data: result,
+//       success: true,
+//       result,
 //       message: "we update this document by this id: " + req.params.id,
 //     });
 //   } catch (err) {
 //     // If err is thrown by Mongoose due to required validations
 //     if (err.name == "ValidationError") {
 //       res.status(400).json({
-//         success: 0,
-//         data: null,
+//         success: false,
+//         result: null,
 //         message: "Required fields are not supplied",
 //       });
 //     } else {
 //       // Server Error
 //       res.status(500).json({
-//         success: 0,
-//         data: null,
+//         success: false,
+//         result: null,
 //         message: "Oops there is an Error",
 //       });
 //     }

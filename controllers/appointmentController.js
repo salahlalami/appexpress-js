@@ -17,14 +17,14 @@ methods.getAppointmentCountByDoctorId = async (req, res) => {
       .count();
 
     res.status(200).json({
-      success: 1,
-      data: result,
+      success: true,
+      result,
       message: "Successfully found the doctor appointment counts",
     });
   } catch (error) {
     res.status(500).json({
-      success: 0,
-      data: null,
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }
@@ -40,14 +40,14 @@ methods.getAllAppointmentCount = async (req, res) => {
       .count();
 
     res.status(200).json({
-      success: 1,
-      data: result,
+      success: true,
+      result,
       message: "Successfully found all appointment counts",
     });
   } catch (error) {
     res.status(500).json({
-      success: 0,
-      data: null,
+      success: false,
+      result: null,
       message: "Oops there is an Error",
     });
   }

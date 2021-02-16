@@ -21,14 +21,14 @@ exports.create = async (req, res) => {
 
       // Returning successfull response
       res.status(200).json({
-        success: 1,
-        data: result,
+        success: true,
+        result,
         message: "Successfully Created the document in Model ",
       });
     } else {
       res.status(400).json({
-        success: 1,
-        data: null,
+        success: true,
+        result: null,
         message: `User Exist with this mail : ${req.body.email} `,
       });
     }
@@ -37,15 +37,15 @@ exports.create = async (req, res) => {
     // If err is thrown by Mongoose due to required validations
     if (err.name == "ValidationError") {
       res.status(400).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Required fields are not supplied",
       });
     } else {
       // Server Error
       res.status(500).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Oops there is an Error",
       });
     }
@@ -73,14 +73,14 @@ exports.update = async (req, res) => {
       ).exec();
 
       res.status(200).json({
-        success: 1,
-        data: result,
+        success: true,
+        result,
         message: "we update this document by this id: " + req.params.id,
       });
     } else {
       res.status(400).json({
-        success: 1,
-        data: null,
+        success: true,
+        result: null,
         message: `User Exist with this mail : ${req.body.email} `,
       });
     }
@@ -88,15 +88,15 @@ exports.update = async (req, res) => {
     // If err is thrown by Mongoose due to required validations
     if (err.name == "ValidationError") {
       res.status(400).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Required fields are not supplied",
       });
     } else {
       // Server Error
       res.status(500).json({
-        success: 0,
-        data: null,
+        success: false,
+        result: null,
         message: "Oops there is an Error",
       });
     }

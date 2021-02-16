@@ -14,7 +14,7 @@ const isValidToken = (token) => {
     // error
     return {
       status: false,
-      data: null,
+      result: null,
     };
   }
 };

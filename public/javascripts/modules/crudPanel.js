@@ -50,7 +50,7 @@ export const initCrudPanel = (component) => {
         // const url = searchInput.dataset.read;
         const target = searchInput.dataset.target;
         const form = document.querySelector('form.ajax[data-state="update"]');
-        const viewType = form.dataset.viewType;
+        const viewType = form.dataset.formtype || "standard";
         const { detail } = event;
         if (detail === undefined || detail.success === false) {
           return;
@@ -179,15 +179,16 @@ export const editItem = (form, target, json) => {
   toForm(response, form);
 };
 
-export const viewItem = (target, json, viewType = ["standard"]) => {
+export const viewItem = (target, json, viewType = "standard") => {
   // const result = readSync(target, id);
+  console.log(json);
   const objResult = JSON.parse(json);
   const response = { result: objResult };
   setCurrentRecord(target, response);
   activeTab(["read"]);
   // toForm(response);
 
-  if (viewType.includes("consultation")) {
+  if (viewType == "consultation") {
     const infoDivs = document.querySelectorAll(
       '.component[data-component="consultationInfo"]'
     );

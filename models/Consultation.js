@@ -10,11 +10,13 @@ const consultationSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Patient",
     required: true,
+    autopopulate: true,
   },
   doctor: {
     type: mongoose.Schema.ObjectId,
     ref: "Doctor",
     required: true,
+    autopopulate: true,
   },
   date: {
     type: String,
@@ -24,6 +26,7 @@ const consultationSchema = new mongoose.Schema({
   consultationType: {
     type: mongoose.Schema.ObjectId,
     ref: "ConsultationType",
+    autopopulate: true,
   },
   prescription: [
     {
@@ -74,15 +77,6 @@ const consultationSchema = new mongoose.Schema({
   },
 });
 
-function autopopulate(next) {
-  this.populate("patient");
-  this.populate("doctor");
-  this.populate("consultationType");
-  next();
-}
-
-consultationSchema.pre("find", autopopulate);
-consultationSchema.pre("findOne", autopopulate);
-consultationSchema.pre("findOneAndUpdate", autopopulate);
+consultationSchema.plugin(require("mongoose-autopopulate"));
 
 module.exports = mongoose.model("Consultation", consultationSchema);

@@ -8,13 +8,14 @@ const bodyParser = require("body-parser");
 const promisify = require("es6-promisify");
 const flash = require("connect-flash");
 // const expressValidator = require("express-validator");
-const router = require("./routes/index");
+const authRouter = require("./routes/auth");
+const pageRouter = require("./routes/page");
 const apiRouter = require("./routes/api");
 const helpers = require("./helpers");
 const errorHandlers = require("./handlers/errorHandlers");
 const settingsApp = require("./middlewares/settingsApp");
 const passport = require("passport");
-const { checkAuth } = require("./controllers/authController");
+const { checkAuth, isLoggedIn } = require("./controllers/authController");
 
 require("./handlers/passport")(passport); // pass passport for configuration
 
@@ -81,8 +82,10 @@ app.use(settingsApp);
 //   }
 //   next();
 // });
+
 // After allllll that above middleware, we finally handle our own routes!
-app.use(router);
+app.use(authRouter);
+app.use(isLoggedIn, pageRouter);
 // Here our API Routes
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");
@@ -99,7 +102,7 @@ app.use(router);
 //     return next();
 //   }
 // });
-app.use("/api", apiRouter);
+app.use("/api", checkAuth, apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

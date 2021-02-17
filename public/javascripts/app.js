@@ -17,12 +17,12 @@ import {
   dropdown,
 } from "./core";
 
+import datepicker from "./lib/datepicker";
+
+import { initCrudPanel, formSubmit, searchItem } from "./components/crudPanel";
 import dataGrid from "./components/dataGrid";
 
 import consultationModule from "./modules/consultationModule";
-
-import { initCrudPanel, formSubmit, searchItem } from "./components/crudPanel";
-import datepicker from "./lib/datepicker";
 
 docReady(function () {
   // const allPages = $('#pageId');

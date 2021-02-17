@@ -6,30 +6,33 @@ const promisify = require("es6-promisify");
 const mail = require("../handlers/mail");
 
 exports.login = passport.authenticate("local-login", {
+  successRedirect: "/redirectAfterLogin",
   failureRedirect: "/login", // redirect back to the signup page if there is an error
   failureFlash: true, // allow flash messages
 });
 exports.redirect = function (req, res) {
-  let user = JSON.parse(JSON.stringify(req.user));
-  console.log(user);
+  if (!req.isAuthenticated()) {
+    return res.redirect("/login");
+  }
+  let staff = JSON.parse(JSON.stringify(req.user));
   if (req.body.remember) {
     req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
   } else {
     req.session.cookie.expires = false; // Cookie expires at end of session
   }
 
-  switch (user.dashbaordType) {
+  switch (staff.role.dashboardType) {
     case "admin":
-      return res.redirect("/admindashboard");
+      return res.redirect("/user");
     // break;
     case "doctor":
-      return res.redirect("/dootordashboard");
+      return res.redirect("/patient");
     // break;
     case "secritary":
-      return res.redirect("/secritarydashboard");
+      return res.redirect("/appointment");
     // break;
     default:
-      return res.redirect("/");
+      return res.redirect("/employee");
   }
 };
 

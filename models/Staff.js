@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcryptjs");
 
-const userSchema = new Schema({
+const staffSchema = new Schema({
   removed: {
     type: Boolean,
     default: false,
@@ -56,16 +56,16 @@ const userSchema = new Schema({
   customMenu: [{ type: mongoose.Schema.ObjectId, ref: "CustomMenu" }],
 });
 
-userSchema.plugin(require("mongoose-autopopulate"));
+staffSchema.plugin(require("mongoose-autopopulate"));
 
 // generating a hash
-userSchema.methods.generateHash = function (password) {
+staffSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(), null);
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function (password) {
+staffSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Staff", staffSchema);

@@ -2,31 +2,19 @@ const express = require("express");
 
 const router = express.Router();
 
-const authController = require("../controllers/authController");
-
 const appController = require("../controllers/appController");
 const { catchErrors } = require("../handlers/errorHandlers");
-const {
-  isLoggedIn,
-  alreadyLoggedIn,
-  login,
-  redirect,
-} = require("../controllers/authController");
 
-router.route("/login").get(alreadyLoggedIn, appController.login);
-router.route("/login").post(catchErrors(login, redirect));
-
-router
-  .route("/logout")
-  .post(isLoggedIn, catchErrors(authController.logout))
-  .get(isLoggedIn, catchErrors(authController.logout));
-
-router.route("/").get(isLoggedIn, appController.dashboard);
+router.route("/").get(appController.dashboard);
 
 router.get("/dashboardDoctor", appController.dashboardDoctor);
-router.get("/dashboardSecretariat", appController.dashboardSecretariat);
+router.get(
+  "/dashboardSecretariat",
+
+  appController.dashboardSecretariat
+);
 router.get("/account", appController.account);
-router.get("/user", appController.user);
+router.get("/staff", appController.staff);
 router.get("/role", appController.role);
 router.get("/permission", appController.permission);
 router.get("/patient", appController.patient);
@@ -60,16 +48,14 @@ router.get("/settingMedical", appController.settingMedical);
 router.get("/settingCommercial", appController.settingCommercial);
 router.get(
   "/consultation/:doctorParam?",
-  catchErrors(appController.consultation)
+
+  appController.consultation
 );
-router.get("/task", catchErrors(appController.task));
-router.get("/customMenu", catchErrors(appController.customMenu));
+router.get("/task", appController.task);
+router.get("/customMenu", appController.customMenu);
 //______________________________________________________________________________________
 
 // Download pdf file
 router.get("/public/download/:pdfname?", appController.download);
 
-//_________________________________________________________________________________________;
-// // Download pdf file
-router.route("/public/download/:pdfname?").get(appController.download);
 module.exports = router;

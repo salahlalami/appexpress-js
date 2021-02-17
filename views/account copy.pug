@@ -8,15 +8,15 @@ block content
       form(action="/account" method="POST" enctype="multipart/form-data")
         .col-24.alpha.omega
           label(for="name") Name
-          input(type="text" name="name" value=user.name)
+          input(type="text" name="name" value=staff.name)
 
         .col-24.alpha.omega
           label(for="email") Email Address
-          input(type="email" name="email" value=user.email)
+          input(type="email" name="email" value=staff.email)
 
         .col-24.alpha.omega
           label(for="photo") Photo
-          .component(data-component="file-upload" data-image=user.photo)
+          .component(data-component="file-upload" data-image=staff.photo)
             .preview
             .file-input
               input(type="file" name="photo")

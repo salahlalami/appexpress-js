@@ -28,9 +28,9 @@ exports.icon = (name) => {
 };
 exports.image = (name) => fs.readFileSync(`./public/images/photos/${name}.jpg`);
 
-exports.userPhotoUrl = (user) => {
-  if (user) {
-    return user.photo ? "/" + user.photo : "/images/photos/profile.jpg";
+exports.staffPhotoUrl = (staff) => {
+  if (staff) {
+    return staff.photo ? "/" + staff.photo : "/images/photos/profile.jpg";
   } else {
     return "/images/photos/profile.jpg";
   }

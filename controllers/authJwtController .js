@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const promisify = require("es6-promisify");
 const mail = require("../handlers/mail");
 
-const User = mongoose.model("User");
+const Staff = mongoose.model("Staff");
 
 require("dotenv").config({ path: ".variables.env" });
 
@@ -24,8 +24,8 @@ exports.register = async (req, res) => {
         .status(400)
         .json({ msg: "Enter the same password twice for verification." });
 
-    const existingUser = await User.findOne({ email: email });
-    if (existingUser)
+    const existingStaff = await Staff.findOne({ email: email });
+    if (existingStaff)
       return res
         .status(400)
         .json({ msg: "An account with this email already exists." });
@@ -35,18 +35,18 @@ exports.register = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = new User({
+    const newStaff = new Staff({
       email,
       password: passwordHash,
       name,
     });
-    const savedUser = await newUser.save();
+    const savedStaff = await newStaff.save();
     res.status(200).send({
       success: true,
-      user: {
-        id: savedUser._id,
-        name: savedUser.name,
-        surname: savedUser.surname,
+      staff: {
+        id: savedStaff._id,
+        name: savedStaff.name,
+        surname: savedStaff.surname,
       },
     });
   } catch (err) {
@@ -62,27 +62,27 @@ exports.login = async (req, res) => {
     if (!email || !password)
       return res.status(400).json({ msg: "Not all fields have been entered." });
 
-    const user = await User.findOne({ email: email, removed: false });
-    // console.log(user);
-    if (!user)
+    const staff = await Staff.findOne({ email: email, removed: false });
+    // console.log(staff);
+    if (!staff)
       return res
         .status(400)
         .json({ error: "No account with this email has been registered." });
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, staff.password);
     if (!isMatch)
       return res.status(400).json({ error: "Invalid credentials." });
 
     const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-        id: user._id,
+        id: staff._id,
       },
       process.env.JWT_SECRET
     );
 
-    const result = await User.findOneAndUpdate(
-      { _id: user._id },
+    const result = await Staff.findOneAndUpdate(
+      { _id: staff._id },
       { isLoggedIn: true },
       {
         new: true,
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
 
     res.json({
       token,
-      user: {
+      staff: {
         id: result._id,
         name: result.name,
         isLoggedIn: result.isLoggedIn,
@@ -104,8 +104,8 @@ exports.login = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.user);
-    res.json(deletedUser);
+    const deletedStaff = await Staff.findByIdAndDelete(req.user);
+    res.json(deletedStaff);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -119,8 +119,8 @@ exports.tokenIsValid = async (req, res) => {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     if (!verified) return res.json(false);
 
-    const user = await User.findById(verified.id);
-    if (!user) return res.json(false);
+    const staff = await Staff.findById(verified.id);
+    if (!staff) return res.json(false);
 
     return res.json(true);
   } catch (err) {
@@ -131,7 +131,7 @@ exports.tokenIsValid = async (req, res) => {
 exports.logout = async (req, res) => {
   console.log(req.user);
 
-  const result = await User.findOneAndUpdate(
+  const result = await Staff.findOneAndUpdate(
     { _id: req.user._id },
     { isLoggedIn: false },
     {
@@ -153,13 +153,13 @@ exports.logout = async (req, res) => {
   //         .status(401)
   //         .json({ msg: "Token verification failed, authorization denied." });
 
-  //     const user = await User.findById(verified.id);
-  //     if (!user)
+  //     const staff = await Staff.findById(verified.id);
+  //     if (!staff)
   //       return res
   //         .status(401)
-  //         .json({ msg: "User doens't Exist, authorization denied." });
+  //         .json({ msg: "Staff doens't Exist, authorization denied." });
   //     else {
-  //       req.user = user;
+  //       req.user = staff;
   //       next();
   //     }
 
@@ -167,7 +167,7 @@ exports.logout = async (req, res) => {
 };
 
 exports.isLoggedIn = (req, res, next) => {
-  // first check if the user is authenticated
+  // first check if the staff is authenticated
   if (req.isAuthenticated()) {
     next(); // carry on! They are logged in!
     return;
@@ -177,25 +177,25 @@ exports.isLoggedIn = (req, res, next) => {
 };
 
 exports.forgot = async (req, res) => {
-  // 1. See if a user with that email exists
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
+  // 1. See if a staff with that email exists
+  const staff = await Staff.findOne({ email: req.body.email });
+  if (!staff) {
     return res.send(_err.UNAUTHORIZED);
   }
   // 2. Set reset tokens and expiry on their account
-  user.resetPasswordToken = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
-  await user.save();
+  staff.resetPasswordToken = crypto.randomBytes(20).toString("hex");
+  staff.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
+  await staff.save();
   // 3. Send them an email with the token
-  const resetURL = `http://${req.headers.host}/account/reset/${user.resetPasswordToken}`;
+  const resetURL = `http://${req.headers.host}/account/reset/${staff.resetPasswordToken}`;
   await mail.send({
-    user,
+    staff,
     filename: "password-reset",
     subject: "Password Reset",
     resetURL,
   });
 
-  // 4. inform the user that, the email have been sent
+  // 4. inform the staff that, the email have been sent
   return res.send({
     status: true,
     message: "Reset link have been sent, please check your email.",
@@ -203,14 +203,14 @@ exports.forgot = async (req, res) => {
 };
 
 exports.reset = async (req, res) => {
-  const user = await User.findOne({
+  const staff = await Staff.findOne({
     resetPasswordToken: req.params.token,
     resetPasswordExpires: { $gt: Date.now() },
   });
-  if (!user) {
+  if (!staff) {
     return res.send(_err.UNAUTHORIZED);
   }
-  // if there is a user, show the rest password form
+  // if there is a staff, show the rest password form
   return res.send({
     status: false,
     message: "Reset your Password",
@@ -227,30 +227,30 @@ exports.confirmedPasswords = (req, res, next) => {
 };
 
 exports.update = async (req, res) => {
-  const user = await User.findOne({
+  const staff = await Staff.findOne({
     resetPasswordToken: req.params.token,
     resetPasswordExpires: { $gt: Date.now() },
   });
 
-  if (!user) {
+  if (!staff) {
     return res.send(_err.UNAUTHORIZED);
   }
 
-  const setPassword = promisify(user.setPassword, user);
+  const setPassword = promisify(staff.setPassword, staff);
   await setPassword(req.body.password);
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpires = undefined;
-  const updatedUser = await user.save();
-  await req.login(updatedUser);
+  staff.resetPasswordToken = undefined;
+  staff.resetPasswordExpires = undefined;
+  const updatedStaff = await staff.save();
+  await req.login(updatedStaff);
 
-  return res.send(updatedUser);
+  return res.send(updatedStaff);
 };
 
 // router.get("/", auth, async (req, res) => {
-//   const user = await User.findById(req.user);
+//   const staff = await Staff.findById(req.user);
 //   res.json({
-//     name: user.name,
-//     id: user._id,
+//     name: staff.name,
+//     id: staff._id,
 //   });
 // });
 

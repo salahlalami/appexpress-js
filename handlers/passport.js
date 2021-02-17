@@ -4,9 +4,9 @@ var FacebookStrategy = require("passport-facebook").Strategy;
 var TwitterStrategy = require("passport-twitter").Strategy;
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-// load up the user model
+// load up the staff model
 const mongoose = require("mongoose");
-let User = mongoose.model("User");
+let Staff = mongoose.model("Staff");
 
 // load the auth variables
 var configAuth = require("./auth"); // use this one for testing
@@ -16,17 +16,17 @@ module.exports = function (passport) {
   // passport session setup ==================================================
   // =========================================================================
   // required for persistent login sessions
-  // passport needs ability to serialize and unserialize users out of session
+  // passport needs ability to serialize and unserialize staffs out of session
 
-  // used to serialize the user for the session
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
+  // used to serialize the staff for the session
+  passport.serializeUser(function (staff, done) {
+    done(null, staff.id);
   });
 
-  // used to deserialize the user
+  // used to deserialize the staff
   passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
-      done(err, user);
+    Staff.findById(id, function (err, staff) {
+      done(err, staff);
     });
   });
 
@@ -37,32 +37,35 @@ module.exports = function (passport) {
     "local-login",
     new LocalStrategy(
       {
-        // by default, local strategy uses username and password, we will override with email
+        // by default, local strategy uses staffname and password, we will override with email
         usernameField: "email",
         passwordField: "password",
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a staff is logged in or not)
       },
       function (req, email, password, done) {
         if (email) email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
         // asynchronous
         process.nextTick(function () {
-          User.findOne({ email: email, removed: false }, function (err, user) {
+          Staff.findOne({ email: email, removed: false }, function (
+            err,
+            staff
+          ) {
             // if there are any errors, return the error
             if (err) return done(err);
 
-            // if no user is found, return the message
-            if (!user)
-              return done(null, false, req.flash("error", "No user found."));
+            // if no staff is found, return the message
+            if (!staff)
+              return done(null, false, req.flash("error", "No staff found."));
 
-            if (!user.validPassword(password))
+            if (!staff.validPassword(password))
               return done(
                 null,
                 false,
                 req.flash("error", "Oops! Wrong password.")
               );
-            // all is well, return user
-            else return done(null, user);
+            // all is well, return staff
+            else return done(null, staff);
           });
         });
       }
@@ -76,51 +79,51 @@ module.exports = function (passport) {
     "local-signup",
     new LocalStrategy(
       {
-        // by default, local strategy uses username and password, we will override with email
+        // by default, local strategy uses staffname and password, we will override with email
         usernameField: "email",
         passwordField: "password",
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a staff is logged in or not)
       },
       function (req, email, password, done) {
         if (email) email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
         // asynchronous
         process.nextTick(function () {
-          // if the user is not already logged in:
+          // if the staff is not already logged in:
           if (!req.user) {
-            User.findOne({ "local.email": email }, function (err, user) {
+            Staff.findOne({ "local.email": email }, function (err, staff) {
               // if there are any errors, return the error
               if (err) return done(err);
 
-              // check to see if theres already a user with that email
-              if (user) {
+              // check to see if theres already a staff with that email
+              if (staff) {
                 return done(
                   null,
                   false,
                   req.flash("signupMessage", "That email is already taken.")
                 );
               } else {
-                // create the user
-                var newUser = new User();
+                // create the staff
+                var newStaff = new Staff();
 
-                newUser.local.email = email;
-                newUser.local.password = newUser.generateHash(password);
+                newStaff.local.email = email;
+                newStaff.local.password = newStaff.generateHash(password);
 
-                newUser.save(function (err) {
+                newStaff.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newStaff);
                 });
               }
             });
-            // if the user is logged in but has no local account...
+            // if the staff is logged in but has no local account...
           } else if (!req.user.local.email) {
             // ...presumably they're trying to connect a local account
-            // BUT let's check if the email used to connect a local account is being used by another user
-            User.findOne({ "local.email": email }, function (err, user) {
+            // BUT let's check if the email used to connect a local account is being used by another staff
+            Staff.findOne({ "local.email": email }, function (err, staff) {
               if (err) return done(err);
 
-              if (user) {
+              if (staff) {
                 return done(
                   null,
                   false,
@@ -128,18 +131,18 @@ module.exports = function (passport) {
                 );
                 // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
               } else {
-                var user = req.user;
-                user.local.email = email;
-                user.local.password = user.generateHash(password);
-                user.save(function (err) {
+                var staff = req.user;
+                staff.local.email = email;
+                staff.local.password = staff.generateHash(password);
+                staff.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, user);
+                  return done(null, staff);
                 });
               }
             });
           } else {
-            // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
+            // staff is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, staff!)
             return done(null, req.user);
           }
         });
@@ -151,7 +154,7 @@ module.exports = function (passport) {
   // FACEBOOK ================================================================
   // =========================================================================
   var fbStrategy = configAuth.facebookAuth;
-  fbStrategy.passReqToCallback = true; // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+  fbStrategy.passReqToCallback = true; // allows us to pass in the req from our route (lets us check if a staff is logged in or not)
   passport.use(
     new FacebookStrategy(fbStrategy, function (
       req,
@@ -162,62 +165,62 @@ module.exports = function (passport) {
     ) {
       // asynchronous
       process.nextTick(function () {
-        // check if the user is already logged in
+        // check if the staff is already logged in
         if (!req.user) {
-          User.findOne({ "facebook.id": profile.id }, function (err, user) {
+          Staff.findOne({ "facebook.id": profile.id }, function (err, staff) {
             if (err) return done(err);
 
-            if (user) {
-              // if there is a user id already but no token (user was linked at one point and then removed)
-              if (!user.facebook.token) {
-                user.facebook.token = token;
-                user.facebook.name =
+            if (staff) {
+              // if there is a staff id already but no token (staff was linked at one point and then removed)
+              if (!staff.facebook.token) {
+                staff.facebook.token = token;
+                staff.facebook.name =
                   profile.name.givenName + " " + profile.name.familyName;
-                user.facebook.email = (
+                staff.facebook.email = (
                   profile.emails[0].value || ""
                 ).toLowerCase();
 
-                user.save(function (err) {
+                staff.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, user);
+                  return done(null, staff);
                 });
               }
 
-              return done(null, user); // user found, return that user
+              return done(null, staff); // staff found, return that staff
             } else {
-              // if there is no user, create them
-              var newUser = new User();
+              // if there is no staff, create them
+              var newStaff = new Staff();
 
-              newUser.facebook.id = profile.id;
-              newUser.facebook.token = token;
-              newUser.facebook.name =
+              newStaff.facebook.id = profile.id;
+              newStaff.facebook.token = token;
+              newStaff.facebook.name =
                 profile.name.givenName + " " + profile.name.familyName;
-              newUser.facebook.email = (
+              newStaff.facebook.email = (
                 profile.emails[0].value || ""
               ).toLowerCase();
 
-              newUser.save(function (err) {
+              newStaff.save(function (err) {
                 if (err) return done(err);
 
-                return done(null, newUser);
+                return done(null, newStaff);
               });
             }
           });
         } else {
-          // user already exists and is logged in, we have to link accounts
-          var user = req.user; // pull the user out of the session
+          // staff already exists and is logged in, we have to link accounts
+          var staff = req.user; // pull the staff out of the session
 
-          user.facebook.id = profile.id;
-          user.facebook.token = token;
-          user.facebook.name =
+          staff.facebook.id = profile.id;
+          staff.facebook.token = token;
+          staff.facebook.name =
             profile.name.givenName + " " + profile.name.familyName;
-          user.facebook.email = (profile.emails[0].value || "").toLowerCase();
+          staff.facebook.email = (profile.emails[0].value || "").toLowerCase();
 
-          user.save(function (err) {
+          staff.save(function (err) {
             if (err) return done(err);
 
-            return done(null, user);
+            return done(null, staff);
           });
         }
       });
@@ -233,60 +236,60 @@ module.exports = function (passport) {
         consumerKey: configAuth.twitterAuth.consumerKey,
         consumerSecret: configAuth.twitterAuth.consumerSecret,
         callbackURL: configAuth.twitterAuth.callbackURL,
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a staff is logged in or not)
       },
       function (req, token, tokenSecret, profile, done) {
         // asynchronous
         process.nextTick(function () {
-          // check if the user is already logged in
+          // check if the staff is already logged in
           if (!req.user) {
-            User.findOne({ "twitter.id": profile.id }, function (err, user) {
+            Staff.findOne({ "twitter.id": profile.id }, function (err, staff) {
               if (err) return done(err);
 
-              if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.twitter.token) {
-                  user.twitter.token = token;
-                  user.twitter.username = profile.username;
-                  user.twitter.displayName = profile.displayName;
+              if (staff) {
+                // if there is a staff id already but no token (staff was linked at one point and then removed)
+                if (!staff.twitter.token) {
+                  staff.twitter.token = token;
+                  staff.twitter.staffname = profile.staffname;
+                  staff.twitter.displayName = profile.displayName;
 
-                  user.save(function (err) {
+                  staff.save(function (err) {
                     if (err) return done(err);
 
-                    return done(null, user);
+                    return done(null, staff);
                   });
                 }
 
-                return done(null, user); // user found, return that user
+                return done(null, staff); // staff found, return that staff
               } else {
-                // if there is no user, create them
-                var newUser = new User();
+                // if there is no staff, create them
+                var newStaff = new Staff();
 
-                newUser.twitter.id = profile.id;
-                newUser.twitter.token = token;
-                newUser.twitter.username = profile.username;
-                newUser.twitter.displayName = profile.displayName;
+                newStaff.twitter.id = profile.id;
+                newStaff.twitter.token = token;
+                newStaff.twitter.staffname = profile.staffname;
+                newStaff.twitter.displayName = profile.displayName;
 
-                newUser.save(function (err) {
+                newStaff.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newStaff);
                 });
               }
             });
           } else {
-            // user already exists and is logged in, we have to link accounts
-            var user = req.user; // pull the user out of the session
+            // staff already exists and is logged in, we have to link accounts
+            var staff = req.user; // pull the staff out of the session
 
-            user.twitter.id = profile.id;
-            user.twitter.token = token;
-            user.twitter.username = profile.username;
-            user.twitter.displayName = profile.displayName;
+            staff.twitter.id = profile.id;
+            staff.twitter.token = token;
+            staff.twitter.staffname = profile.staffname;
+            staff.twitter.displayName = profile.displayName;
 
-            user.save(function (err) {
+            staff.save(function (err) {
               if (err) return done(err);
 
-              return done(null, user);
+              return done(null, staff);
             });
           }
         });
@@ -303,63 +306,63 @@ module.exports = function (passport) {
         clientID: configAuth.googleAuth.clientID,
         clientSecret: configAuth.googleAuth.clientSecret,
         callbackURL: configAuth.googleAuth.callbackURL,
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a staff is logged in or not)
       },
       function (req, token, refreshToken, profile, done) {
         // asynchronous
         process.nextTick(function () {
-          // check if the user is already logged in
+          // check if the staff is already logged in
           if (!req.user) {
-            User.findOne({ "google.id": profile.id }, function (err, user) {
+            Staff.findOne({ "google.id": profile.id }, function (err, staff) {
               if (err) return done(err);
 
-              if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.google.token) {
-                  user.google.token = token;
-                  user.google.name = profile.displayName;
-                  user.google.email = (
+              if (staff) {
+                // if there is a staff id already but no token (staff was linked at one point and then removed)
+                if (!staff.google.token) {
+                  staff.google.token = token;
+                  staff.google.name = profile.displayName;
+                  staff.google.email = (
                     profile.emails[0].value || ""
                   ).toLowerCase(); // pull the first email
 
-                  user.save(function (err) {
+                  staff.save(function (err) {
                     if (err) return done(err);
 
-                    return done(null, user);
+                    return done(null, staff);
                   });
                 }
 
-                return done(null, user);
+                return done(null, staff);
               } else {
-                var newUser = new User();
+                var newStaff = new Staff();
 
-                newUser.google.id = profile.id;
-                newUser.google.token = token;
-                newUser.google.name = profile.displayName;
-                newUser.google.email = (
+                newStaff.google.id = profile.id;
+                newStaff.google.token = token;
+                newStaff.google.name = profile.displayName;
+                newStaff.google.email = (
                   profile.emails[0].value || ""
                 ).toLowerCase(); // pull the first email
 
-                newUser.save(function (err) {
+                newStaff.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newStaff);
                 });
               }
             });
           } else {
-            // user already exists and is logged in, we have to link accounts
-            var user = req.user; // pull the user out of the session
+            // staff already exists and is logged in, we have to link accounts
+            var staff = req.user; // pull the staff out of the session
 
-            user.google.id = profile.id;
-            user.google.token = token;
-            user.google.name = profile.displayName;
-            user.google.email = (profile.emails[0].value || "").toLowerCase(); // pull the first email
+            staff.google.id = profile.id;
+            staff.google.token = token;
+            staff.google.name = profile.displayName;
+            staff.google.email = (profile.emails[0].value || "").toLowerCase(); // pull the first email
 
-            user.save(function (err) {
+            staff.save(function (err) {
               if (err) return done(err);
 
-              return done(null, user);
+              return done(null, staff);
             });
           }
         });

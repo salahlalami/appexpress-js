@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const userController = require("../controllers/userController");
+const staffController = require("../controllers/staffController");
 const authController = require("../controllers/authController");
 
 const appController = require("../controllers/appController");
@@ -56,10 +56,10 @@ const permissionMiddleware = require("../middlewares/permissionMiddleware");
 
 const { catchErrors } = require("../handlers/errorHandlers");
 
-// checking if user is logged it or not !!
+// checking if staff is logged it or not !!
 // it's basically a middleware that check if  logged in if yes he can continue the action else he will be redirect to login page
-const checkUser = require("../middlewares/checkUser");
-router.get("/*", checkUser);
+const checkStaff = require("../middlewares/checkStaff");
+router.get("/*", checkStaff);
 
 // Render Pages_______________________________________________________________________
 router.get("/", appController.dashboard);
@@ -976,7 +976,7 @@ router.get('/', (req, res) => {
 });
 */
 //_________________________________________________________________ account management_______________________________
-router.get("/login", userController.loginForm);
+router.get("/login", staffController.loginForm);
 router.post("/login", authController.login, function (req, res) {
   if (req.body.remember) {
     req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // Cookie expires after 30 days
@@ -985,22 +985,22 @@ router.post("/login", authController.login, function (req, res) {
   }
   res.redirect("/");
 });
-router.get("/register", userController.registerForm);
+router.get("/register", staffController.registerForm);
 
 // 1. Validate the registration data
-// 2. register the user
+// 2. register the staff
 // 3. we need to log them in
 router.post(
   "/register",
-  userController.validateRegister,
-  userController.register,
+  staffController.validateRegister,
+  staffController.register,
   authController.login
 );
 
 router.get("/logout", authController.logout);
 
-router.get("/account", authController.isLoggedIn, userController.account);
-router.post("/account", catchErrors(userController.updateAccount));
+router.get("/account", authController.isLoggedIn, staffController.account);
+router.post("/account", catchErrors(staffController.updateAccount));
 router.post("/account/forgot", catchErrors(authController.forgot));
 router.get("/account/reset/:token", catchErrors(authController.reset));
 router.post(
@@ -1020,34 +1020,34 @@ router.post("/upload", upload.single("imageupload"), function (req, res) {
 router.get(
   "/roles",
   permissionMiddleware("admin-create"),
-  roleController.getUserWithRoles
+  roleController.getStaffWithRoles
 );
 router.post(
   "/roles",
   permissionMiddleware("admin-create"),
-  roleController.setUpUserWithRole
+  roleController.setUpStaffWithRole
 );
 
 //_________________________________________________________________ permissions management_______________________________
-// this route is used to get get the list of the users that we can give permissions to
+// this route is used to get get the list of the staffs that we can give permissions to
 router.get(
-  "/permissions/users",
+  "/permissions/staffs",
   permissionMiddleware("employees-read"),
-  permissionController.getUsers
+  permissionController.getStaffs
 );
-// this route is used to get a list of the permissions of the chosed used ( user _id passed as a param in the link)
+// this route is used to get a list of the permissions of the chosed used ( staff _id passed as a param in the link)
 router.get(
-  "/permissions/users/:_id",
+  "/permissions/staffs/:_id",
   permissionMiddleware("employees-read"),
-  permissionController.getUserPermissions
+  permissionController.getStaffPermissions
 );
-// this route is used to update the permissions of the selected user ( the user is pre selected throw the previous)
+// this route is used to update the permissions of the selected staff ( the staff is pre selected throw the previous)
 router.post(
-  "/permissions/users/update",
+  "/permissions/staffs/update",
   permissionMiddleware("employees-update"),
-  permissionController.updateUserPermissions
+  permissionController.updateStaffPermissions
 );
-//router.post('/roles',permissionMiddleware('admin-create'), roleController.setUpUserWithRole);
+//router.post('/roles',permissionMiddleware('admin-create'), roleController.setUpStaffWithRole);
 
 // Hello salah, this is just a test !
 //  we can delete this later

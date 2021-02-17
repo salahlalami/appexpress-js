@@ -10,9 +10,9 @@ const taskSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  user: {
+  staff: {
     type: mongoose.Schema.ObjectId,
-    ref: "User",
+    ref: "Staff",
   },
   title: {
     type: String,

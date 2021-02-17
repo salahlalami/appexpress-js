@@ -24,6 +24,7 @@ exports.catchErrors = (fn) => {
 exports.notFound = (req, res, next) => {
   res.render("errors/404", {
     title: "404",
+    page: req,
   });
 };
 
@@ -75,7 +76,7 @@ exports.developmentErrors = (err, req, res, next) => {
 /*
   Production Error Handler
 
-  No stacktraces are leaked to user
+  No stacktraces are leaked to staff
 */
 exports.productionErrors = (err, req, res, next) => {
   // res.status(err.status || 500);

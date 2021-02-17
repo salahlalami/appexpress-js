@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const Staff = mongoose.model("Staff");
 const getOne = require("./helpersControllers/custom").getOne;
 
 // exports.listOld = async (req, res) => {
@@ -8,7 +8,7 @@ const getOne = require("./helpersControllers/custom").getOne;
 //   const skip = page * limit - limit;
 //   try {
 //     //  Query the database for a list of all results
-//     const resultsPromise = User.aggregate([
+//     const resultsPromise = Staff.aggregate([
 //       {
 //         $match: {
 //           removed: false,
@@ -33,7 +33,7 @@ const getOne = require("./helpersControllers/custom").getOne;
 //       .sort({ created: "desc" });
 
 //     // Counting the total documents
-//     const countPromise = User.count({ removed: false });
+//     const countPromise = Staff.count({ removed: false });
 //     const rolePromise = Role.find();
 //     // Resolving both promises
 //     const [result, count, roles] = await Promise.all([
@@ -42,16 +42,16 @@ const getOne = require("./helpersControllers/custom").getOne;
 //       rolePromise,
 //     ]);
 
-//     for (let user of result) {
+//     for (let staff of result) {
 //       let found = null;
-//       for (let userRole of roles) {
-//         if (JSON.stringify(userRole._id) == JSON.stringify(user.role)) {
-//           found = userRole;
+//       for (let staffRole of roles) {
+//         if (JSON.stringify(staffRole._id) == JSON.stringify(staff.role)) {
+//           found = staffRole;
 //           console.log("found : " + found);
 //           break;
 //         }
 //       }
-//       if (found != null) user.role = found;
+//       if (found != null) staff.role = found;
 //     }
 //     const pages = Math.ceil(count / limit);
 
@@ -90,13 +90,13 @@ exports.list = async (req, res) => {
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = User.find({ removed: false })
+    const resultsPromise = Staff.find({ removed: false })
       .skip(skip)
       .limit(limit)
       .sort({ created: "desc" })
       .populate();
     // Counting the total documents
-    const countPromise = User.count({ removed: false });
+    const countPromise = Staff.count({ removed: false });
     // Resolving both promises
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
     // Calculating total pages
@@ -105,10 +105,10 @@ exports.list = async (req, res) => {
     // Getting Pagination Object
     const pagination = { page, pages, count };
     if (count > 0) {
-      for (let user of result) {
-        user.password = undefined;
-        user.customMenu = undefined;
-        user.permissions = undefined;
+      for (let staff of result) {
+        staff.password = undefined;
+        staff.customMenu = undefined;
+        staff.permissions = undefined;
       }
       return res.status(200).json({
         success: true,
@@ -137,7 +137,7 @@ exports.profile = async (req, res) => {
       return res.status(404).json({
         success: false,
         result: null,
-        message: "couldn't found  user Profile ",
+        message: "couldn't found  staff Profile ",
       });
     }
     let result = {
@@ -174,7 +174,7 @@ exports.photo = async (req, res) => {
       photo: req.body.photo,
     };
 
-    const tmpResult = await User.findOneAndUpdate(
+    const tmpResult = await Staff.findOneAndUpdate(
       { _id: req.user._id, removed: false },
       { $set: updates },
       { new: true, runValidators: true, context: "query" }
@@ -219,7 +219,7 @@ exports.photo = async (req, res) => {
 exports.read = async (req, res) => {
   try {
     // Find document by id
-    const tmpResult = await User.findOne({
+    const tmpResult = await Staff.findOne({
       _id: req.params.id,
       removed: false,
     });
@@ -278,9 +278,9 @@ exports.create = async (req, res) => {
         message: "Email or password fields they don't have been entered.",
       });
 
-    const existingUser = await User.findOne({ email: email });
+    const existingStaff = await Staff.findOne({ email: email });
 
-    if (existingUser)
+    if (existingStaff)
       return res.status(400).json({
         success: false,
         result: null,
@@ -310,11 +310,11 @@ exports.create = async (req, res) => {
       req.body.name = employee.name;
       req.body.surname = employee.surname;
     }
-    var newUser = new User();
-    const passwordHash = newUser.generateHash(password);
+    var newStaff = new Staff();
+    const passwordHash = newStaff.generateHash(password);
     req.body.password = passwordHash;
 
-    const result = await new User(req.body).save();
+    const result = await new Staff(req.body).save();
     if (!result) {
       return res.status(403).json({
         success: false,
@@ -336,7 +336,7 @@ exports.create = async (req, res) => {
         doctor: result.doctor,
         employee: result.employee,
       },
-      message: "User document save correctly",
+      message: "Staff document save correctly",
     });
   } catch {
     return res.status(500).json({ success: false, message: "there is error" });
@@ -354,9 +354,9 @@ exports.update = async (req, res) => {
     let { email } = req.body;
 
     if (email) {
-      const existingUser = await User.findOne({ email: email });
+      const existingStaff = await Staff.findOne({ email: email });
 
-      if (existingUser._id != req.params.id)
+      if (existingStaff._id != req.params.id)
         return res
           .status(400)
           .json({ message: "An account with this email already exists." });
@@ -368,7 +368,7 @@ exports.update = async (req, res) => {
     };
 
     // Find document by id and updates with the required fields
-    const result = await User.findOneAndUpdate(
+    const result = await Staff.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -424,14 +424,14 @@ exports.updatePassword = async (req, res) => {
     //   return res
     //     .status(400)
     //     .json({ msg: "Enter the same password twice for verification." });
-    var newUser = new User();
-    const passwordHash = newUser.generateHash(password);
+    var newStaff = new Staff();
+    const passwordHash = newStaff.generateHash(password);
     let updates = {
       password: passwordHash,
     };
 
     // Find document by id and updates with the required fields
-    const result = await User.findOneAndUpdate(
+    const result = await Staff.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -477,7 +477,7 @@ exports.delete = async (req, res) => {
       removed: true,
     };
     // Find the document by id and delete it
-    const result = await User.findOneAndUpdate(
+    const result = await Staff.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -514,7 +514,7 @@ exports.status = async (req, res) => {
         enabled: req.query.enabled,
       };
       // Find the document by id and delete it
-      const result = await User.findOneAndUpdate(
+      const result = await Staff.findOneAndUpdate(
         { _id: req.params.id, removed: false },
         { $set: updates },
         {
@@ -543,7 +543,7 @@ exports.status = async (req, res) => {
         .json({
           success: false,
           result: [],
-          message: "couldn't change user status by this request",
+          message: "couldn't change staff status by this request",
         })
         .end();
     }
@@ -584,7 +584,7 @@ exports.search = async (req, res) => {
     for (const field of fieldsArray) {
       fields.$or.push({ [field]: { $regex: new RegExp(req.query.q, "i") } });
     }
-    let result = await User.find(fields)
+    let result = await Staff.find(fields)
       .where("removed", false)
       .sort({ name: "asc" })
       .limit(10);
@@ -620,7 +620,7 @@ exports.filter = async (req, res) => {
         message: "filter not provided correctly",
       });
     }
-    const result = await User.find({ removed: false })
+    const result = await Staff.find({ removed: false })
       .where(req.query.filter)
       .equals(req.query.equal);
     return res.status(200).json({

@@ -3,21 +3,33 @@ import "../sass/style.scss";
 
 import docReady from "./lib/docReady";
 // import { $$ } from './lib/bling';
-import { modal, selectToggle } from "./core";
-import moreOption from "./modules/moreOption";
+import {
+  modal,
+  selectToggle,
+  ajaxSelectInput,
+  searchInput,
+  tabPanel,
+  navApp,
+  subMenuDrawer,
+  panelModel,
+  accordionModel,
+  inputFunction,
+  moreOption,
+} from "./core";
+// import moreOption from "./modules/moreOption";
 
-import inputFunction from "./modules/inputFunction";
+// import inputFunction from "./modules/inputFunction";
 import dataGrid from "./modules/dataGrid";
-import ajaxSelectInput from "./modules/ajaxSelectInput";
-import searchInput from "./modules/searchInput";
-import tabPanel from "./modules/tabPanel";
-import navApp from "./modules/navApp";
-import initSubMenuDrawer from "./modules/subMenuDrawer";
-import panelModel from "./modules/panelModel";
+// import ajaxSelectInput from "./modules/ajaxSelectInput";
+// import searchInput from "./modules/searchInput";
+// import tabPanel from "./modules/tabPanel";
+// import navApp from "./modules/navApp";
+// import subMenuDrawer from "./modules/subMenuDrawer";
+// import panelModel from "./modules/panelModel";
 import datepicker from "./lib/datepicker";
-import accordionModel from "./modules/accordionModel";
-import FileUpload from "./modules/fileUpload";
-import consultationComponent from "./modules/consultationComponent";
+// import accordionModel from "./modules/accordionModel";
+// import FileUpload from "./modules/fileUpload";
+import consultationModule from "./modules/consultationModule";
 // import consultationAudioRecorder from './modules/consultationAudioRecorder';
 // import patientFolder from "./modules/patientFolder";
 import { initCrudPanel, formSubmit, searchItem } from "./modules/crudPanel";
@@ -60,9 +72,9 @@ docReady(function () {
     '.component[data-component="accordionForm"]'
   );
   // const recorderToggle = document.querySelectorAll('.component[data-component="recorder-toggle"]');
-  const fileUploadComponent = document.querySelectorAll(
-    '.component[data-component="file-upload"]'
-  );
+  // const fileUploadComponent = document.querySelectorAll(
+  //   '.component[data-component="file-upload"]'
+  // );
   const prescriptions = document.querySelectorAll(
     '.component[data-component="prescriptionGrid"]'
   );
@@ -73,7 +85,7 @@ docReady(function () {
   window.modal = modal;
 
   moreOption();
-  initSubMenuDrawer();
+  subMenuDrawer();
 
   [].forEach.call(inputs, function (input) {
     inputFunction(input);
@@ -125,16 +137,16 @@ docReady(function () {
   });
 
   [].forEach.call(prescriptions, function (prescription) {
-    consultationComponent.init(prescription);
+    consultationModule.init(prescription);
   });
 
   // [].forEach.call(recorderToggle, function(el) {
   //     consultationAudioRecorder(el);
   // });
 
-  [].forEach.call(fileUploadComponent, function (el) {
-    FileUpload(el);
-  });
+  // [].forEach.call(fileUploadComponent, function (el) {
+  //   FileUpload(el);
+  // });
 
   // [].forEach.call(itemListComponent, function (el) {
   //   patientFolder(el);

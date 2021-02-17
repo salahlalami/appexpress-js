@@ -9,8 +9,8 @@ import {
   deleteSync,
   multiSync,
 } from "../axiosRequest";
-import activeTab from "./activeTab";
-import { uniqueid, formatDate, activeModel } from "../helper";
+import { activeTab, activeModel } from "../core";
+import { uniqueid, formatDate } from "../helper";
 
 import delegate from "../lib/delegate";
 import AudioRecorder from "../lib/audioRecorder";
@@ -594,7 +594,7 @@ function resetPrescriptionGrid(prescriptionGrid) {
 
 //////// ***** Main Component  : prescriptionComponent ***** //////////
 
-const consultationComponent = {
+const consultationModule = {
   init: function (component) {
     const addNewRow = component.querySelector("button.newMedicament");
     const savePrescription = component.querySelector(".savePrescription");
@@ -889,4 +889,4 @@ const consultationComponent = {
     }
   },
 };
-export default consultationComponent;
+export default consultationModule;

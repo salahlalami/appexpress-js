@@ -2,7 +2,7 @@
 import "../sass/style.scss";
 
 import docReady from "./lib/docReady";
-// import { $$ } from './lib/bling';
+
 import {
   modal,
   selectToggle,
@@ -16,23 +16,13 @@ import {
   inputFunction,
   dropdown,
 } from "./core";
-// import dropdown from "./modules/dropdown";
 
-// import inputFunction from "./modules/inputFunction";
-import dataGrid from "./modules/dataGrid";
-// import ajaxSelectInput from "./modules/ajaxSelectInput";
-// import searchInput from "./modules/searchInput";
-// import tabPanel from "./modules/tabPanel";
-// import navApp from "./modules/navApp";
-// import subMenuDrawer from "./modules/subMenuDrawer";
-// import panelModel from "./modules/panelModel";
-import datepicker from "./lib/datepicker";
-// import accordionModel from "./modules/accordionModel";
-// import FileUpload from "./modules/fileUpload";
+import dataGrid from "./components/dataGrid";
+
 import consultationModule from "./modules/consultationModule";
-// import consultationAudioRecorder from './modules/consultationAudioRecorder';
-// import patientFolder from "./modules/patientFolder";
-import { initCrudPanel, formSubmit, searchItem } from "./modules/crudPanel";
+
+import { initCrudPanel, formSubmit, searchItem } from "./components/crudPanel";
+import datepicker from "./lib/datepicker";
 
 docReady(function () {
   // const allPages = $('#pageId');

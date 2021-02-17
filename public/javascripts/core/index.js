@@ -1,7 +1,7 @@
 export { default as accordionModel } from "./accordionModel";
 export { default as activeTab } from "./activeTab";
 export { default as activeModel } from "./activeModel";
-export { default as moreOption } from "./moreOption";
+export { default as dropdown } from "./dropdown";
 export { default as navApp } from "./navApp";
 export { default as panelModel } from "./panelModel";
 export { default as searchInput } from "./searchInput";

@@ -14,9 +14,9 @@ import {
   panelModel,
   accordionModel,
   inputFunction,
-  moreOption,
+  dropdown,
 } from "./core";
-// import moreOption from "./modules/moreOption";
+// import dropdown from "./modules/dropdown";
 
 // import inputFunction from "./modules/inputFunction";
 import dataGrid from "./modules/dataGrid";
@@ -84,7 +84,7 @@ docReady(function () {
 
   window.modal = modal;
 
-  moreOption();
+  dropdown();
   subMenuDrawer();
 
   [].forEach.call(inputs, function (input) {

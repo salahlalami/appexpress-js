@@ -20,7 +20,7 @@ mixin consultationInfo(props={})
                         != h.icon('date-icon')
                         span(data-prescriptionDate="")
                             | 16/08/2018
-                .moreOption
+                .dropdown
                     .toggle
                         != h.icon("more")
                         ul.toggleOption
@@ -44,7 +44,7 @@ mixin consultationInfo(props={})
                         != h.icon('date-icon')
                         span(data-reportdate="")
                             | 16/08/2018
-                .moreOption.list-more-option
+                .dropdown.list-more-option
                     .toggle
                         != h.icon("more")
                         ul.toggleOption
@@ -75,7 +75,7 @@ mixin consultationInfo(props={})
                         .item-data-2
                             != h.icon('date-icon')
                             span(data-property="created" data-type="datetime")
-                    .moreOption.list-more-option
+                    .dropdown.list-more-option
                         .toggle
                             != h.icon("more")
                             ul.toggleOption

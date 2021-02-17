@@ -7,7 +7,7 @@ mixin prescriptionGrid(props={})
     .component(data-component="prescriptionGrid" data-target-prescription=targetPrescription data-target-recorder=targetRecoder)      
         form(data-status="new" method="POST")
             
-            .orgMoreOption.hidden
+            .orgdropdown.hidden
                 .toggle
                     != h.icon("more")
                     ul.toggleOption

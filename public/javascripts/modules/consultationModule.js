@@ -85,7 +85,7 @@ const medicamentGrid = {
     const currentRow = component.querySelector(".currentRow");
     const medicamentRow = component.querySelector(".medicament-row");
     const form = component.querySelector("form");
-    const orgMoreOption = form.querySelector(".orgMoreOption");
+    const orgdropdown = form.querySelector(".orgdropdown");
     const newObj = medicamentGrid.toObject(currentRow);
     const newID = uniqueid();
     const action = currentRow.dataset.action;
@@ -106,11 +106,11 @@ const medicamentGrid = {
         <div class="col-5"><span>${newObj.note}</span></div>
         `;
 
-        let moreOption = orgMoreOption.cloneNode(true);
-        moreOption.className = "moreOption";
-        moreOption.querySelector("li.remove").dataset.id = editedID;
-        moreOption.querySelector("li.edit").dataset.id = editedID;
-        editedRow.appendChild(moreOption);
+        let dropdown = orgdropdown.cloneNode(true);
+        dropdown.className = "dropdown";
+        dropdown.querySelector("li.remove").dataset.id = editedID;
+        dropdown.querySelector("li.edit").dataset.id = editedID;
+        editedRow.appendChild(dropdown);
       }
       if (action == "new") {
         const newRow = `<div class="content-row calculation-row" data-medicament='${JSON.stringify(
@@ -128,11 +128,11 @@ const medicamentGrid = {
         medicamentRow.innerHTML += newRow;
         const className = `.calculation-row[data-row="${newID}"]`;
         const lastRow = medicamentRow.querySelector(className);
-        let moreOption = orgMoreOption.cloneNode(true);
-        moreOption.className = "moreOption";
-        moreOption.querySelector("li.remove").dataset.id = newID;
-        moreOption.querySelector("li.edit").dataset.id = newID;
-        lastRow.appendChild(moreOption);
+        let dropdown = orgdropdown.cloneNode(true);
+        dropdown.className = "dropdown";
+        dropdown.querySelector("li.remove").dataset.id = newID;
+        dropdown.querySelector("li.edit").dataset.id = newID;
+        lastRow.appendChild(dropdown);
       }
 
       medicamentGrid.reset(component);
@@ -158,7 +158,7 @@ const medicamentGrid = {
   },
   record: (component, medicament) => {
     const form = component.querySelector("form");
-    const orgMoreOption = form.querySelector(".orgMoreOption");
+    const orgdropdown = form.querySelector(".orgdropdown");
     const newID = uniqueid();
     const result = `<div class="content-row calculation-row" data-medicament='${JSON.stringify(
       medicament
@@ -174,11 +174,11 @@ const medicamentGrid = {
     const dom = document.createElement("div");
     dom.innerHTML = result;
     const row = dom.querySelector(".calculation-row");
-    let moreOption = orgMoreOption.cloneNode(true);
-    moreOption.className = "moreOption";
-    moreOption.querySelector("li.remove").dataset.id = newID;
-    moreOption.querySelector("li.edit").dataset.id = newID;
-    row.appendChild(moreOption);
+    let dropdown = orgdropdown.cloneNode(true);
+    dropdown.className = "dropdown";
+    dropdown.querySelector("li.remove").dataset.id = newID;
+    dropdown.querySelector("li.edit").dataset.id = newID;
+    row.appendChild(dropdown);
     return dom.innerHTML;
   },
   render: (component, data) => {

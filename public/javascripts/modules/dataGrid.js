@@ -16,19 +16,17 @@ let render = {
       let listItem = document.createElement("tr");
       listItem.dataset.id = data._id;
       listItem.dataset.json = JSON.stringify(data);
-      const orgMoreOption = table.querySelector(".moreOption");
-      let moreOption = orgMoreOption.cloneNode(true);
-      moreOption.querySelector("li.remove").dataset.id = data._id;
-      moreOption.querySelector(
-        "li.remove"
-      ).dataset.displayLabel = valueByString(
+      const orgdropdown = table.querySelector(".dropdown");
+      let dropdown = orgdropdown.cloneNode(true);
+      dropdown.querySelector("li.remove").dataset.id = data._id;
+      dropdown.querySelector("li.remove").dataset.displayLabel = valueByString(
         data,
-        moreOption.querySelector("li.remove").dataset.label || ""
+        dropdown.querySelector("li.remove").dataset.label || ""
       );
-      moreOption.querySelector("li.edit").dataset.id = data._id;
-      moreOption.querySelector("li.edit").dataset.json = JSON.stringify(data);
-      moreOption.querySelector("li.read").dataset.id = data._id;
-      moreOption.querySelector("li.read").dataset.json = JSON.stringify(data);
+      dropdown.querySelector("li.edit").dataset.id = data._id;
+      dropdown.querySelector("li.edit").dataset.json = JSON.stringify(data);
+      dropdown.querySelector("li.read").dataset.id = data._id;
+      dropdown.querySelector("li.read").dataset.json = JSON.stringify(data);
 
       for (let i = 0; i < col.length; ++i) {
         const variable = valueByString(data, col[i]);
@@ -38,7 +36,7 @@ let render = {
         ).textContent = variable;
       }
       const tdElement = document.createElement("td");
-      tdElement.appendChild(moreOption).classList.remove("hidden");
+      tdElement.appendChild(dropdown).classList.remove("hidden");
       listItem.appendChild(tdElement);
 
       table.querySelector("tbody.tableBody").appendChild(listItem);
@@ -111,7 +109,7 @@ const dataGrid = {
 
     delegate(
       document.body,
-      ".tableBody tr .moreOption .edit",
+      ".tableBody tr .dropdown .edit",
       "click",
       function (e) {
         editItem(form, target, e.delegateTarget.dataset.json);
@@ -121,7 +119,7 @@ const dataGrid = {
 
     delegate(
       document.body,
-      ".tableBody tr .moreOption .read",
+      ".tableBody tr .dropdown .read",
       "click",
       function (e) {
         viewItem(target, e.delegateTarget.dataset.json, viewType);
@@ -131,7 +129,7 @@ const dataGrid = {
 
     delegate(
       document.body,
-      ".tableBody tr .moreOption .remove",
+      ".tableBody tr .dropdown .remove",
       "click",
       function (e) {
         const displayLabel = e.delegateTarget.dataset.displayLabel;

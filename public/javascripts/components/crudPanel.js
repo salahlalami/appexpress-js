@@ -1,9 +1,9 @@
 /* eslint-disable no-prototype-builtins */
-import activeTab from "./activeTab";
-import { accordionBar } from "./accordionModel";
+import { activeTab, accordionBar } from "../core";
+
 import { valueByString } from "../helper";
 import delegate from "../lib/delegate";
-import consultationComponent from "./consultationComponent";
+import consultationModule from "../modules/consultationModule";
 import dataGrid from "./dataGrid";
 // import loader from "./loader";
 
@@ -193,7 +193,7 @@ export const viewItem = (target, json, viewType = "standard") => {
       '.component[data-component="consultationInfo"]'
     );
     [].forEach.call(infoDivs, function (infoDiv) {
-      consultationComponent.info(infoDiv, response);
+      consultationModule.info(infoDiv, response);
     });
   } else {
     const infoDivs = document.querySelectorAll(

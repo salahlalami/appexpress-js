@@ -17,10 +17,10 @@ function dataOption(current) {
     current.querySelector(".toggleOption").classList.add("show");
   }
 }
-function moreOption() {
+function dropdown() {
   delegate(
     document.body,
-    ".moreOption",
+    ".dropdown",
     "click",
     function (e) {
       dataOption(e.delegateTarget);
@@ -31,17 +31,17 @@ function moreOption() {
   document.addEventListener(
     "click",
     function (event) {
-      if (event.target.closest(".moreOption")) {
+      if (event.target.closest(".dropdown")) {
         return;
       }
 
       const toggleOptions = document.querySelectorAll(".toggleOption.show");
       [].forEach.call(toggleOptions, function (toggleOption) {
-        console.log("outside moreoption click");
+        console.log("outside dropdown click");
         toggleOption.classList.remove("show");
       });
     },
     false
   );
 }
-export default moreOption;
+export default dropdown;

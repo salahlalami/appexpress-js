@@ -7,7 +7,7 @@ include components/_infoHeader
 
 block panelHeader
     - const target = 'client'
-    - const fields = 'company'
+    - const fields = 'company,managerName,managerSurname'
     - const displayFields = 'company'
     p.panelTitle #{title}
     .space-25
@@ -20,7 +20,7 @@ block panelBody
             +infoHeader( "Clients: ", displayFields)
             .tab-content         
                 .read
-                    - const listInfo = [{key:'company',text:'Entreprise'},{key:'managerName',text:'Nom de Directeur'},{key:'managerSurname',text:'Prénom de Directeur'},{key:'bankAccount',text:'Compte CCB'},{key:'fax',text:'Fax'},{key:'cell',text:'Tel Mobile'},{key:'email',text:'Email'},{key:'website',text:'siteweb'}]
+                    - const listInfo = [{key:'company',text:'Entreprise'},{key:'managerName',text:'Nom de Directeur'},{key:'managerSurname',text:'Prénom de Directeur'},{key:'bankAccount',text:'Compte CCB'},{key:'fax',text:'Fax'},{key:'phone',text:'Tel'},{key:'cell',text:'Mobile'},{key:'email',text:'Email'},{key:'website',text:'Site web'}]
                     +information(listInfo)
                 .edit.hidden
                     +clientForm(target,"update")
@@ -38,7 +38,7 @@ block panelFooter
         
 block content 
     .model.modelSmall
-        - const col = ['company', 'managerName', 'managerSurname', 'bankAccount', 'fax', 'cell', 'email', 'website']
-        - const list = ['entreprise', 'Nom de Directeur', 'Prénom de Directeur', 'Compte CCB', 'Fax', 'Tel Mobile', 'email', 'siteweb']
+        - const col = ['company', 'managerName|managerSurname', 'phone', 'cell', 'email']
+        - const lists = ['entreprise', 'Responsable', 'Tel', 'Mobile', 'email']
         - const items = 10
         +dataTable(target,lists,col,items, "Liste des clients", displayFields)

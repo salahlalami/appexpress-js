@@ -29,27 +29,39 @@ const clientSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  RC: {
+  companyRegNumber: {
     type: String,
     trim: true,
   },
-  AI: {
+  companyTaxNumber: {
     type: String,
     trim: true,
   },
-  NIF: {
+  companyTaxID: {
     type: String,
     trim: true,
   },
-  NIS: {
-    type: String,
-    trim: true,
-  },
+  customField: [
+    {
+      fieldName: {
+        type: String,
+        trim: true,
+      },
+      fieldValue: {
+        type: String,
+        trim: true,
+      },
+    },
+  ],
   address: {
     type: String,
     trim: true,
   },
-  tel: {
+  country: {
+    type: String,
+    trim: true,
+  },
+  phone: {
     type: String,
     trim: true,
     required: true,
@@ -65,6 +77,7 @@ const clientSchema = new mongoose.Schema({
   email: {
     type: String,
     trim: true,
+    lowercase: true,
   },
   website: {
     type: String,

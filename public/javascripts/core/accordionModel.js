@@ -1,4 +1,4 @@
-export function accordionBar() {
+function accordionBar() {
   const tabs = document.querySelectorAll(".tab-content");
   // const tabLinks = document.querySelectorAll('.tab-link');
   const viewComponent = document.querySelectorAll(

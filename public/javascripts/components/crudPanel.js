@@ -3,7 +3,7 @@ import { activeTab, accordionBar } from "../core";
 
 import { valueByString } from "../helper";
 import delegate from "../lib/delegate";
-import consultationModule from "../modules/consultationModule";
+import { consultationModule } from "../modules/consultation";
 import dataGrid from "./dataGrid";
 // import loader from "./loader";
 

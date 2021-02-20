@@ -22,7 +22,7 @@ import datepicker from "./lib/datepicker";
 import { initCrudPanel, formSubmit, searchItem } from "./components/crudPanel";
 import dataGrid from "./components/dataGrid";
 
-import consultationModule from "./modules/consultationModule";
+import { consultationModule } from "./modules/consultation";
 
 docReady(function () {
   // const allPages = $('#pageId');

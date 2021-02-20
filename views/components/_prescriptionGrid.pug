@@ -2,7 +2,6 @@
 mixin prescriptionGrid(props={})
     - const targetPrescription=props.targetPrescription ||  "prescription"
     - const targetRecoder=props.targetRecoder || "audiorecording"
-    - const actionForm=props.actionForm || ""
     - const title= props.title || "" 
     .component(data-component="prescriptionGrid" data-target-prescription=targetPrescription data-target-recorder=targetRecoder)      
         form(data-status="new" method="POST")

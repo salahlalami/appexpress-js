@@ -1,13 +1,13 @@
 
 extends layouts/default
-include mixins/_userForm
+include mixins/_staffForm
 include components/_searchItemCrud
 include components/_dataTable
 include components/_information
 include components/_infoHeader
 
 block panelHeader
-    - const target = 'user'
+    - const target = 'staff'
     - const fields = 'name'
     - const displayFields = 'name'
     p.panelTitle #{title}
@@ -18,9 +18,9 @@ block panelHeader
 
 block panelBody
     .clearfix
-    .panelContent.component(data-component="view-details" data-page="user")
+    .panelContent.component(data-component="view-details" data-page="staff")
         .panel-body.hidden
-            +infoHeader( "User: ", displayFields)
+            +infoHeader( "Staff: ", displayFields)
             .tab-content
                 .read
                     - const listInfo = [{key:'name',text:'Nom'},{key:'surname',text:'Prenom'},{key:'email',text:'email'},{key:'accountType',text:'Type de Compte'},{key:'role.displayName',text:'Role d\'utilisateur'}]
@@ -52,14 +52,14 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +userForm(target,"create",roles)
+                +staffForm(target,"create",roles)
 
 block content
-    .userPage    
+    .staffPage    
         .model.modelSmall
 
   
             - const col = ['name|surname','email','accountType','role.displayName']  
             - const limit = 20
             - const lists = ['Nom Prenom', 'Email','Type de Compte','Role d\'utilisateur']
-            +dataTable(target,lists,col,items,"Users", displayFields)
+            +dataTable(target,lists,col,items,"Staffs", displayFields)

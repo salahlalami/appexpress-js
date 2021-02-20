@@ -10,54 +10,53 @@ mixin clientForm(target={},formState="create")
             .col-24.alpha.omega
                 .col-24.alpha.omega
                     label(for="company") Company
-                    input(type="text" name="company"  data-name="company" class="searchAjax" data-ajax=search autocomplete="off")
+                    input(type="text" name="company"  data-name="company" autocomplete="off")
 
                 .col-12.alpha
                     label(for="managerName") Manager Name
-                    input(name="managerName" data-name="managerName" type="text")
+                    input(name="managerName" data-name="managerName" type="text" autocomplete="off")
                 .col-12.omega
-                    label(for="managerSurname") Sur Name
-                    input(name="managerSurname" data-name="managerSurname" type="text")
+                    label(for="managerSurname") Manager Surname
+                    input(name="managerSurname" data-name="managerSurname" type="text" autocomplete="off")
 
                 .col-12.alpha
                     label(for="email") Email
                     input(name="email" data-name="email" type="email")
                 .col-12.omega
-                    label(for="tel") Telephone
-                    input(name="tel" data-name="tel" type="text")
+                    label(for="phone") Telephone
+                    input(name="phone" data-name="phone" type="text")
 
                 .col-12.alpha
-                    label(for="cell") Cell
+                    label(for="cell") Mobile
                     input(name="cell" data-name="cell" type="text")
                 .col-12.omega
                     label(for="fax") Fax
                     input(name="fax" data-name="fax" type="text")
+                .col-24.alpha.omega
+                    label(for="website") Website
+                    input(name="website" data-name="website" type="text")
 
                 .col-24.alpha.omega
                     label(for="bankAccount") Bank Account
                     input(name="bankAccount" data-name="bankAccount" type="text")
                
                 .col-12.alpha
-                    label(for="rc") RC
-                    input(name="RC" data-name="rc" type="text")
+                    label(for="companyRegNumber") Company Reg Number
+                    input(name="companyRegNumber" data-name="companyRegNumber" type="text")
                 .col-12.omega
-                    label(for="ai") AI
-                    input(name="AI" data-name="ai" type="text")
-
-                .col-12.alpha
-                    label(for="nif") NIF
-                    input(name="NIF" data-name="nif" type="text")
-                .col-12.omega
-                    label(for="nis") NIS
-                    input(name="NIS" data-name="nis" type="text")
+                    label(for="companyTaxNumber") Company Tax Number
+                    input(name="companyTaxNumber" data-name="companyTaxNumber" type="text")
 
                 .col-24.alpha.omega
-                    label(for="website") Website
-                    input(name="website" data-name="website" type="text")
+                    label(for="companyTaxId") Company Tax Id
+                    input(name="companyTaxId" data-name="companyTaxId" type="text")
 
+                .col-24.alpha.omega
+                    label(for="country") country
+                    input(name="country" value="Algeria" autocomplete="off")
                 .col-24.alpha.omega
                     label(for="address") Address
-                    textarea(name="address", rows="5" autocomplete="off")
+                    textarea(name="address", rows="5" autocomplete="off")                    
 
                 .clearfix
             

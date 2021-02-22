@@ -1,8 +1,6 @@
 import delegate from "../lib/delegate";
 
 function dataOption(current) {
-  // console.log(this);
-
   const result = current
     .querySelector(".toggleOption")
     .classList.contains("show");
@@ -37,7 +35,6 @@ function dropdown() {
 
       const toggleOptions = document.querySelectorAll(".toggleOption.show");
       [].forEach.call(toggleOptions, function (toggleOption) {
-        console.log("outside dropdown click");
         toggleOption.classList.remove("show");
       });
     },

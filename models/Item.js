@@ -10,7 +10,7 @@ const itemSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  name: {
+  itemName: {
     type: String,
     trim: true,
     required: true,
@@ -18,11 +18,9 @@ const itemSchema = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
-    required: true,
   },
   price: {
     type: Number,
-    required: true,
   },
   currency: {
     type: mongoose.Schema.ObjectId,

@@ -149,12 +149,73 @@ export function uniqueid() {
   var idstr = String.fromCharCode(Math.floor(Math.random() * 25 + 65));
   do {
     // between numbers and characters (48 is 0 and 90 is Z (42-48 = 90)
-    var ascicode = Math.floor(Math.random() * 42 + 48);
-    if (ascicode < 58 || ascicode > 64) {
-      // exclude all chars between : (58) and @ (64)
-      idstr += String.fromCharCode(ascicode);
-    }
-  } while (idstr.length < 32);
+    var ascicodeChar = Math.floor(Math.random() * 25 + 65);
+    idstr += String.fromCharCode(ascicodeChar);
+    idstr += Math.floor(Math.random() * 99);
+  } while (idstr.length < 8);
 
   return idstr;
+}
+
+export function RowToObject(row) {
+  let obj = {};
+
+  const elements = row.querySelectorAll("input, select, textarea");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    const name = element.name;
+    const value = element.value;
+
+    if (name) {
+      obj[name] = value;
+    }
+  }
+
+  return obj;
+}
+
+export function jsonToRow(jsonTxt, row, idRow) {
+  let obj = JSON.parse(jsonTxt);
+  row.dataset.action = "edit";
+  row.dataset.id = idRow;
+  const elements = row.querySelectorAll("input, select, textarea");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    element.value = obj[element.name];
+  }
+
+  return obj;
+}
+
+export function resetRow(currentRow) {
+  currentRow.dataset.action = "new";
+  currentRow.dataset.id = null;
+  const elements = currentRow.querySelectorAll("input, select,textarea");
+  const autocompletes = currentRow.querySelectorAll(".autocomplete");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    element.value = "";
+    element.dataset.value = "";
+  }
+  [].forEach.call(autocompletes, function (autocomplete) {
+    const select = autocomplete.querySelector("select");
+    if (select != null) {
+      if (select.parentNode) {
+        select.parentNode.removeChild(select);
+      }
+    }
+  });
+}
+export function validateRow(row) {
+  const elements = row.querySelectorAll("input, select, textarea");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    if (element.hasAttribute("required")) {
+      if (element.value.length == 0) {
+        return false;
+      }
+    }
+  }
+
+  return true;
 }

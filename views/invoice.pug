@@ -1,5 +1,5 @@
-extends layouts/default 
-include components/_invoiceGrid
+extends layouts/largeLayout 
+include components/_invoiceModule
 
 
   
@@ -12,4 +12,4 @@ block content
     - const list = ['quantité', 'montant', 'total']
     - const items = 10
 
-    +invoiceGrid()
+    +invoiceModule()

@@ -31,7 +31,7 @@ const invoiceSchema = new mongoose.Schema({
   },
   items: [
     {
-      name: {
+      itemName: {
         type: String,
         trim: true,
         required: true,

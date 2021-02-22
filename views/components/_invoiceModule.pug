@@ -1,8 +1,8 @@
 
-mixin invoiceGrid(props={})
+mixin invoiceModule(props={})
     - const targetInvoice=props.targetInvoice ||  "invoice"
     - const title= props.title || "" 
-    .component(data-component="invoiceGrid" data-target-invoice=targetInvoice)      
+    .component(data-component="invoiceModule" data-target-invoice=targetInvoice)      
         form(data-status="new" method="POST")
             
             .orgdropdown.hidden
@@ -54,41 +54,27 @@ mixin invoiceGrid(props={})
                 .line
 
                 .page-content-container.pt-0
-                    .content-row
-                        .col-4
-                            label(for="designation") Designaiton
-                            input(type="text" name="designation" autocomplete="off")
-                        .col-6
-                            label(for="description") Description
-                            input(type="text" name="description" autocomplete="off")
-                        .col-3
-                            label(for="qte") Qte
-                            input(type="text" name="qte" autocomplete="off")
-                        .col-4
-                            label(for="price_unit") Prix unitaire
-                            input(type="text" name="price_unit" autocomplete="off")
+                    .content-row.currentRow(data-action="new" data-id=null)
                         .col-5
-                            label(for="amount") Montant
-                            input(type="text" name="amount" autocomplete="off")
-                        .col-2
-                            button(type="button" class="icon-plus-btn plus-btn")!= h.icon('plus-circle') 
-
-
-
-                    .content-row.calculation-row
-                        .col-4
-                            span Designaiton
-                        .col-6
-                            span Description
+                            label(for="itemName") Designaiton
+                            input(type="text" name="itemName" data-disabled="true"  autocomplete="off" required)
+                        .col-7
+                            label(for="description") Description
+                            input(type="text" name="description" data-disabled="true"  autocomplete="off")
                         .col-3
-                            span 10
+                            label(for="quantity") Quantity
+                            input(type="number" name="quantity" min="0" data-disabled="true"  autocomplete="off" required)
+                        .col-3
+                            label(for="price") Prix
+                            input(type="number" name="price" min="0" data-disabled="true"  autocomplete="off" required)
                         .col-4
-                            span 250 000
-                        .col-6
-                            span 2 500 000
-                        .col-1
-                            //- button(type="button" class="icon-plus-btn plus-btn")
-                            != h.icon("more")
+                            label(for="total") Montant
+                            input(type="number" name="total" min="0"  data-disabled="true"  autocomplete="off" readonly required)
+                        .col-2
+                            button(type="button" class="newItem icon-plus-btn plus-btn")!= h.icon('plus-circle') 
+
+                    .itemsRow
+                    
 
                     .content-row
                         .col-13
@@ -99,23 +85,25 @@ mixin invoiceGrid(props={})
                                 .col-8
                                     button(type="submit" class="btn secondary-btn icon-btn") Enregistrer & Envoyer
                                         != h.icon('check-circle') 
-                        .col-11
+                        .col-11.calcTotal
                             .total-row
                                 .col-9.padding-no
                                     | total H.T
                                 .col-15.space-adj
-                                    | 2 500 000 DA
+                                    .subTotal 2500000
+                                    | DA
                             .total-row
                                 .col-9.padding-no
-                                    select(name='tva')
-                                        option(value='zero') T.V.A: 0 %
-                                        option(value='one') T.V.A: 1 %
-                                        option(value='two') T.V.A: 2 %
+                                    select.taxRate(name='taxRate')
+                                        option(value='0') T.V.A: 0 %
+                                        option(value='0.19') T.V.A: 19 %
                                 .col-15.space-adj
-                                    | 00 DA
+                                    .taxTotal 00
+                                    | DA
 
                             .total-row
                                 .col-9.padding-no
                                     | total TTC
                                 .col-15.space-adj
-                                    | 2 500 000 DA
+                                    .total 2500000
+                                    | DA

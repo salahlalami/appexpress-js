@@ -23,6 +23,7 @@ import { initCrudPanel, formSubmit, searchItem } from "./components/crudPanel";
 import dataGrid from "./components/dataGrid";
 
 import { consultationModule } from "./modules/consultation";
+import { invoiceModule } from "./modules/invoice";
 
 docReady(function () {
   // const allPages = $('#pageId');
@@ -76,7 +77,7 @@ docReady(function () {
 
   dropdown();
   subMenuDrawer();
-
+  invoiceModule.init();
   [].forEach.call(inputs, function (input) {
     inputFunction(input);
   });

@@ -1,7 +1,9 @@
 
 mixin invoiceModule(props={})
     - const targetInvoice=props.targetInvoice ||  "invoice"
-    - const title= props.title || "" 
+    - const title= props.title || ""
+    - const targetClient = props.targetClient || 'client'
+    - const targetItem = props.targetItem || 'item'
     .component(data-component="invoiceModule" data-target-invoice=targetInvoice)      
         form(data-status="new" method="POST")
             
@@ -25,7 +27,10 @@ mixin invoiceModule(props={})
                     .content-row
                         .col-12
                             label(for="client") Client
-                            input(type="text" name="client" autocomplete="off")
+                            .component(data-component="searchList" data-error-message="No clients found")   
+                                .autocomplete
+                                    input(type="text" data-target ="client"  class="searchList" data-output="_id" name="client" data-disabled="true" data-name="client" data-fields="company,managerName,managerSurname" data-label="company" autocomplete="off" placeholder="Rechercher un client" required )    
+                                                                            
                         .col-4
                             label(for="name") numéro de facture
                             input(type="text" name="name" autocomplete="off")

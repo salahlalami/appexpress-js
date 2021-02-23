@@ -5,11 +5,8 @@ include components/_invoiceModule
   
 block content 
   .model.modelLarge
-    - const get = '/api/invoice/get/'
-    - const read = '/api/invoice/read'
-    - const remove = '/api/invoice/delete'
-    - const col = ['quantity', 'price', 'total']
-    - const list = ['quantité', 'montant', 'total']
-    - const items = 10
+    - const targetInvoice = 'invoice'
+    - const targetClient = 'client'
+    - const targetItem = 'item'
 
-    +invoiceModule()
+    +invoiceModule({title,currencies,targetInvoice,targetClient,targetItem})

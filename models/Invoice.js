@@ -56,7 +56,8 @@ const invoiceSchema = new mongoose.Schema({
     },
   ],
   currency: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Currency",
     required: true,
   },
   taxRate: {
@@ -92,11 +93,10 @@ const invoiceSchema = new mongoose.Schema({
   },
   note: {
     type: String,
-    required: true,
   },
   status: {
     type: String,
-    default: 1,
+    default: "Draft",
   },
   updated: {
     type: Date,

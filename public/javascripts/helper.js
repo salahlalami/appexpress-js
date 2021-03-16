@@ -219,3 +219,18 @@ export function validateRow(row) {
 
   return true;
 }
+
+export function formToObject(form) {
+  let obj = {};
+  const elements = form.querySelectorAll("input, select, textarea");
+  for (let i = 0; i < elements.length; ++i) {
+    const element = elements[i];
+    const name = element.name;
+    const value = element.value;
+
+    if (name && element.dataset.disabled != "true") {
+      obj[name] = value;
+    }
+  }
+  return obj;
+}

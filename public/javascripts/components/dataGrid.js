@@ -1,4 +1,3 @@
-import { viewItem, editItem, removeItem } from "./crudPanel";
 import delegate from "../lib/delegate";
 import { listSync } from "../axiosRequest";
 import { valueByString } from "../helper";
@@ -94,9 +93,7 @@ const ajaxFunction = (component, target, option = {}) => {
 const dataGrid = {
   init: function (component) {
     const loaderWarpper = '.component[data-component="dataTable"] .table';
-    const form = document.querySelector('form.ajax[data-state="update"]');
     const table = component.querySelector(".table");
-    const viewType = table.dataset.viewtype;
     let items = table.dataset.items || null;
     const selectItems = component.querySelector("select.itemsPerPage");
     const target = table.dataset.target;
@@ -106,37 +103,6 @@ const dataGrid = {
       items = this.value;
       ajaxFunction(component, target, { items, loaderWarpper });
     });
-
-    delegate(
-      document.body,
-      ".tableBody tr .dropdown .edit",
-      "click",
-      function (e) {
-        editItem(form, target, e.delegateTarget.dataset.json);
-      },
-      false
-    );
-
-    delegate(
-      document.body,
-      ".tableBody tr .dropdown .read",
-      "click",
-      function (e) {
-        viewItem(target, e.delegateTarget.dataset.json, viewType);
-      },
-      false
-    );
-
-    delegate(
-      document.body,
-      ".tableBody tr .dropdown .remove",
-      "click",
-      function (e) {
-        const displayLabel = e.delegateTarget.dataset.displayLabel;
-        removeItem(target, e.delegateTarget.dataset.id, displayLabel);
-      },
-      false
-    );
 
     delegate(
       document.body,

@@ -1,10 +1,11 @@
 
 mixin invoiceModule(props={})
-    - const targetInvoice=props.targetInvoice ||  "invoice"
+    - const targetErp=props.targetErp ||  "erp"
     - const title= props.title || ""
     - const targetClient = props.targetClient || 'client'
     - const targetItem = props.targetItem || 'item'
-    .component(data-component="invoiceModule" data-target-invoice=targetInvoice)      
+    - const currencies=props.currencies || [];
+    .component(data-component="erpModule" data-target-erp=targetErp)      
         form(data-status="new" method="POST")
             
             .orgdropdown.hidden
@@ -32,29 +33,28 @@ mixin invoiceModule(props={})
                                     input(type="text" data-target ="client"  class="searchList" data-output="_id" name="client" data-disabled="true" data-name="client" data-fields="company,managerName,managerSurname" data-label="company" autocomplete="off" placeholder="Rechercher un client" required )    
                                                                             
                         .col-4
-                            label(for="name") numéro de facture
-                            input(type="text" name="name" autocomplete="off")
+                            label(for="number") numéro de facture
+                            input(type="text" name="number" autocomplete="off")
                         .col-4
                             label(for="recurring") facture récurrente
                             select(name='recurring')
                                 option(value='None') None
-                                option(value='Val1') Val1
+                                option(value='30-days') Val1
                         .col-4
-                            label(for="devise") Devise
-                            select(name='devise')
-                                option(value='DA') DA
-                                option(value='USD') USD    
-                                option(value='PKR') PKR 
+                            label(for="currency") Devise
+                            select(name='currency')
+                                each currency in currencies
+                                    option(value=currency._id) #{currency.name}
                     .content-row
                         .col-5
-                            label(for="invoice_date") Date de la Facture
-                            input(class="datepicker" type="text" name="invoice_date" autocomplete="off")
+                            label(for="date") Date de la Facture
+                            input(class="datepicker" type="text" name="date" autocomplete="off")
                         .col-5
-                            label(for="due_date") Date d'échéance
-                            input(class="datepicker" type="text" name="due_date" autocomplete="off")
+                            label(for="expiredDate") Date d'échéance
+                            input(class="datepicker" type="text" name="expiredDate" autocomplete="off")
                         .col-10
-                            label(for="admmin_note") Note Admin
-                            input(type="text" name="admmin_note" autocomplete="off")
+                            label(for="note") Note Client
+                            input(type="text" name="note" autocomplete="off")
                 .space-15
                 .line
 
@@ -85,7 +85,7 @@ mixin invoiceModule(props={})
                         .col-13
                             .action-buttons
                                 .col-8
-                                    button(type="submit" class="btn primary-btn icon-btn") Enregister
+                                    button(type="submit" class="btn primary-btn icon-btn saveErp") Enregister
                                         != h.icon('check-circle') 
                                 .col-8
                                     button(type="submit" class="btn secondary-btn icon-btn") Enregistrer & Envoyer
@@ -95,20 +95,20 @@ mixin invoiceModule(props={})
                                 .col-9.padding-no
                                     | total H.T
                                 .col-15.space-adj
-                                    .subTotal 2500000
-                                    | DA
+                                    .subTotal 00.00
+                                    span DA
                             .total-row
                                 .col-9.padding-no
                                     select.taxRate(name='taxRate')
                                         option(value='0') T.V.A: 0 %
                                         option(value='0.19') T.V.A: 19 %
                                 .col-15.space-adj
-                                    .taxTotal 00
-                                    | DA
+                                    .taxTotal 00.00
+                                    span DA
 
                             .total-row
                                 .col-9.padding-no
                                     | total TTC
                                 .col-15.space-adj
-                                    .total 2500000
-                                    | DA
+                                    .total 00.00
+                                    span DA

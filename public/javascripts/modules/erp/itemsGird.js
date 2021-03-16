@@ -6,20 +6,22 @@ import {
   resetRow,
 } from "../../helper";
 import delegate from "../../lib/delegate";
+import moneyFormat from "../../lib/moneyFormat";
 //////// ***** items Module  : add , edit , remove , render ***** //////////
 
 const itemsGrid = {
   currentRow: null,
-  invoiceComponent: null,
-  init: (invoiceComponent) => {
-    itemsGrid.invoiceComponent = invoiceComponent;
-    itemsGrid.currentRow = invoiceComponent.querySelector(".currentRow");
+  erpComponent: null,
+  currentCurrency: "$",
+  init: (erpComponent) => {
+    itemsGrid.erpComponent = erpComponent;
+    itemsGrid.currentRow = erpComponent.querySelector(".currentRow");
     const currentRow = itemsGrid.currentRow;
-    const newItem = invoiceComponent.querySelector(".newItem");
+    const newItem = erpComponent.querySelector(".newItem");
     const price = currentRow.querySelector('input[name ="price"]');
     const quantity = currentRow.querySelector('input[name ="quantity"]');
     const total = currentRow.querySelector('input[name ="total"]');
-    const taxRate = invoiceComponent.querySelector("select.taxRate");
+    const taxRate = erpComponent.querySelector("select.taxRate");
 
     newItem.addEventListener("click", function () {
       itemsGrid.add();
@@ -63,15 +65,15 @@ const itemsGrid = {
     return `<div class="col-5"><span>${obj.itemName}</span></div>
     <div class="col-7"><span>${obj.description}</span></div>
     <div class="col-3"><span>${obj.quantity} </span></div>
-    <div class="col-3"><span>${obj.price} DA</span></div>
-    <div class="col-4"><span>${obj.total} DA</span></div>
+    <div class="col-3"><span>${moneyFormat(obj.price)} DA</span></div>
+    <div class="col-4"><span>${moneyFormat(obj.total)} DA</span></div>
     `;
   },
   add: () => {
     const currentRow = itemsGrid.currentRow;
-    const invoiceComponent = itemsGrid.invoiceComponent;
-    const itemsRow = invoiceComponent.querySelector(".itemsRow");
-    const orgdropdown = invoiceComponent.querySelector(".orgdropdown");
+    const erpComponent = itemsGrid.erpComponent;
+    const itemsRow = erpComponent.querySelector(".itemsRow");
+    const orgdropdown = erpComponent.querySelector(".orgdropdown");
     const newObj = RowToObject(currentRow);
     const newID = uniqueid();
     const action = currentRow.dataset.action;
@@ -115,19 +117,19 @@ const itemsGrid = {
     itemsGrid.sum();
   },
   edit: (element) => {
-    const invoiceComponent = itemsGrid.invoiceComponent;
+    const erpComponent = itemsGrid.erpComponent;
     const id = element.dataset.id;
-    const currentRow = invoiceComponent.querySelector(".currentRow");
+    const currentRow = erpComponent.querySelector(".currentRow");
     const className = `.calculation-row[data-row="${id}"]`;
-    const selected = invoiceComponent.querySelector(className);
+    const selected = erpComponent.querySelector(className);
     const jsonTxt = selected.dataset.item;
     jsonToRow(jsonTxt, currentRow, id);
   },
   remove: (element) => {
-    const invoiceComponent = itemsGrid.invoiceComponent;
+    const erpComponent = itemsGrid.erpComponent;
     const id = element.dataset.id;
     const className = `.calculation-row[data-row="${id}"]`;
-    const selected = invoiceComponent.querySelector(className);
+    const selected = erpComponent.querySelector(className);
     if (selected.parentNode) {
       selected.parentNode.removeChild(selected);
       itemsGrid.sum();
@@ -135,11 +137,11 @@ const itemsGrid = {
   },
 
   render: (data) => {
-    const invoiceComponent = itemsGrid.invoiceComponent;
-    const itemsRow = invoiceComponent.querySelector(".itemsRow");
+    const erpComponent = itemsGrid.erpComponent;
+    const itemsRow = erpComponent.querySelector(".itemsRow");
     const { items } = data;
     const content = items.map((item) => {
-      const orgdropdown = invoiceComponent.querySelector(".orgdropdown");
+      const orgdropdown = erpComponent.querySelector(".orgdropdown");
       let dropdown = orgdropdown.cloneNode(true);
       const newID = uniqueid();
       const result = `<div class="content-row calculation-row"
@@ -163,10 +165,10 @@ const itemsGrid = {
     itemsGrid.sum();
   },
   sum: () => {
-    const invoiceComponent = itemsGrid.invoiceComponent;
-    const itemsRow = invoiceComponent.querySelector(".itemsRow");
+    const erpComponent = itemsGrid.erpComponent;
+    const itemsRow = erpComponent.querySelector(".itemsRow");
     const items = itemsRow.querySelectorAll(".calculation-row");
-    const calcTotal = invoiceComponent.querySelector(".calcTotal");
+    const calcTotal = erpComponent.querySelector(".calcTotal");
     const subTotal = calcTotal.querySelector(".subTotal");
     const taxRate = calcTotal.querySelector("select.taxRate").value;
     const taxTotal = calcTotal.querySelector(".taxTotal");
@@ -179,9 +181,9 @@ const itemsGrid = {
     });
     const taxTotalValue = subTotalValue * parseFloat(taxRate);
     const totalValue = subTotalValue + taxTotalValue;
-    subTotal.innerHTML = subTotalValue.toFixed(2);
-    taxTotal.innerHTML = taxTotalValue.toFixed(2);
-    total.innerHTML = totalValue.toFixed(2);
+    subTotal.innerHTML = moneyFormat(subTotalValue.toFixed(2));
+    taxTotal.innerHTML = moneyFormat(taxTotalValue.toFixed(2));
+    total.innerHTML = moneyFormat(totalValue.toFixed(2));
   },
 };
 

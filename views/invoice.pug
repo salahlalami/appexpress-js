@@ -5,8 +5,8 @@ include components/_invoiceModule
   
 block content 
   .model.modelLarge
-    - const targetInvoice = 'invoice'
+    - const targetErp = 'invoice'
     - const targetClient = 'client'
     - const targetItem = 'item'
 
-    +invoiceModule({title,currencies,targetInvoice,targetClient,targetItem})
+    +invoiceModule({title,currencies,targetErp,targetClient,targetItem})

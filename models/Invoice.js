@@ -12,7 +12,6 @@ const invoiceSchema = new mongoose.Schema({
   },
   year: {
     type: Number,
-    required: true,
   },
   recurring: {
     type: Boolean,
@@ -21,7 +20,7 @@ const invoiceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  dateExpired: {
+  expiredDate: {
     type: String,
   },
   client: {

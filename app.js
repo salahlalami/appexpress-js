@@ -10,12 +10,13 @@ const flash = require("connect-flash");
 const authRouter = require("./routes/auth");
 const pageRouter = require("./routes/page");
 const apiRouter = require("./routes/api");
+const authJwtRouter = require("./routes/authJwt");
 const helpers = require("./helpers");
 const errorHandlers = require("./handlers/errorHandlers");
 const settingsApp = require("./middlewares/settingsApp");
 const passport = require("passport");
 const { checkAuth, isLoggedIn } = require("./controllers/authController");
-
+const { isValidToken } = require("./controllers/authJwtController ");
 require("./handlers/passport")(passport); // pass passport for configuration
 
 // create our Express app
@@ -86,7 +87,12 @@ app.use(settingsApp);
 app.use(authRouter);
 // app.use(isLoggedIn, pageRouter);
 app.use(pageRouter);
-app.use("/api", apiRouter);
+
+// app.use("/api", authJwtRouter);
+
+// app.use("/api", isValidToken, apiRouter);
+
+app.use("/v1/api", apiRouter);
 // Here our API Routes
 // app.use(function (req, res, next) {
 //   res.header("Access-Control-Allow-Origin", "*");

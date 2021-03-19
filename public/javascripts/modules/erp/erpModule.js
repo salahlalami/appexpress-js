@@ -54,34 +54,35 @@ const erpModule = {
     let erpComponent = document.querySelector(erpModule.componentName);
     if (erpComponent) {
       itemsGird.init(erpComponent);
-    }
-    const saveErp = erpComponent.querySelector(".saveErp");
-    const targetErp = erpComponent.dataset.targetErp;
-    const form = erpComponent.querySelector("form");
-    saveErp.addEventListener(
-      "click",
-      function (event) {
-        event.preventDefault();
-        const data = erpModule.data();
-        if (data) {
-          let ajaxCall = null;
-          if (form.dataset.status === "new") {
-            ajaxCall = createSync(targetErp, data);
-          } else {
-            const idErp = form.dataset.idErp || "";
-            ajaxCall = updateSync(targetErp, idErp, data);
-          }
 
-          ajaxCall.then((response) => {
-            if (response != undefined && response.success == true) {
-              form.dataset.status = "new";
-              form.dataset.idErp = null;
+      const saveErp = erpComponent.querySelector(".saveErp");
+      const targetErp = erpComponent.dataset.targetErp;
+      const form = erpComponent.querySelector("form");
+      saveErp.addEventListener(
+        "click",
+        function (event) {
+          event.preventDefault();
+          const data = erpModule.data();
+          if (data) {
+            let ajaxCall = null;
+            if (form.dataset.status === "new") {
+              ajaxCall = createSync(targetErp, data);
+            } else {
+              const idErp = form.dataset.idErp || "";
+              ajaxCall = updateSync(targetErp, idErp, data);
             }
-          });
-        }
-      },
-      false
-    );
+
+            ajaxCall.then((response) => {
+              if (response != undefined && response.success == true) {
+                form.dataset.status = "new";
+                form.dataset.idErp = null;
+              }
+            });
+          }
+        },
+        false
+      );
+    }
   },
 };
 export default erpModule;

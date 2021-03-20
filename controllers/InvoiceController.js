@@ -130,7 +130,6 @@ methods.update = async (req, res) => {
     if (total - discount - credit <= 0) {
       body["paymentStatus"] = "paid";
     }
-
     // Find document by id and updates with the required fields
     const result = await Model.findOneAndUpdate({ _id: id }, body, {
       new: true,

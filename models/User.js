@@ -54,6 +54,7 @@ const userSchema = new Schema({
   },
   permissions: [{ type: mongoose.Schema.ObjectId, ref: "Permission" }],
   customMenu: [{ type: mongoose.Schema.ObjectId, ref: "CustomMenu" }],
+  isLoggedIn: { type: Boolean },
 });
 
 userSchema.plugin(require("mongoose-autopopulate"));

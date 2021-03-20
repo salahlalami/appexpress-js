@@ -18,8 +18,12 @@
     width: 840px;
   }
   &Large {
-    width: 80%;
+    width: 1100px;
   }
+}
+
+.wide .modelSmall {
+  width: 1100px !important;
 }
 
 .boxHeader {

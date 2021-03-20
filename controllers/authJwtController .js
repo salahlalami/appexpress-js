@@ -2,8 +2,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const mongoose = require("mongoose");
-const promisify = require("es6-promisify");
-const mail = require("../handlers/mail");
 
 const User = mongoose.model("User");
 
@@ -50,7 +48,11 @@ exports.register = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({
+      success: false,
+      result: null,
+      message: err.message,
+    });
   }
 };
 
@@ -65,13 +67,19 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: email, removed: false });
     // console.log(user);
     if (!user)
-      return res
-        .status(400)
-        .json({ error: "No account with this email has been registered." });
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "No account with this email has been registered.",
+      });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
-      return res.status(400).json({ error: "Invalid credentials." });
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "Invalid credentials.",
+      });
 
     const token = jwt.sign(
       {
@@ -90,47 +98,70 @@ exports.login = async (req, res) => {
     ).exec();
 
     res.json({
-      token,
-      user: {
-        id: result._id,
-        name: result.name,
-        isLoggedIn: result.isLoggedIn,
+      success: true,
+      result: {
+        token,
+        user: {
+          id: result._id,
+          name: result.name,
+          isLoggedIn: result.isLoggedIn,
+        },
       },
+      message: "Successfully login user",
     });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    // res.status(500).json({ success: false, result:null, message: err.message });
+    res
+      .status(500)
+      .json({ success: false, result: null, message: err.message });
   }
 };
 
-exports.delete = async (req, res) => {
-  try {
-    const deletedUser = await User.findByIdAndDelete(req.user);
-    res.json(deletedUser);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-exports.tokenIsValid = async (req, res) => {
+exports.isValidToken = async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
-    if (!token) return res.json(false);
+    if (!token)
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "No authentication token, authorization denied.",
+      });
 
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    if (!verified) return res.json(false);
+    if (!verified)
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "Token verification failed, authorization denied.",
+      });
 
-    const user = await User.findById(verified.id);
-    if (!user) return res.json(false);
+    const user = await User.findOne({ _id: verified.id, removed: false });
+    if (!user)
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "User doens't Exist, authorization denied.",
+      });
 
-    return res.json(true);
+    if (user.isLoggedIn === false)
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "User is already logout try to login, authorization denied.",
+      });
+    else {
+      req.user = user;
+      // console.log(req.user);
+      next();
+    }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res
+      .status(500)
+      .json({ success: false, result: null, message: err.message });
   }
 };
 
 exports.logout = async (req, res) => {
-  console.log(req.user);
-
   const result = await User.findOneAndUpdate(
     { _id: req.user._id },
     { isLoggedIn: false },
@@ -140,118 +171,4 @@ exports.logout = async (req, res) => {
   ).exec();
 
   res.status(200).json({ isLoggedIn: result.isLoggedIn });
-
-  //     const token = req.header("x-auth-token");
-  //     if (!token)
-  //       return res
-  //         .status(401)
-  //         .json({ msg: "No authentication token, authorization denied." });
-
-  //     const verified = jwt.verify(token, process.env.JWT_SECRET);
-  //     if (!verified)
-  //       return res
-  //         .status(401)
-  //         .json({ msg: "Token verification failed, authorization denied." });
-
-  //     const user = await User.findById(verified.id);
-  //     if (!user)
-  //       return res
-  //         .status(401)
-  //         .json({ msg: "User doens't Exist, authorization denied." });
-  //     else {
-  //       req.user = user;
-  //       next();
-  //     }
-
-  // res.redirect("/login");
 };
-
-exports.isLoggedIn = (req, res, next) => {
-  // first check if the user is authenticated
-  if (req.isAuthenticated()) {
-    next(); // carry on! They are logged in!
-    return;
-  }
-
-  res.redirect("/login");
-};
-
-exports.forgot = async (req, res) => {
-  // 1. See if a user with that email exists
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
-    return res.send(_err.UNAUTHORIZED);
-  }
-  // 2. Set reset tokens and expiry on their account
-  user.resetPasswordToken = crypto.randomBytes(20).toString("hex");
-  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour from now
-  await user.save();
-  // 3. Send them an email with the token
-  const resetURL = `http://${req.headers.host}/account/reset/${user.resetPasswordToken}`;
-  await mail.send({
-    user,
-    filename: "password-reset",
-    subject: "Password Reset",
-    resetURL,
-  });
-
-  // 4. inform the user that, the email have been sent
-  return res.send({
-    status: true,
-    message: "Reset link have been sent, please check your email.",
-  });
-};
-
-exports.reset = async (req, res) => {
-  const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: { $gt: Date.now() },
-  });
-  if (!user) {
-    return res.send(_err.UNAUTHORIZED);
-  }
-  // if there is a user, show the rest password form
-  return res.send({
-    status: false,
-    message: "Reset your Password",
-  });
-};
-
-exports.confirmedPasswords = (req, res, next) => {
-  if (req.body.password === req.body["password-confirm"]) {
-    next(); // keepit going!
-    return;
-  }
-
-  res.redirect("back");
-};
-
-exports.update = async (req, res) => {
-  const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: { $gt: Date.now() },
-  });
-
-  if (!user) {
-    return res.send(_err.UNAUTHORIZED);
-  }
-
-  const setPassword = promisify(user.setPassword, user);
-  await setPassword(req.body.password);
-  user.resetPasswordToken = undefined;
-  user.resetPasswordExpires = undefined;
-  const updatedUser = await user.save();
-  await req.login(updatedUser);
-
-  return res.send(updatedUser);
-};
-
-// router.get("/", auth, async (req, res) => {
-//   const user = await User.findById(req.user);
-//   res.json({
-//     name: user.name,
-//     id: user._id,
-//   });
-// });
-
-// module.exports = router;

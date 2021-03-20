@@ -1,7 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-const mongoose = require("mongoose");
-const MongoStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo").default;
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -11,12 +10,13 @@ const flash = require("connect-flash");
 const authRouter = require("./routes/auth");
 const pageRouter = require("./routes/page");
 const apiRouter = require("./routes/api");
+const authJwtRouter = require("./routes/authJwt");
 const helpers = require("./helpers");
 const errorHandlers = require("./handlers/errorHandlers");
 const settingsApp = require("./middlewares/settingsApp");
 const passport = require("passport");
 const { checkAuth, isLoggedIn } = require("./controllers/authController");
-
+const { isValidToken } = require("./controllers/authJwtController ");
 require("./handlers/passport")(passport); // pass passport for configuration
 
 // create our Express app
@@ -46,7 +46,7 @@ app.use(
     key: process.env.KEY,
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    store: MongoStore.create({ mongoUrl: process.env.DATABASE }),
   })
 );
 
@@ -85,24 +85,30 @@ app.use(settingsApp);
 
 // After allllll that above middleware, we finally handle our own routes!
 app.use(authRouter);
-app.use(isLoggedIn, pageRouter);
+// app.use(isLoggedIn, pageRouter);
+app.use(pageRouter);
 // Here our API Routes
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
-//   res.header("Access-Control-Expose-Headers", "Content-Length");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Accept, Authorization, Content-Type, X-Requested-With, Range"
-//   );
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   } else {
-//     return next();
-//   }
-// });
-app.use("/api", checkAuth, apiRouter);
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Accept, Authorization, Content-Type, X-Requested-With, Range"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  } else {
+    return next();
+  }
+});
+
+app.use("/api", authJwtRouter);
+// isValidToken
+app.use("/api", apiRouter);
+
+app.use("/v1/api", apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

@@ -64,9 +64,9 @@ svg {
   width: calc(100% - 540px);
 }
 .wide {
-  width: 100%;
   left: 60px;
   float: left;
+  width: calc(100% - 60px);
 }
 .space {
   width: 100%;

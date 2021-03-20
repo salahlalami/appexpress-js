@@ -66,27 +66,13 @@ html
                     a(href="#") Profile
                     a(href="#") Settings
                     a(href="#") Logout
-      
-      .component(data-component="panel")      
-        .panelButton
-          != h.icon('menu')    
-        .panel
-          .box
-              block panelHeader
-                  p.panelTitle Dashboard
-              //- .space
-              block panelBody                  
-          block panelFooter    
-                
-      .content
+    
+      .content.wide
          block content
     
      
       block scripts
          script(src="/dist/App.bundle.js")
-      
-      block additionalScripts
-        
          
 
    

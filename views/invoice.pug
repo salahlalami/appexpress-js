@@ -1,15 +1,12 @@
-extends layouts/default 
-include components/_invoiceGrid
+extends layouts/largeLayout 
+include components/_invoiceModule
 
 
   
 block content 
   .model.modelLarge
-    - const get = '/api/invoice/get/'
-    - const read = '/api/invoice/read'
-    - const remove = '/api/invoice/delete'
-    - const col = ['quantity', 'price', 'total']
-    - const list = ['quantité', 'montant', 'total']
-    - const items = 10
+    - const targetErp = 'invoice'
+    - const targetClient = 'client'
+    - const targetItem = 'item'
 
-    +invoiceGrid()
+    +invoiceModule({title,currencies,targetErp,targetClient,targetItem})

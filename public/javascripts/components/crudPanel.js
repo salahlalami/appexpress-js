@@ -16,6 +16,44 @@ import {
 } from "../axiosRequest";
 
 export const initCrudPanel = (component) => {
+  const form = document.querySelector('form.ajax[data-state="update"]');
+  const table = document.querySelector(
+    '.component[data-component="dataTable"] .table'
+  );
+  const viewType = table.dataset.viewtype;
+
+  const target = table.dataset.target;
+
+  delegate(
+    document.body,
+    ".tableBody tr .dropdown .edit",
+    "click",
+    function (e) {
+      editItem(form, target, e.delegateTarget.dataset.json);
+    },
+    false
+  );
+
+  delegate(
+    document.body,
+    ".tableBody tr .dropdown .read",
+    "click",
+    function (e) {
+      viewItem(target, e.delegateTarget.dataset.json, viewType);
+    },
+    false
+  );
+
+  delegate(
+    document.body,
+    ".tableBody tr .dropdown .remove",
+    "click",
+    function (e) {
+      const displayLabel = e.delegateTarget.dataset.displayLabel;
+      removeItem(target, e.delegateTarget.dataset.id, displayLabel);
+    },
+    false
+  );
   delegate(
     document.body,
     ".meta-actions .meta-remove",

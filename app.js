@@ -105,8 +105,8 @@ app.use(function (req, res, next) {
 });
 
 app.use("/api", authJwtRouter);
-// isValidToken
-app.use("/api", apiRouter);
+
+app.use("/api", isValidToken, apiRouter);
 
 app.use("/v1/api", apiRouter);
 

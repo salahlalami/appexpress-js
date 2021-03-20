@@ -87,29 +87,28 @@ app.use(settingsApp);
 app.use(authRouter);
 // app.use(isLoggedIn, pageRouter);
 app.use(pageRouter);
+// Here our API Routes
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
+  res.header("Access-Control-Expose-Headers", "Content-Length");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Accept, Authorization, Content-Type, X-Requested-With, Range"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  } else {
+    return next();
+  }
+});
 
-// app.use("/api", authJwtRouter);
-
-// app.use("/api", isValidToken, apiRouter);
+app.use("/api", authJwtRouter);
+// isValidToken
+app.use("/api", apiRouter);
 
 app.use("/v1/api", apiRouter);
-// Here our API Routes
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   res.header("Access-Control-Allow-Methods", "GET,PATCH,POST,DELETE");
-//   res.header("Access-Control-Expose-Headers", "Content-Length");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Accept, Authorization, Content-Type, X-Requested-With, Range"
-//   );
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   } else {
-//     return next();
-//   }
-// });
-// app.use("/api", checkAuth, apiRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

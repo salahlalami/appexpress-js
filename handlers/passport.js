@@ -47,15 +47,18 @@ module.exports = function (passport) {
 
         // asynchronous
         process.nextTick(function () {
-          User.findOne({ email: email, removed: false }, function (err, user) {
+          User.findOne({ email: email, removed: false }, async function (
+            err,
+            user
+          ) {
             // if there are any errors, return the error
             if (err) return done(err);
 
             // if no user is found, return the message
             if (!user)
               return done(null, false, req.flash("error", "No user found."));
-
-            if (!user.validPassword(password))
+            const isMatch = await user.validPassword(password);
+            if (!isMatch)
               return done(
                 null,
                 false,
@@ -128,7 +131,7 @@ module.exports = function (passport) {
                 );
                 // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
               } else {
-                var user = req.user;
+                let user = req.user;
                 user.local.email = email;
                 user.local.password = user.generateHash(password);
                 user.save(function (err) {

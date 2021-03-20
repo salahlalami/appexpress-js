@@ -48,7 +48,11 @@ exports.register = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
+    res.status(500).json({
+      success: false,
+      result: null,
+      message: err.message,
+    });
   }
 };
 
@@ -63,13 +67,19 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email: email, removed: false });
     // console.log(user);
     if (!user)
-      return res
-        .status(400)
-        .json({ error: "No account with this email has been registered." });
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "No account with this email has been registered.",
+      });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
-      return res.status(400).json({ error: "Invalid credentials." });
+      return res.status(400).json({
+        success: false,
+        result: null,
+        message: "Invalid credentials.",
+      });
 
     const token = jwt.sign(
       {
@@ -88,16 +98,22 @@ exports.login = async (req, res) => {
     ).exec();
 
     res.json({
-      token,
-      user: {
-        id: result._id,
-        name: result.name,
-        isLoggedIn: result.isLoggedIn,
+      success: true,
+      result: {
+        token,
+        user: {
+          id: result._id,
+          name: result.name,
+          isLoggedIn: result.isLoggedIn,
+        },
       },
+      message: "Successfully login user",
     });
   } catch (err) {
-    // res.status(500).json({ error: err.message });
-    res.status(500).json({ message: "unknow error" });
+    // res.status(500).json({ success: false, result:null, message: err.message });
+    res
+      .status(500)
+      .json({ success: false, result: null, message: err.message });
   }
 };
 
@@ -105,25 +121,33 @@ exports.isValidToken = async (req, res, next) => {
   try {
     const token = req.header("x-auth-token");
     if (!token)
-      return res
-        .status(401)
-        .json({ error: "No authentication token, authorization denied." });
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "No authentication token, authorization denied.",
+      });
 
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     if (!verified)
-      return res
-        .status(401)
-        .json({ error: "Token verification failed, authorization denied." });
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "Token verification failed, authorization denied.",
+      });
 
     const user = await User.findOne({ _id: verified.id, removed: false });
     if (!user)
-      return res
-        .status(401)
-        .json({ error: "User doens't Exist, authorization denied." });
+      return res.status(401).json({
+        success: false,
+        result: null,
+        message: "User doens't Exist, authorization denied.",
+      });
 
     if (user.isLoggedIn === false)
       return res.status(401).json({
-        error: "User is already logout try to login, authorization denied.",
+        success: false,
+        result: null,
+        message: "User is already logout try to login, authorization denied.",
       });
     else {
       req.user = user;
@@ -131,7 +155,9 @@ exports.isValidToken = async (req, res, next) => {
       next();
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res
+      .status(500)
+      .json({ success: false, result: null, message: err.message });
   }
 };
 

@@ -1,6 +1,6 @@
 const express = require("express");
 const session = require("express-session");
-let MongoStore = require("connect-mongo").default;
+const MongoStore = require("connect-mongo");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");

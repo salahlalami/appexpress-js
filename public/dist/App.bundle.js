@@ -2249,8 +2249,7 @@ Object.defineProperty(exports, "__esModule", {
 })("docReadyfunc", window);
 
 var docReady = window.docReadyfunc;
-// modify this previous line to pass in your own method name
-// and object for the method to be attached to
+
 exports.default = docReady;
 
 /***/ }),

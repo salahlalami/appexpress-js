@@ -82,6 +82,5 @@
 })("docReadyfunc", window);
 
 const docReady = window.docReadyfunc;
-// modify this previous line to pass in your own method name
-// and object for the method to be attached to
+
 export default docReady;

@@ -18,7 +18,7 @@ const passport = require("passport");
 const { checkAuth, isLoggedIn } = require("./controllers/authController");
 const { isValidToken } = require("./controllers/authJwtController ");
 require("./handlers/passport")(passport); // pass passport for configuration
-
+require("dotenv").config({ path: ".variables.env" });
 // create our Express app
 const app = express();
 // view engine setup

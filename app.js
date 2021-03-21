@@ -95,7 +95,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Expose-Headers", "Content-Length");
   res.header(
     "Access-Control-Allow-Headers",
-    "Accept, Authorization, Content-Type, X-Requested-With, Range"
+    "Accept, Authorization,x-auth-token, Content-Type, X-Requested-With, Range"
   );
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);

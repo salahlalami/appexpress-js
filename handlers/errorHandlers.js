@@ -21,15 +21,10 @@ exports.catchErrors = (fn) => {
 
   If we hit a route that is not found, we mark it as 404 and pass it along to the next error handler to display
 */
-exports.notFound = (res) => {
-  res.status(404).json({
-    success: false,
-    result: null,
-    message: "Api URL not found",
+exports.notFound = (req, res, next) => {
+  res.render("errors/404", {
+    title: "404",
   });
-  // res.render("errors/404", {
-  //   title: "404",
-  // });
 };
 
 /*
@@ -71,15 +66,10 @@ exports.developmentErrors = (err, req, res, next) => {
   //   }, // Form Submit, Reload the page
   //   "application/json": () => res.json(errorDetails), // Ajax call, send JSON back
   // });
-  res.status(500).json({
-    success: false,
-    result: null,
-    message: err.message,
+  res.render("errors/500", {
+    title: "500",
+    error: err.message,
   });
-  // res.render("errors/500", {
-  //   title: "500",
-  //   error: err.message,
-  // });
 };
 
 /*
@@ -93,13 +83,8 @@ exports.productionErrors = (err, req, res, next) => {
   //   message: err.message,
   //   error: {},
   // });
-  res.status(500).json({
-    success: false,
-    result: null,
-    message: err.message,
+  res.render("errors/500", {
+    title: "500",
+    error: err.message,
   });
-  // res.render("errors/500", {
-  //   title: "500",
-  //   error: err.message,
-  // });
 };

@@ -32,13 +32,10 @@ const invoiceSchema = new mongoose.Schema({
     {
       itemName: {
         type: String,
-        trim: true,
         required: true,
       },
       description: {
         type: String,
-        trim: true,
-        required: true,
       },
       quantity: {
         type: Number,
@@ -55,8 +52,7 @@ const invoiceSchema = new mongoose.Schema({
     },
   ],
   currency: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Currency",
+    type: String,
     required: true,
   },
   taxRate: {

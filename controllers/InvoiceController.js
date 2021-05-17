@@ -3,7 +3,7 @@
 
 const mongoose = require("mongoose");
 const Model = mongoose.model("Invoice");
-// const custom = require("./helpersControllers/custom");
+const custom = require("./helpersControllers/custom");
 
 const crudController = require("./helpersControllers/crudController");
 const methods = crudController.createCRUDController("Invoice");
@@ -38,13 +38,29 @@ methods.create = async (req, res) => {
     body["taxTotal"] = taxTotal;
     body["total"] = total;
     body["items"] = items;
+
     // Creating a new document in the collection
     const result = await new Model(body).save();
+    const fileId = "invoice-" + result._id + ".pdf";
+    const updateResult = await Model.findOneAndUpdate(
+      { _id: result._id },
+      { pdfPath: fileId },
+      {
+        new: true,
+      }
+    ).exec();
+    // Returning successfull response
+
+    custom.generatePdf(
+      "Invoice",
+      { filename: "invoice", format: "A4" },
+      result
+    );
 
     // Returning successfull response
     return res.status(200).json({
       success: true,
-      result,
+      result: updateResult,
       message: "Successfully Created the document in Model ",
     });
   } catch (err) {
@@ -93,7 +109,9 @@ methods.update = async (req, res) => {
     body["taxTotal"] = taxTotal;
     body["total"] = total;
     body["items"] = items;
+    body["pdfPath"] = "invoice-" + req.params.id + ".pdf";
     // Find document by id and updates with the required fields
+
     const result = await Model.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       body,
@@ -103,6 +121,13 @@ methods.update = async (req, res) => {
       }
     ).exec();
 
+    // Returning successfull response
+
+    await custom.generatePdf(
+      "Invoice",
+      { filename: "invoice", format: "A4" },
+      result
+    );
     return res.status(200).json({
       success: true,
       result,

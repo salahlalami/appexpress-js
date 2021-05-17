@@ -89,6 +89,7 @@ exports.generatePdf = (
     model: result,
     moment: moment,
   });
+
   pdf
     .create(html, {
       format: info.format,

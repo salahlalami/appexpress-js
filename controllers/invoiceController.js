@@ -117,13 +117,12 @@ methods.update = async (req, res) => {
       body,
       {
         new: true, // return the new result instead of the old one
-        runValidators: true,
       }
     ).exec();
 
     // Returning successfull response
 
-    await custom.generatePdf(
+    custom.generatePdf(
       "Invoice",
       { filename: "invoice", format: "A4" },
       result
@@ -135,6 +134,7 @@ methods.update = async (req, res) => {
     });
   } catch (err) {
     // If err is thrown by Mongoose due to required validations
+    console.log(err);
     if (err.name == "ValidationError") {
       return res.status(400).json({
         success: false,

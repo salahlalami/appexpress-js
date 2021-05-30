@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": ">= 7.6.0"
+    "node": "14.x"
   },
   "scripts": {
     "start": "node ./start.js",
@@ -33,7 +33,7 @@
     "express-session": "^1.17.1",
     "express-validator": "6.6.1",
     "glob": "7.1.1",
-    "html-pdf": "^2.2.0",
+    "html-pdf": "^3.0.1",
     "html-to-text": "6.0.0",
     "jimp": "0.2.27",
     "jsonwebtoken": "^8.5.1",

@@ -16,13 +16,15 @@ const quoteSchema = new mongoose.Schema({
   },
   year: {
     type: Number,
-    required: true,
+  },
+  recurring: {
+    type: String,
   },
   date: {
     type: String,
     required: true,
   },
-  dateExpired: {
+  expiredDate: {
     type: String,
     required: true,
   },
@@ -30,18 +32,16 @@ const quoteSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Client",
     required: true,
+    autopopulate: true,
   },
   items: [
     {
-      name: {
+      itemName: {
         type: String,
-        trim: true,
         required: true,
       },
       description: {
         type: String,
-        trim: true,
-        required: true,
       },
       quantity: {
         type: Number,
@@ -58,8 +58,7 @@ const quoteSchema = new mongoose.Schema({
     },
   ],
   currency: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Currency",
+    type: String,
   },
   taxRate: {
     type: Number,
@@ -73,10 +72,31 @@ const quoteSchema = new mongoose.Schema({
   total: {
     type: Number,
   },
-  status: {
+  credit: {
+    type: Number,
+    default: 0,
+  },
+  discount: {
+    type: Number,
+    default: 0,
+  },
+  clientPayment: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: "ClientPayment",
+    },
+  ],
+  paymentStatus: {
     type: String,
     trim: true,
     default: "0",
+  },
+  note: {
+    type: String,
+  },
+  status: {
+    type: String,
+    default: "Draft",
   },
   updated: {
     type: Date,
@@ -92,4 +112,5 @@ const quoteSchema = new mongoose.Schema({
   },
 });
 
+quoteSchema.plugin(require("mongoose-autopopulate"));
 module.exports = mongoose.model("Quote", quoteSchema);

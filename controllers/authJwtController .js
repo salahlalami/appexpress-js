@@ -125,6 +125,7 @@ exports.isValidToken = async (req, res, next) => {
         success: false,
         result: null,
         message: "No authentication token, authorization denied.",
+        jwtExpired: true,
       });
 
     const verified = jwt.verify(token, process.env.JWT_SECRET);
@@ -133,6 +134,7 @@ exports.isValidToken = async (req, res, next) => {
         success: false,
         result: null,
         message: "Token verification failed, authorization denied.",
+        jwtExpired: true,
       });
 
     const user = await User.findOne({ _id: verified.id, removed: false });
@@ -141,6 +143,7 @@ exports.isValidToken = async (req, res, next) => {
         success: false,
         result: null,
         message: "User doens't Exist, authorization denied.",
+        jwtExpired: true,
       });
 
     if (user.isLoggedIn === false)
@@ -148,6 +151,7 @@ exports.isValidToken = async (req, res, next) => {
         success: false,
         result: null,
         message: "User is already logout try to login, authorization denied.",
+        jwtExpired: true,
       });
     else {
       req.user = user;
@@ -155,9 +159,12 @@ exports.isValidToken = async (req, res, next) => {
       next();
     }
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, result: null, message: err.message });
+    res.status(500).json({
+      success: false,
+      result: null,
+      message: err.message,
+      jwtExpired: true,
+    });
   }
 };
 

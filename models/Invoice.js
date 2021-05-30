@@ -14,7 +14,7 @@ const invoiceSchema = new mongoose.Schema({
     type: Number,
   },
   recurring: {
-    type: Boolean,
+    type: String,
   },
   date: {
     type: String,
@@ -22,23 +22,22 @@ const invoiceSchema = new mongoose.Schema({
   },
   expiredDate: {
     type: String,
+    required: true,
   },
   client: {
     type: mongoose.Schema.ObjectId,
     ref: "Client",
     required: true,
+    autopopulate: true,
   },
   items: [
     {
       itemName: {
         type: String,
-        trim: true,
         required: true,
       },
       description: {
         type: String,
-        trim: true,
-        required: true,
       },
       quantity: {
         type: Number,
@@ -55,9 +54,7 @@ const invoiceSchema = new mongoose.Schema({
     },
   ],
   currency: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Currency",
-    required: true,
+    type: String,
   },
   taxRate: {
     type: Number,
@@ -111,4 +108,5 @@ const invoiceSchema = new mongoose.Schema({
   },
 });
 
+invoiceSchema.plugin(require("mongoose-autopopulate"));
 module.exports = mongoose.model("Invoice", invoiceSchema);

@@ -59,7 +59,6 @@ const styles = {
 //   compress: { warnings: false },
 // });
 
-module.exports = {};
 // OK - now it's time to put it all together
 const config = {
   entry: {

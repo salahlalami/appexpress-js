@@ -37,7 +37,7 @@ exports.userPhotoUrl = (user) => {
 };
 
 // Some details about the site
-exports.siteName = `Cedimed App`;
+exports.siteName = `Express.js / MongoBD / Rest Api`;
 
 exports.timeRange = (start, end, format, interval) => {
   if (format == undefined) {

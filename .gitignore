@@ -4,5 +4,5 @@ package-lock.json
 .DS_Store
 .idea
 notes.md
-.env
+.variables.env
 

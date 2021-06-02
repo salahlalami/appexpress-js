@@ -23,7 +23,7 @@ exports.redirect = function (req, res) {
 
   switch (staff.role.dashboardType) {
     case "admin":
-      return res.redirect("/user");
+      return res.redirect("/consultation/5f9dab87012603af2f0a6d01");
     // break;
     case "doctor":
       return res.redirect("/patient");
@@ -32,7 +32,7 @@ exports.redirect = function (req, res) {
       return res.redirect("/appointment");
     // break;
     default:
-      return res.redirect("/employee");
+      return res.redirect("/user");
   }
 };
 

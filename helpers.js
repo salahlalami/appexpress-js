@@ -109,17 +109,21 @@ exports.lists = [
 ];
 
 exports.menu = [
-  { slug: "/", title: "Dashboard", icon: "dashboard" },
-  { slug: "/patient", title: "Patients", icon: "patients" },
-  { slug: "/appointment", title: "Appointment", icon: "appointment" },
   {
     slug: "/consultation/5f9dab87012603af2f0a6d01",
-    title: "Consultation",
-    icon: "accounting",
+    title: "Consultations",
+    icon: "dashboard",
   },
-  { slug: "/mriscan", title: "IRM Scanner", icon: "accounting" },
-  { slug: "/laboratory", title: "Laboratory", icon: "laboratory" },
-  { slug: "/payment", title: "Paiement", icon: "accounting" },
+  { slug: "/patient", title: "Patients", icon: "patients" },
+  { slug: "/appointment", title: "Appointment", icon: "appointment" },
+  // {
+  //   slug: "/consultation/5f9dab87012603af2f0a6d01",
+  //   title: "Consultation",
+  //   icon: "accounting",
+  // },
+  // { slug: "/mriscan", title: "IRM Scanner", icon: "accounting" },
+  // { slug: "/laboratory", title: "Laboratory", icon: "laboratory" },
+  // { slug: "/payment", title: "Paiement", icon: "accounting" },
   {
     slug: "#",
     title: "Medical Parametres",
@@ -147,60 +151,60 @@ exports.menu = [
     submenu: [
       { slug: "/employee", title: "Employes", icon: "patients" },
       { slug: "/doctor", title: "Doctors", icon: "patients" },
-      {
-        slug: "/employeecontract",
-        title: "Contrat Employee",
-        icon: "patients",
-      },
-      { slug: "/salary", title: "Contrat de Salaire", icon: "accounting" },
-      { slug: "/medicalsettings", title: "RH Parametres", icon: "patients" },
+      // {
+      //   slug: "/employeecontract",
+      //   title: "Contrat Employee",
+      //   icon: "patients",
+      // },
+      // { slug: "/salary", title: "Contrat de Salaire", icon: "accounting" },
+      // { slug: "/medicalsettings", title: "RH Parametres", icon: "patients" },
     ],
   },
 
-  {
-    slug: "#",
-    title: "Gestion Commercial",
-    icon: "accounting",
-    submenu: [
-      { slug: "/customer", title: "Client", icon: "accounting" },
-      { slug: "/supplier", title: "Fournisseur", icon: "accounting" },
-      { slug: "/invoice", title: "Facture", icon: "accounting" },
-      { slug: "/quote", title: "Devis", icon: "accounting" },
-      { slug: "/orderform", title: "Bon de commande", icon: "accounting" },
-      { slug: "/clientpayment", title: "Regelement", icon: "accounting" },
-      { slug: "/expenses", title: "Depences", icon: "accounting" },
-      {
-        slug: "/financesettings",
-        title: "Finance Parametres",
-        icon: "patients",
-      },
-    ],
-  },
+  // {
+  //   slug: "#",
+  //   title: "Gestion Commercial",
+  //   icon: "accounting",
+  //   submenu: [
+  //     { slug: "/customer", title: "Client", icon: "accounting" },
+  //     { slug: "/supplier", title: "Fournisseur", icon: "accounting" },
+  //     { slug: "/invoice", title: "Facture", icon: "accounting" },
+  //     { slug: "/quote", title: "Devis", icon: "accounting" },
+  //     { slug: "/orderform", title: "Bon de commande", icon: "accounting" },
+  //     { slug: "/clientpayment", title: "Regelement", icon: "accounting" },
+  //     { slug: "/expenses", title: "Depences", icon: "accounting" },
+  //     {
+  //       slug: "/financesettings",
+  //       title: "Finance Parametres",
+  //       icon: "patients",
+  //     },
+  //   ],
+  // },
 
-  { slug: "/rapport", title: "Rapport", icon: "settings" },
-  {
-    slug: "javascript:",
-    title: "Parametres",
-    icon: "settings",
-    class: "has-sub-menu-drawer",
-    submenu: [
-      {
-        slug: "/generalsettings",
-        title: "Generale Parametres",
-        icon: "settings",
-      },
-      {
-        slug: "/settingCommercial",
-        title: "Commercial Parametres",
-        icon: "settings",
-      },
-      {
-        slug: "/financesettings",
-        title: "Finance Parametres",
-        icon: "settings",
-      },
-    ],
-  },
+  // { slug: "/rapport", title: "Rapport", icon: "settings" },
+  // {
+  //   slug: "javascript:",
+  //   title: "Parametres",
+  //   icon: "settings",
+  //   class: "has-sub-menu-drawer",
+  //   submenu: [
+  //     {
+  //       slug: "/generalsettings",
+  //       title: "Generale Parametres",
+  //       icon: "settings",
+  //     },
+  //     {
+  //       slug: "/settingCommercial",
+  //       title: "Commercial Parametres",
+  //       icon: "settings",
+  //     },
+  //     {
+  //       slug: "/financesettings",
+  //       title: "Finance Parametres",
+  //       icon: "settings",
+  //     },
+  //   ],
+  // },
 ];
 
 exports.settingCommercial = async (name) => {

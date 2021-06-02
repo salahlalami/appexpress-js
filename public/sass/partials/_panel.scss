@@ -124,3 +124,25 @@ ul.info {
     z-index: 9;
   }
 }
+.cancel {
+  color: #094460;
+  background-color: #fbfcff;
+  border: 1px solid #e1edff;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 0.375rem 0.75rem;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 6px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.cancel:hover {
+  border: 1px solid #259cd4;
+}

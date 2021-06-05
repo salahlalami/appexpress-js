@@ -85,8 +85,8 @@ app.use(settingsApp);
 
 // After allllll that above middleware, we finally handle our own routes!
 app.use(authRouter);
-
-app.use(isLoggedIn, pageRouter);
+// app.use(isLoggedIn, pageRouter);
+app.use(pageRouter);
 // Here our API Routes
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

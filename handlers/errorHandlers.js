@@ -75,7 +75,7 @@ exports.developmentErrors = (err, req, res, next) => {
 /*
   Production Error Handler
 
-  No stacktraces are leaked to user
+  No stacktraces are leaked to admin
 */
 exports.productionErrors = (err, req, res, next) => {
   // res.status(err.status || 500);

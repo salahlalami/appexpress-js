@@ -1,7 +1,7 @@
 include autocomplete/_employeeAutocomplete
 include autocomplete/_doctorAutocomplete
 
-mixin userForm(target={},formState="create",roles=[])
+mixin adminForm(target={},formState="create",roles=[])
     .component(data-component="ajaxForm")  
         
         form.ajax(autocomplete="off" data-target=target  data-state=formState method="POST")

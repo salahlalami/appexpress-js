@@ -4,8 +4,8 @@ const HasPermission = (perm) => {
   return async (req, res, next) => {
     let session = req;
     let permis;
-    // if the session is missing redirect the user to the login page
-    if (session.user == undefined) {
+    // if the session is missing redirect the admin to the login page
+    if (session.admin == undefined) {
       return res.send({
         status: false,
         message: "Unauthorized",
@@ -22,9 +22,9 @@ const HasPermission = (perm) => {
       });
     }
     //check if permission exists in database
-    if (permis && session.user) {
-      // if yes => check if the user has it
-      if (session.user.permissions.includes(String(permis._id))) {
+    if (permis && session.admin) {
+      // if yes => check if the admin has it
+      if (session.admin.permissions.includes(String(permis._id))) {
         next();
       } else {
         return res.send({
@@ -33,7 +33,7 @@ const HasPermission = (perm) => {
         });
       }
     } else {
-      // else we are going to return to the user that he does not have the permission to do this action
+      // else we are going to return to the admin that he does not have the permission to do this action
       return res.send({
         status: false,
         message: "You do not have permission for this action",

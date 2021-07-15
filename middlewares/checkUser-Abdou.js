@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const isValidToken = (token) => {
   try {
-    let user = jwt.verify(token, process.env.JWT_SECRET);
+    let admin = jwt.verify(token, process.env.JWT_SECRET);
 
     return {
       status: true,
-      data: user,
+      data: admin,
     };
   } catch (error) {
     console.log(error);
@@ -38,39 +38,39 @@ const retrieveToken = (headers) => {
 };
 
 module.exports = (req, res, next) => {
-  let user;
+  let admin;
 
   let token = retrieveToken(req.headers);
 
   if (token) {
-    user = isValidToken(token);
-    if (user.status) {
-      req.user = user.data;
+    admin = isValidToken(token);
+    if (admin.status) {
+      req.admin = admin.data;
     }
   }
 
   // only register && public/download  routes will be allowed to get pass :)
 
-  // he we check if the the user collection exist in the request
-  // if yes means that the user is logged in
-  // else the user is not logged it
-  console.log(req.user);
+  // he we check if the the admin collection exist in the request
+  // if yes means that the admin is logged in
+  // else the admin is not logged it
+  console.log(req.admin);
   if (
-    req.user == undefined &&
+    req.admin == undefined &&
     req.path !== "/register" &&
     req.path !== "/login" &&
     req.path.search("/public/download") !== 0
   ) {
-    // redirect to login page if the user is not logged in :')
+    // redirect to login page if the admin is not logged in :')
     return res.send({
       status: false,
       path: req.path,
-      message: "CheckUser.js Unauthorized",
+      message: "CheckAdmin.js Unauthorized",
     });
   } else {
     console.log("next()");
   }
 
-  // if yes continue the user actions ^_^
+  // if yes continue the admin actions ^_^
   next();
 };

@@ -6,7 +6,7 @@
 	.st0{fill:url(#SVGID_1_);}
 	.st1{fill:#377dff;}
 </style>
-<radialGradient id="SVGID_1_" cx="70.2" cy="23.1111" r="51.2447" gradientTransform="matrix(0.9972 0 0 0.1 0.2 125.1889)" gradientUnits="userSpaceOnUse">
+<radialGradient id="SVGID_1_" cx="70.2" cy="23.1111" r="51.2447" gradientTransform="matrix(0.9972 0 0 0.1 0.2 125.1889)" gradientUnits="adminSpaceOnUse">
 	<stop  offset="2.054068e-07" style="stop-color:#000000;stop-opacity:0.3"/>
 	<stop  offset="0.4872" style="stop-color:#000000;stop-opacity:0"/>
 </radialGradient>

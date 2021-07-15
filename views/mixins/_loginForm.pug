@@ -2,12 +2,12 @@ mixin loginForm()
   form.form(action="/login" method="POST")
     .input-field
       span.field-icon
-        != h.icon('login-user')
-      input(type="email" name="email" placeholder="username : admin@demo.com")
+        != h.icon('login-admin')
+      input(type="email" name="email" placeholder="adminname : administrator@demo.com")
     .input-field
       span.field-icon
         != h.icon('login-password')
-      input(type="password" name="password" placeholder="password : admin123")
+      input(type="password" name="password" placeholder="password : administrator123")
     label
       input.remember-check-input(name="remember" type='checkbox' value='' formcontrolname='agree_privacy')
       span.form-check-sign

@@ -13,11 +13,11 @@
   box-sizing: border-box;
   position: relative;
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
+  -webkit-admin-select: none; /* Safari */
+  -khtml-admin-select: none; /* Konqueror HTML */
+  -moz-admin-select: none; /* Old versions of Firefox */
+  -ms-admin-select: none; /* Internet Explorer/Edge */
+  admin-select: none;
   .dropdown {
     right: 5px;
     position: absolute;

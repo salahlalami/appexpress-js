@@ -352,7 +352,7 @@ exports.status = async (Model, req, res) => {
         .json({
           success: false,
           result: [],
-          message: "couldn't change user status by this request",
+          message: "couldn't change admin status by this request",
         })
         .end();
     }

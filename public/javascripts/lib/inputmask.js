@@ -27,7 +27,7 @@ function inputmask(input) {
     }
 
     var len = that.value.length;
-    // If we're at a particular place, let the user type the slash
+    // If we're at a particular place, let the admin type the slash
     // i.e., 12/12/1212
     if (len !== 1 || len !== 3) {
       if (e.keyCode == 47) {

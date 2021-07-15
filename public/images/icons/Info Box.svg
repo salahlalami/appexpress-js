@@ -1,13 +1,13 @@
 <svg id="Info_Box" data-name="Info Box" xmlns="http://www.w3.org/2000/svg"  width="465" height="340" viewBox="0 0 465 340">
   <defs>
-    <filter id="Rectangle_4" x="227" y="168" width="238" height="156" filterUnits="userSpaceOnUse">
+    <filter id="Rectangle_4" x="227" y="168" width="238" height="156" filterUnits="adminSpaceOnUse">
       <feOffset dy="6" input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="8" result="blur"/>
       <feFlood flood-color="#0078b0" flood-opacity="0.102"/>
       <feComposite operator="in" in2="blur"/>
       <feComposite in="SourceGraphic"/>
     </filter>
-    <filter id="Oval_3" x="411.5" y="171" width="25" height="25" filterUnits="userSpaceOnUse">
+    <filter id="Oval_3" x="411.5" y="171" width="25" height="25" filterUnits="adminSpaceOnUse">
       <feOffset dy="2" input="SourceAlpha"/>
       <feGaussianBlur stdDeviation="3" result="blur-2"/>
       <feFlood flood-color="#00a3f0" flood-opacity="0.102"/>

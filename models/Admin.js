@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 const bcrypt = require("bcryptjs");
 
-const userSchema = new Schema({
+const adminSchema = new Schema({
   removed: {
     type: Boolean,
     default: false,
@@ -23,20 +23,11 @@ const userSchema = new Schema({
     trim: true,
     required: true,
   },
-  name: { type: String, required: true },
-  surname: { type: String, required: true },
+  name: { type: String },
+  surname: { type: String },
   photo: {
     type: String,
     trim: true,
-  },
-  accountType: {
-    type: String,
-    trim: true,
-  },
-  doctor: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Doctor",
-    autopopulate: true,
   },
   employee: {
     type: mongoose.Schema.ObjectId,
@@ -57,16 +48,16 @@ const userSchema = new Schema({
   isLoggedIn: { type: Boolean },
 });
 
-userSchema.plugin(require("mongoose-autopopulate"));
+adminSchema.plugin(require("mongoose-autopopulate"));
 
 // generating a hash
-userSchema.methods.generateHash = function (password) {
+adminSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(), null);
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function (password) {
+adminSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Admin", adminSchema);

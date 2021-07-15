@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Model = mongoose.model("Employee");
-const User = mongoose.model("User");
+const Admin = mongoose.model("Admin");
 const crudController = require("./helpersControllers/crudController");
 
 let methods = crudController.createCRUDController("Employee");
@@ -33,7 +33,7 @@ methods.update = async (req, res) => {
     };
 
     // Find document by id and updates with the required fields
-    await User.findOneAndUpdate(
+    await Admin.findOneAndUpdate(
       { employee: _id, removed: false },
       { $set: updates },
       {

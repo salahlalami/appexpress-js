@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const Admin = mongoose.model("Admin");
 
 require("dotenv").config({ path: ".variables.env" });
 
@@ -27,19 +27,19 @@ const auth = async (req, res, next) => {
           .status(401)
           .json({ error: "Token verification failed, authorization denied." });
 
-      const user = await User.findOne({ _id: verified.id, removed: false });
-      if (!user)
+      const admin = await Admin.findOne({ _id: verified.id, removed: false });
+      if (!admin)
         return res
           .status(401)
-          .json({ error: "User doens't Exist, authorization denied." });
+          .json({ error: "Admin doens't Exist, authorization denied." });
 
-      if (user.isLoggedIn === false)
+      if (admin.isLoggedIn === false)
         return res.status(401).json({
-          error: "User is already logout try to login, authorization denied.",
+          error: "Admin is already logout try to login, authorization denied.",
         });
       else {
-        req.user = user;
-        // console.log(req.user);
+        req.admin = admin;
+        // console.log(req.admin);
         next();
       }
     }

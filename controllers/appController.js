@@ -15,9 +15,9 @@ exports.role = (req, res) => {
 exports.permission = (req, res) => {
   res.render("permission", { title: "Permissions Management" });
 };
-exports.user = async (req, res) => {
+exports.admin = async (req, res) => {
   const [roles] = await Promise.all([getData("Role")]);
-  res.render("user", { title: "Users Management", roles });
+  res.render("admin", { title: "Admins Management", roles });
 };
 exports.dashboard = (req, res) => {
   res.render("index", {

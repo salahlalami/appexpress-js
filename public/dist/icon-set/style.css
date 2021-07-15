@@ -1,18 +1,19 @@
 @font-face {
-  font-family: 'The-Icon-of';
-  src:  url('fonts/The-Icon-of.eot?ww946b');
-  src:  url('fonts/The-Icon-of.eot?ww946b#iefix') format('embedded-opentype'),
-    url('fonts/The-Icon-of.ttf?ww946b') format('truetype'),
-    url('fonts/The-Icon-of.woff?ww946b') format('woff'),
-    url('fonts/The-Icon-of.svg?ww946b#The-Icon-of') format('svg');
+  font-family: "The-Icon-of";
+  src: url("fonts/The-Icon-of.eot?ww946b");
+  src: url("fonts/The-Icon-of.eot?ww946b#iefix") format("embedded-opentype"),
+    url("fonts/The-Icon-of.ttf?ww946b") format("truetype"),
+    url("fonts/The-Icon-of.woff?ww946b") format("woff"),
+    url("fonts/The-Icon-of.svg?ww946b#The-Icon-of") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="tio-"], [class*=" tio-"] {
+[class^="tio-"],
+[class*=" tio-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'The-Icon-of' !important;
+  font-family: "The-Icon-of" !important;
   font-size: 1.125em;
   speak: none;
   font-style: normal;
@@ -1694,7 +1695,7 @@
 .tio-poi-remove:before {
   content: "\eb25";
 }
-.tio-poi-user:before {
+.tio-poi-admin:before {
   content: "\eb26";
 }
 .tio-poi:before {
@@ -3422,24 +3423,24 @@
 .tio-group-senior:before {
   content: "\ed65";
 }
-.tio-user-add:before {
+.tio-admin-add:before {
   content: "\ed66";
 }
-.tio-user-big-outlined:before {
+.tio-admin-big-outlined:before {
   content: "\ed67";
 }
-.tio-user-big:before {
+.tio-admin-big:before {
   content: "\ed68";
 }
-.tio-user-outlined:before {
+.tio-admin-outlined:before {
   content: "\ed69";
 }
-.tio-user-switch:before {
+.tio-admin-switch:before {
   content: "\ed6a";
 }
-.tio-user:before {
+.tio-admin:before {
   content: "\ed6b";
 }
-.tio-users-switch:before {
+.tio-admins-switch:before {
   content: "\ed6c";
 }

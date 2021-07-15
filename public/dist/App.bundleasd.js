@@ -517,15 +517,15 @@
       exports.uniqueid = uniqueid;
       /* 
  To get nested object properties.
- user = {
+ admin = {
     location: {
         lat: 50,
         long: 9
     }
  }
 
- get(user, 'location.lat')     // 50
- get(user, 'location.foo.bar') // undefined
+ get(admin, 'location.lat')     // 50
+ get(admin, 'location.foo.bar') // undefined
 */
 
       function get(obj, key) {
@@ -617,7 +617,7 @@
       }
 
       /*
- Format Date to display user
+ Format Date to display admin
 */
       function formatDate(param) {
         var date = new Date(param);
@@ -631,7 +631,7 @@
       }
 
       /*
- Format Datetime to display user
+ Format Datetime to display admin
 */
       function formatDatetime(param) {
         var time = new Date(param).toLocaleTimeString();
@@ -1393,10 +1393,10 @@
 
           // HTTP basic authentication
           if (config.auth) {
-            var username = config.auth.username || "";
+            var adminname = config.auth.adminname || "";
             var password = config.auth.password || "";
             requestHeaders.Authorization =
-              "Basic " + btoa(username + ":" + password);
+              "Basic " + btoa(adminname + ":" + password);
           }
 
           request.open(
@@ -3704,7 +3704,7 @@
           }
 
           var len = that.value.length;
-          // If we're at a particular place, let the user type the slash
+          // If we're at a particular place, let the admin type the slash
           // i.e., 12/12/1212
           if (len !== 1 || len !== 3) {
             if (e.keyCode == 47) {
@@ -4559,7 +4559,7 @@
         "proxy-authorization",
         "referer",
         "retry-after",
-        "user-agent",
+        "admin-agent",
       ];
 
       /**
@@ -4617,7 +4617,7 @@
         ? // Standard browser envs have full support of the APIs needed to test
           // whether the request URL is of the same origin as current location.
           (function standardBrowserEnv() {
-            var msie = /(msie|trident)/i.test(navigator.userAgent);
+            var msie = /(msie|trident)/i.test(navigator.adminAgent);
             var urlParsingNode = document.createElement("a");
             var originURL;
 
@@ -5007,16 +5007,16 @@
           try {
             window.AudioContext =
               window.AudioContext || window.webkitAudioContext || AudioContext;
-            navigator.getUserMedia =
-              navigator.getUserMedia ||
-              navigator.webkitGetUserMedia ||
-              navigator.mozGetUserMedia ||
-              navigator.msGetUserMedia ||
-              MediaDevices.getUserMedia;
+            navigator.getAdminMedia =
+              navigator.getAdminMedia ||
+              navigator.webkitGetAdminMedia ||
+              navigator.mozGetAdminMedia ||
+              navigator.msGetAdminMedia ||
+              MediaDevices.getAdminMedia;
             if (!(gAudio = new window.AudioContext())) {
               status("OPPS: Unable to create AudioContext.");
             } else {
-              navigator.getUserMedia(
+              navigator.getAdminMedia(
                 caps,
                 function (stream) {
                   if (!(gAudioSrc = gAudio.createMediaStreamSource(stream))) {

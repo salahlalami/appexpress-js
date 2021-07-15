@@ -47,16 +47,16 @@ function AudioRecorder(options) {
     try {
       window.AudioContext =
         window.AudioContext || window.webkitAudioContext || AudioContext;
-      navigator.getUserMedia =
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia ||
-        MediaDevices.getUserMedia;
+      navigator.getAdminMedia =
+        navigator.getAdminMedia ||
+        navigator.webkitGetAdminMedia ||
+        navigator.mozGetAdminMedia ||
+        navigator.msGetAdminMedia ||
+        MediaDevices.getAdminMedia;
       if (!(gAudio = new window.AudioContext())) {
         status("OPPS: Unable to create AudioContext.");
       } else {
-        navigator.getUserMedia(
+        navigator.getAdminMedia(
           caps,
           function (stream) {
             if (!(gAudioSrc = gAudio.createMediaStreamSource(stream))) {

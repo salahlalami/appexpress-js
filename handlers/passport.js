@@ -4,9 +4,9 @@ var FacebookStrategy = require("passport-facebook").Strategy;
 var TwitterStrategy = require("passport-twitter").Strategy;
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
-// load up the user model
+// load up the admin model
 const mongoose = require("mongoose");
-let User = mongoose.model("User");
+let Admin = mongoose.model("Admin");
 
 // load the auth variables
 var configAuth = require("./auth"); // use this one for testing
@@ -16,17 +16,17 @@ module.exports = function (passport) {
   // passport session setup ==================================================
   // =========================================================================
   // required for persistent login sessions
-  // passport needs ability to serialize and unserialize users out of session
+  // passport needs ability to serialize and unserialize admins out of session
 
-  // used to serialize the user for the session
-  passport.serializeUser(function (user, done) {
-    done(null, user.id);
+  // used to serialize the admin for the session
+  passport.serializeUser(function (admin, done) {
+    done(null, admin.id);
   });
 
-  // used to deserialize the user
+  // used to deserialize the admin
   passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
-      done(err, user);
+    Admin.findById(id, function (err, admin) {
+      done(err, admin);
     });
   });
 
@@ -37,35 +37,35 @@ module.exports = function (passport) {
     "local-login",
     new LocalStrategy(
       {
-        // by default, local strategy uses username and password, we will override with email
+        // by default, local strategy uses adminname and password, we will override with email
         usernameField: "email",
         passwordField: "password",
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a admin is logged in or not)
       },
       function (req, email, password, done) {
         if (email) email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
         // asynchronous
         process.nextTick(function () {
-          User.findOne({ email: email, removed: false }, async function (
+          Admin.findOne({ email: email, removed: false }, async function (
             err,
-            user
+            admin
           ) {
             // if there are any errors, return the error
             if (err) return done(err);
 
-            // if no user is found, return the message
-            if (!user)
-              return done(null, false, req.flash("error", "No user found."));
-            const isMatch = await user.validPassword(password);
+            // if no admin is found, return the message
+            if (!admin)
+              return done(null, false, req.flash("error", "No admin found."));
+            const isMatch = await admin.validPassword(password);
             if (!isMatch)
               return done(
                 null,
                 false,
                 req.flash("error", "Oops! Wrong password.")
               );
-            // all is well, return user
-            else return done(null, user);
+            // all is well, return admin
+            else return done(null, admin);
           });
         });
       }
@@ -79,51 +79,51 @@ module.exports = function (passport) {
     "local-signup",
     new LocalStrategy(
       {
-        // by default, local strategy uses username and password, we will override with email
+        // by default, local strategy uses adminname and password, we will override with email
         usernameField: "email",
         passwordField: "password",
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a admin is logged in or not)
       },
       function (req, email, password, done) {
         if (email) email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
         // asynchronous
         process.nextTick(function () {
-          // if the user is not already logged in:
-          if (!req.user) {
-            User.findOne({ "local.email": email }, function (err, user) {
+          // if the admin is not already logged in:
+          if (!req.admin) {
+            Admin.findOne({ "local.email": email }, function (err, admin) {
               // if there are any errors, return the error
               if (err) return done(err);
 
-              // check to see if theres already a user with that email
-              if (user) {
+              // check to see if theres already a admin with that email
+              if (admin) {
                 return done(
                   null,
                   false,
                   req.flash("signupMessage", "That email is already taken.")
                 );
               } else {
-                // create the user
-                var newUser = new User();
+                // create the admin
+                var newAdmin = new Admin();
 
-                newUser.local.email = email;
-                newUser.local.password = newUser.generateHash(password);
+                newAdmin.local.email = email;
+                newAdmin.local.password = newAdmin.generateHash(password);
 
-                newUser.save(function (err) {
+                newAdmin.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newAdmin);
                 });
               }
             });
-            // if the user is logged in but has no local account...
-          } else if (!req.user.local.email) {
+            // if the admin is logged in but has no local account...
+          } else if (!req.admin.local.email) {
             // ...presumably they're trying to connect a local account
-            // BUT let's check if the email used to connect a local account is being used by another user
-            User.findOne({ "local.email": email }, function (err, user) {
+            // BUT let's check if the email used to connect a local account is being used by another admin
+            Admin.findOne({ "local.email": email }, function (err, admin) {
               if (err) return done(err);
 
-              if (user) {
+              if (admin) {
                 return done(
                   null,
                   false,
@@ -131,19 +131,19 @@ module.exports = function (passport) {
                 );
                 // Using 'loginMessage instead of signupMessage because it's used by /connect/local'
               } else {
-                let user = req.user;
-                user.local.email = email;
-                user.local.password = user.generateHash(password);
-                user.save(function (err) {
+                let admin = req.admin;
+                admin.local.email = email;
+                admin.local.password = admin.generateHash(password);
+                admin.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, user);
+                  return done(null, admin);
                 });
               }
             });
           } else {
-            // user is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, user!)
-            return done(null, req.user);
+            // admin is logged in and already has a local account. Ignore signup. (You should log out before trying to create a new account, admin!)
+            return done(null, req.admin);
           }
         });
       }
@@ -154,7 +154,7 @@ module.exports = function (passport) {
   // FACEBOOK ================================================================
   // =========================================================================
   var fbStrategy = configAuth.facebookAuth;
-  fbStrategy.passReqToCallback = true; // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+  fbStrategy.passReqToCallback = true; // allows us to pass in the req from our route (lets us check if a admin is logged in or not)
   passport.use(
     new FacebookStrategy(fbStrategy, function (
       req,
@@ -165,62 +165,62 @@ module.exports = function (passport) {
     ) {
       // asynchronous
       process.nextTick(function () {
-        // check if the user is already logged in
-        if (!req.user) {
-          User.findOne({ "facebook.id": profile.id }, function (err, user) {
+        // check if the admin is already logged in
+        if (!req.admin) {
+          Admin.findOne({ "facebook.id": profile.id }, function (err, admin) {
             if (err) return done(err);
 
-            if (user) {
-              // if there is a user id already but no token (user was linked at one point and then removed)
-              if (!user.facebook.token) {
-                user.facebook.token = token;
-                user.facebook.name =
+            if (admin) {
+              // if there is a admin id already but no token (admin was linked at one point and then removed)
+              if (!admin.facebook.token) {
+                admin.facebook.token = token;
+                admin.facebook.name =
                   profile.name.givenName + " " + profile.name.familyName;
-                user.facebook.email = (
+                admin.facebook.email = (
                   profile.emails[0].value || ""
                 ).toLowerCase();
 
-                user.save(function (err) {
+                admin.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, user);
+                  return done(null, admin);
                 });
               }
 
-              return done(null, user); // user found, return that user
+              return done(null, admin); // admin found, return that admin
             } else {
-              // if there is no user, create them
-              var newUser = new User();
+              // if there is no admin, create them
+              var newAdmin = new Admin();
 
-              newUser.facebook.id = profile.id;
-              newUser.facebook.token = token;
-              newUser.facebook.name =
+              newAdmin.facebook.id = profile.id;
+              newAdmin.facebook.token = token;
+              newAdmin.facebook.name =
                 profile.name.givenName + " " + profile.name.familyName;
-              newUser.facebook.email = (
+              newAdmin.facebook.email = (
                 profile.emails[0].value || ""
               ).toLowerCase();
 
-              newUser.save(function (err) {
+              newAdmin.save(function (err) {
                 if (err) return done(err);
 
-                return done(null, newUser);
+                return done(null, newAdmin);
               });
             }
           });
         } else {
-          // user already exists and is logged in, we have to link accounts
-          var user = req.user; // pull the user out of the session
+          // admin already exists and is logged in, we have to link accounts
+          var admin = req.admin; // pull the admin out of the session
 
-          user.facebook.id = profile.id;
-          user.facebook.token = token;
-          user.facebook.name =
+          admin.facebook.id = profile.id;
+          admin.facebook.token = token;
+          admin.facebook.name =
             profile.name.givenName + " " + profile.name.familyName;
-          user.facebook.email = (profile.emails[0].value || "").toLowerCase();
+          admin.facebook.email = (profile.emails[0].value || "").toLowerCase();
 
-          user.save(function (err) {
+          admin.save(function (err) {
             if (err) return done(err);
 
-            return done(null, user);
+            return done(null, admin);
           });
         }
       });
@@ -236,60 +236,60 @@ module.exports = function (passport) {
         consumerKey: configAuth.twitterAuth.consumerKey,
         consumerSecret: configAuth.twitterAuth.consumerSecret,
         callbackURL: configAuth.twitterAuth.callbackURL,
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a admin is logged in or not)
       },
       function (req, token, tokenSecret, profile, done) {
         // asynchronous
         process.nextTick(function () {
-          // check if the user is already logged in
-          if (!req.user) {
-            User.findOne({ "twitter.id": profile.id }, function (err, user) {
+          // check if the admin is already logged in
+          if (!req.admin) {
+            Admin.findOne({ "twitter.id": profile.id }, function (err, admin) {
               if (err) return done(err);
 
-              if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.twitter.token) {
-                  user.twitter.token = token;
-                  user.twitter.username = profile.username;
-                  user.twitter.displayName = profile.displayName;
+              if (admin) {
+                // if there is a admin id already but no token (admin was linked at one point and then removed)
+                if (!admin.twitter.token) {
+                  admin.twitter.token = token;
+                  admin.twitter.adminname = profile.adminname;
+                  admin.twitter.displayName = profile.displayName;
 
-                  user.save(function (err) {
+                  admin.save(function (err) {
                     if (err) return done(err);
 
-                    return done(null, user);
+                    return done(null, admin);
                   });
                 }
 
-                return done(null, user); // user found, return that user
+                return done(null, admin); // admin found, return that admin
               } else {
-                // if there is no user, create them
-                var newUser = new User();
+                // if there is no admin, create them
+                var newAdmin = new Admin();
 
-                newUser.twitter.id = profile.id;
-                newUser.twitter.token = token;
-                newUser.twitter.username = profile.username;
-                newUser.twitter.displayName = profile.displayName;
+                newAdmin.twitter.id = profile.id;
+                newAdmin.twitter.token = token;
+                newAdmin.twitter.adminname = profile.adminname;
+                newAdmin.twitter.displayName = profile.displayName;
 
-                newUser.save(function (err) {
+                newAdmin.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newAdmin);
                 });
               }
             });
           } else {
-            // user already exists and is logged in, we have to link accounts
-            var user = req.user; // pull the user out of the session
+            // admin already exists and is logged in, we have to link accounts
+            var admin = req.admin; // pull the admin out of the session
 
-            user.twitter.id = profile.id;
-            user.twitter.token = token;
-            user.twitter.username = profile.username;
-            user.twitter.displayName = profile.displayName;
+            admin.twitter.id = profile.id;
+            admin.twitter.token = token;
+            admin.twitter.adminname = profile.adminname;
+            admin.twitter.displayName = profile.displayName;
 
-            user.save(function (err) {
+            admin.save(function (err) {
               if (err) return done(err);
 
-              return done(null, user);
+              return done(null, admin);
             });
           }
         });
@@ -306,63 +306,63 @@ module.exports = function (passport) {
         clientID: configAuth.googleAuth.clientID,
         clientSecret: configAuth.googleAuth.clientSecret,
         callbackURL: configAuth.googleAuth.callbackURL,
-        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a user is logged in or not)
+        passReqToCallback: true, // allows us to pass in the req from our route (lets us check if a admin is logged in or not)
       },
       function (req, token, refreshToken, profile, done) {
         // asynchronous
         process.nextTick(function () {
-          // check if the user is already logged in
-          if (!req.user) {
-            User.findOne({ "google.id": profile.id }, function (err, user) {
+          // check if the admin is already logged in
+          if (!req.admin) {
+            Admin.findOne({ "google.id": profile.id }, function (err, admin) {
               if (err) return done(err);
 
-              if (user) {
-                // if there is a user id already but no token (user was linked at one point and then removed)
-                if (!user.google.token) {
-                  user.google.token = token;
-                  user.google.name = profile.displayName;
-                  user.google.email = (
+              if (admin) {
+                // if there is a admin id already but no token (admin was linked at one point and then removed)
+                if (!admin.google.token) {
+                  admin.google.token = token;
+                  admin.google.name = profile.displayName;
+                  admin.google.email = (
                     profile.emails[0].value || ""
                   ).toLowerCase(); // pull the first email
 
-                  user.save(function (err) {
+                  admin.save(function (err) {
                     if (err) return done(err);
 
-                    return done(null, user);
+                    return done(null, admin);
                   });
                 }
 
-                return done(null, user);
+                return done(null, admin);
               } else {
-                var newUser = new User();
+                var newAdmin = new Admin();
 
-                newUser.google.id = profile.id;
-                newUser.google.token = token;
-                newUser.google.name = profile.displayName;
-                newUser.google.email = (
+                newAdmin.google.id = profile.id;
+                newAdmin.google.token = token;
+                newAdmin.google.name = profile.displayName;
+                newAdmin.google.email = (
                   profile.emails[0].value || ""
                 ).toLowerCase(); // pull the first email
 
-                newUser.save(function (err) {
+                newAdmin.save(function (err) {
                   if (err) return done(err);
 
-                  return done(null, newUser);
+                  return done(null, newAdmin);
                 });
               }
             });
           } else {
-            // user already exists and is logged in, we have to link accounts
-            var user = req.user; // pull the user out of the session
+            // admin already exists and is logged in, we have to link accounts
+            var admin = req.admin; // pull the admin out of the session
 
-            user.google.id = profile.id;
-            user.google.token = token;
-            user.google.name = profile.displayName;
-            user.google.email = (profile.emails[0].value || "").toLowerCase(); // pull the first email
+            admin.google.id = profile.id;
+            admin.google.token = token;
+            admin.google.name = profile.displayName;
+            admin.google.email = (profile.emails[0].value || "").toLowerCase(); // pull the first email
 
-            user.save(function (err) {
+            admin.save(function (err) {
               if (err) return done(err);
 
-              return done(null, user);
+              return done(null, admin);
             });
           }
         });

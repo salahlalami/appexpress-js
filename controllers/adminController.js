@@ -2,82 +2,6 @@ const mongoose = require("mongoose");
 const Admin = mongoose.model("Admin");
 const getOne = require("./helpersControllers/custom").getOne;
 
-// exports.listOld = async (req, res) => {
-//   const page = req.query.page || 1;
-//   const limit = parseInt(req.query.items) || 10;
-//   const skip = page * limit - limit;
-//   try {
-//     //  Query the database for a list of all results
-//     const resultsPromise = Admin.aggregate([
-//       {
-//         $match: {
-//           removed: false,
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 1,
-//           enabled: 1,
-//           email: 1,
-//           name: 1,
-//           surname: 1,
-//           accountType: 1,
-//           role: 1,
-//           employee: 1,
-//           doctor: 1,
-//         },
-//       },
-//     ])
-//       .skip(skip)
-//       .limit(limit)
-//       .sort({ created: "desc" });
-
-//     // Counting the total documents
-//     const countPromise = Admin.count({ removed: false });
-//     const rolePromise = Role.find();
-//     // Resolving both promises
-//     const [result, count, roles] = await Promise.all([
-//       resultsPromise,
-//       countPromise,
-//       rolePromise,
-//     ]);
-
-//     for (let admin of result) {
-//       let found = null;
-//       for (let adminRole of roles) {
-//         if (JSON.stringify(adminRole._id) == JSON.stringify(admin.role)) {
-//           found = adminRole;
-//           console.log("found : " + found);
-//           break;
-//         }
-//       }
-//       if (found != null) admin.role = found;
-//     }
-//     const pages = Math.ceil(count / limit);
-
-//     // Getting Pagination Object
-//     const pagination = { page, pages, count };
-//     if (count > 0) {
-//       return res.status(200).json({
-//         success: true,
-//         result,
-//         pagination,
-//         message: "Successfully found all documents",
-//       });
-//     } else {
-//       return res.status(203).json({
-//         success: false,
-//         result: [],
-//         pagination,
-//         message: "Collection is Empty",
-//       });
-//     }
-//   } catch {
-//     return res
-//       .status(500)
-//       .json({ success: false, result: [], message: "Oops there is an Error" });
-//   }
-// };
 /**
  *  Get all documents of a Model
  *  @param {Object} req.params
@@ -147,16 +71,16 @@ exports.profile = async (req, res) => {
       name: req.admin.name,
       surname: req.admin.surname,
       photo: req.admin.photo,
-      accountType: req.admin.accountType,
+
       role: req.admin.role,
-      doctor: req.admin.doctor,
+
       employee: req.admin.employee,
     };
 
     return res.status(200).json({
       success: true,
       result,
-      message: "Successfully found all documents",
+      message: "Successfully found Profile",
     });
   } catch {
     return res.status(500).json({
@@ -195,9 +119,7 @@ exports.photo = async (req, res) => {
         name: tmpResult.name,
         surname: tmpResult.surname,
         photo: tmpResult.photo,
-        accountType: tmpResult.accountType,
         role: tmpResult.role,
-        doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
 
@@ -239,9 +161,7 @@ exports.read = async (req, res) => {
         name: tmpResult.name,
         surname: tmpResult.surname,
         photo: tmpResult.photo,
-        accountType: tmpResult.accountType,
         role: tmpResult.role,
-        doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
 
@@ -269,7 +189,6 @@ exports.read = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const accountType = req.body.accountType;
     let { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({
@@ -293,20 +212,9 @@ exports.create = async (req, res) => {
         result: null,
         message: "The password needs to be at least 8 characters long.",
       });
-    // if (password !== passwordCheck)
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "Enter the same password twice for verification." });
-    let doctor;
-    let employee;
-    if (accountType === "doctor") {
-      doctor = await getOne("Doctor", req.body.doctor);
-      req.body.employee = undefined;
-      req.body.name = doctor.name;
-      req.body.surname = doctor.surname;
-    } else if (accountType === "employee") {
-      employee = await getOne("Employee", req.body.employee);
-      req.body.doctor = undefined;
+
+    if (req.body.employee) {
+      let employee = await getOne("Employee", req.body.employee);
       req.body.name = employee.name;
       req.body.surname = employee.surname;
     }
@@ -331,9 +239,7 @@ exports.create = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
         role: result.role,
-        doctor: result.doctor,
         employee: result.employee,
       },
       message: "Admin document save correctly",
@@ -363,7 +269,7 @@ exports.update = async (req, res) => {
     }
 
     let updates = {
-      role: req.body.role,
+      role: req.body.role._id,
       email: req.body.email,
     };
 
@@ -392,8 +298,7 @@ exports.update = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
-        doctor: result.doctor,
+        role: result.role,
         employee: result.employee,
       },
       message: "we update this document by this id: " + req.params.id,
@@ -454,9 +359,7 @@ exports.updatePassword = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
         role: result.role,
-        doctor: result.doctor,
         employee: result.employee,
       },
       message: "we update the password by this id: " + req.params.id,
@@ -509,7 +412,7 @@ exports.delete = async (req, res) => {
 
 exports.status = async (req, res) => {
   try {
-    if (req.query.enabled == "true" || req.query.enabled == "false") {
+    if (req.query.enabled === true || req.query.enabled === false) {
       let updates = {
         enabled: req.query.enabled,
       };

@@ -269,7 +269,7 @@ exports.update = async (req, res) => {
     }
 
     let updates = {
-      role: req.body.role._id,
+      role: req.body.role,
       email: req.body.email,
     };
 

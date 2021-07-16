@@ -22,12 +22,12 @@
 <path class="st4" d="M150,0c-2.1,0-4.1,0.7-5.7,1.8L80,48.6l0,0l0,0L15.7,1.8C14.1,0.6,12.1,0,10,0H150z"/>
 <path class="st5" d="M20,34L3.2,17.3l0,0c0.4,0.3,0.7,0.6,1.1,0.9L4,18l16,11.6l0,4.4"/>
 <path class="st6" d="M68.9,82L20,120l0-86.5L68.9,82"/>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-5.6241" y1="116.5692" x2="-4.0567" y2="116.5692" gradientTransform="matrix(38.2761 0 0 -38.2761 235.2731 4517.6318)">
+<linearGradient id="SVGID_1_" gradientUnits="adminSpaceOnUse" x1="-5.6241" y1="116.5692" x2="-4.0567" y2="116.5692" gradientTransform="matrix(38.2761 0 0 -38.2761 235.2731 4517.6318)">
 	<stop  offset="0" style="stop-color:#C8C8C8"/>
 	<stop  offset="1" style="stop-color:#CDCDCD"/>
 </linearGradient>
 <path class="st7" d="M68.9,82L80,73.3L20,29.7v3.9L68.9,82L68.9,82z"/>
-<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="-4.3471" y1="116.0725" x2="-2.4891" y2="116.0725" gradientTransform="matrix(38.2761 0 0 -38.2761 235.2731 4517.6318)">
+<linearGradient id="SVGID_2_" gradientUnits="adminSpaceOnUse" x1="-4.3471" y1="116.0725" x2="-2.4891" y2="116.0725" gradientTransform="matrix(38.2761 0 0 -38.2761 235.2731 4517.6318)">
 	<stop  offset="0" style="stop-color:#D9D9D9"/>
 	<stop  offset="1" style="stop-color:#E2E2E2"/>
 </linearGradient>

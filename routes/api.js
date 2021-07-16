@@ -6,7 +6,7 @@ const { catchErrors } = require("../handlers/errorHandlers");
 
 const router = express.Router();
 
-const userController = require("../controllers/userController");
+const adminController = require("../controllers/adminController");
 const roleController = require("../controllers/roleController");
 const permissionController = require("../controllers/permissionController");
 
@@ -50,41 +50,41 @@ const customMenuController = require("../controllers/customMenuController");
 // const permissionMiddleware = require("../middlewares/permissionMiddleware");
 // const settingMiddleware = require("../middlewares/settingMiddleware");
 
-// //_______________________________ User management_______________________________
+// //_______________________________ Admin management_______________________________
 
-var userPhotoStorage = multer.diskStorage({
+var adminPhotoStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/user");
+    cb(null, "public/uploads/admin");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-const userPhotoUpload = multer({ storage: userPhotoStorage });
+const adminPhotoUpload = multer({ storage: adminPhotoStorage });
 
 router
-  .route("/user/create")
+  .route("/admin/create")
   .post(
-    [userPhotoUpload.single("photo"), setFilePathToBody],
-    catchErrors(userController.create)
+    [adminPhotoUpload.single("photo"), setFilePathToBody],
+    catchErrors(adminController.create)
   );
-router.route("/user/read/:id").get(catchErrors(userController.read));
-router.route("/user/update/:id").patch(catchErrors(userController.update));
-router.route("/user/delete/:id").delete(catchErrors(userController.delete));
-router.route("/user/search").get(catchErrors(userController.search));
-router.route("/user/list").get(catchErrors(userController.list));
-router.route("/user/profile").get(catchErrors(userController.profile));
-router.route("/user/status/:id").patch(catchErrors(userController.status));
+router.route("/admin/read/:id").get(catchErrors(adminController.read));
+router.route("/admin/update/:id").patch(catchErrors(adminController.update));
+router.route("/admin/delete/:id").delete(catchErrors(adminController.delete));
+router.route("/admin/search").get(catchErrors(adminController.search));
+router.route("/admin/list").get(catchErrors(adminController.list));
+router.route("/admin/profile").get(catchErrors(adminController.profile));
+router.route("/admin/status/:id").patch(catchErrors(adminController.status));
 router
-  .route("/user/photo")
+  .route("/admin/photo")
   .post(
-    [userPhotoUpload.single("photo"), setFilePathToBody],
-    catchErrors(userController.photo)
+    [adminPhotoUpload.single("photo"), setFilePathToBody],
+    catchErrors(adminController.photo)
   );
 router
-  .route("/user/password-update/:id")
-  .patch(catchErrors(userController.updatePassword));
-//list of users ends here
+  .route("/admin/password-update/:id")
+  .patch(catchErrors(adminController.updatePassword));
+//list of admins ends here
 
 // //____________________________ role management_______________________________
 
@@ -97,7 +97,7 @@ router.route("/role/list").get(catchErrors(roleController.list));
 router.route("/role/filter").get(catchErrors(roleController.filter));
 
 // //_________________________________________________________________ permissions management_______________________________
-// // this route is used to get get the list of the users that we can give permissions to
+// // this route is used to get get the list of the admins that we can give permissions to
 
 router
   .route("/permission/create")
@@ -850,23 +850,23 @@ router
 // });
 
 // router.get(
-//   "/permissions/users",
+//   "/permissions/admins",
 //   permissionMiddleware("employees-read"),
-//   permissionController.getUsers
+//   permissionController.getAdmins
 // );
-// // this route is used to get a list of the permissions of the chosed used ( user _id passed as a param in the link)
+// // this route is used to get a list of the permissions of the chosed used ( admin _id passed as a param in the link)
 // router.get(
-//   "/permissions/users/:_id",
+//   "/permissions/admins/:_id",
 //   permissionMiddleware("employees-read"),
-//   permissionController.getUserPermissions
+//   permissionController.getAdminPermissions
 // );
-// // this route is used to update the permissions of the selected user ( the user is pre selected throw the previous)
+// // this route is used to update the permissions of the selected admin ( the admin is pre selected throw the previous)
 // router.post(
-//   "/permissions/users/update",
+//   "/permissions/admins/update",
 //   permissionMiddleware("employees-update"),
-//   permissionController.updateUserPermissions
+//   permissionController.updateAdminPermissions
 // );
-// //router.post('/roles',permissionMiddleware('admin-create'), roleController.setUpUserWithRole);
+// //router.post('/roles',permissionMiddleware('administrator-create'), roleController.setUpAdminWithRole);
 
 // // Hello salah, this is just a test !
 // //  we can delete this later

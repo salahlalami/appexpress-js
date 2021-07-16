@@ -1,83 +1,7 @@
 const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const Admin = mongoose.model("Admin");
 const getOne = require("./helpersControllers/custom").getOne;
 
-// exports.listOld = async (req, res) => {
-//   const page = req.query.page || 1;
-//   const limit = parseInt(req.query.items) || 10;
-//   const skip = page * limit - limit;
-//   try {
-//     //  Query the database for a list of all results
-//     const resultsPromise = User.aggregate([
-//       {
-//         $match: {
-//           removed: false,
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 1,
-//           enabled: 1,
-//           email: 1,
-//           name: 1,
-//           surname: 1,
-//           accountType: 1,
-//           role: 1,
-//           employee: 1,
-//           doctor: 1,
-//         },
-//       },
-//     ])
-//       .skip(skip)
-//       .limit(limit)
-//       .sort({ created: "desc" });
-
-//     // Counting the total documents
-//     const countPromise = User.count({ removed: false });
-//     const rolePromise = Role.find();
-//     // Resolving both promises
-//     const [result, count, roles] = await Promise.all([
-//       resultsPromise,
-//       countPromise,
-//       rolePromise,
-//     ]);
-
-//     for (let user of result) {
-//       let found = null;
-//       for (let userRole of roles) {
-//         if (JSON.stringify(userRole._id) == JSON.stringify(user.role)) {
-//           found = userRole;
-//           console.log("found : " + found);
-//           break;
-//         }
-//       }
-//       if (found != null) user.role = found;
-//     }
-//     const pages = Math.ceil(count / limit);
-
-//     // Getting Pagination Object
-//     const pagination = { page, pages, count };
-//     if (count > 0) {
-//       return res.status(200).json({
-//         success: true,
-//         result,
-//         pagination,
-//         message: "Successfully found all documents",
-//       });
-//     } else {
-//       return res.status(203).json({
-//         success: false,
-//         result: [],
-//         pagination,
-//         message: "Collection is Empty",
-//       });
-//     }
-//   } catch {
-//     return res
-//       .status(500)
-//       .json({ success: false, result: [], message: "Oops there is an Error" });
-//   }
-// };
 /**
  *  Get all documents of a Model
  *  @param {Object} req.params
@@ -90,13 +14,13 @@ exports.list = async (req, res) => {
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = User.find({ removed: false })
+    const resultsPromise = Admin.find({ removed: false })
       .skip(skip)
       .limit(limit)
       .sort({ created: "desc" })
       .populate();
     // Counting the total documents
-    const countPromise = User.count({ removed: false });
+    const countPromise = Admin.count({ removed: false });
     // Resolving both promises
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
     // Calculating total pages
@@ -105,10 +29,10 @@ exports.list = async (req, res) => {
     // Getting Pagination Object
     const pagination = { page, pages, count };
     if (count > 0) {
-      for (let user of result) {
-        user.password = undefined;
-        user.customMenu = undefined;
-        user.permissions = undefined;
+      for (let admin of result) {
+        admin.password = undefined;
+        admin.customMenu = undefined;
+        admin.permissions = undefined;
       }
       return res.status(200).json({
         success: true,
@@ -133,30 +57,30 @@ exports.list = async (req, res) => {
 exports.profile = async (req, res) => {
   try {
     //  Query the database for a list of all results
-    if (!req.user) {
+    if (!req.admin) {
       return res.status(404).json({
         success: false,
         result: null,
-        message: "couldn't found  user Profile ",
+        message: "couldn't found  admin Profile ",
       });
     }
     let result = {
-      _id: req.user._id,
-      enabled: req.user.enabled,
-      email: req.user.email,
-      name: req.user.name,
-      surname: req.user.surname,
-      photo: req.user.photo,
-      accountType: req.user.accountType,
-      role: req.user.role,
-      doctor: req.user.doctor,
-      employee: req.user.employee,
+      _id: req.admin._id,
+      enabled: req.admin.enabled,
+      email: req.admin.email,
+      name: req.admin.name,
+      surname: req.admin.surname,
+      photo: req.admin.photo,
+
+      role: req.admin.role,
+
+      employee: req.admin.employee,
     };
 
     return res.status(200).json({
       success: true,
       result,
-      message: "Successfully found all documents",
+      message: "Successfully found Profile",
     });
   } catch {
     return res.status(500).json({
@@ -174,8 +98,8 @@ exports.photo = async (req, res) => {
       photo: req.body.photo,
     };
 
-    const tmpResult = await User.findOneAndUpdate(
-      { _id: req.user._id, removed: false },
+    const tmpResult = await Admin.findOneAndUpdate(
+      { _id: req.admin._id, removed: false },
       { $set: updates },
       { new: true, runValidators: true, context: "query" }
     );
@@ -195,9 +119,7 @@ exports.photo = async (req, res) => {
         name: tmpResult.name,
         surname: tmpResult.surname,
         photo: tmpResult.photo,
-        accountType: tmpResult.accountType,
         role: tmpResult.role,
-        doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
 
@@ -219,7 +141,7 @@ exports.photo = async (req, res) => {
 exports.read = async (req, res) => {
   try {
     // Find document by id
-    const tmpResult = await User.findOne({
+    const tmpResult = await Admin.findOne({
       _id: req.params.id,
       removed: false,
     });
@@ -239,9 +161,7 @@ exports.read = async (req, res) => {
         name: tmpResult.name,
         surname: tmpResult.surname,
         photo: tmpResult.photo,
-        accountType: tmpResult.accountType,
         role: tmpResult.role,
-        doctor: tmpResult.doctor,
         employee: tmpResult.employee,
       };
 
@@ -269,7 +189,6 @@ exports.read = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const accountType = req.body.accountType;
     let { email, password } = req.body;
     if (!email || !password)
       return res.status(400).json({
@@ -278,9 +197,9 @@ exports.create = async (req, res) => {
         message: "Email or password fields they don't have been entered.",
       });
 
-    const existingUser = await User.findOne({ email: email });
+    const existingAdmin = await Admin.findOne({ email: email });
 
-    if (existingUser)
+    if (existingAdmin)
       return res.status(400).json({
         success: false,
         result: null,
@@ -293,28 +212,17 @@ exports.create = async (req, res) => {
         result: null,
         message: "The password needs to be at least 8 characters long.",
       });
-    // if (password !== passwordCheck)
-    //   return res
-    //     .status(400)
-    //     .json({ msg: "Enter the same password twice for verification." });
-    let doctor;
-    let employee;
-    if (accountType === "doctor") {
-      doctor = await getOne("Doctor", req.body.doctor);
-      req.body.employee = undefined;
-      req.body.name = doctor.name;
-      req.body.surname = doctor.surname;
-    } else if (accountType === "employee") {
-      employee = await getOne("Employee", req.body.employee);
-      req.body.doctor = undefined;
+
+    if (req.body.employee) {
+      let employee = await getOne("Employee", req.body.employee);
       req.body.name = employee.name;
       req.body.surname = employee.surname;
     }
-    var newUser = new User();
-    const passwordHash = newUser.generateHash(password);
+    var newAdmin = new Admin();
+    const passwordHash = newAdmin.generateHash(password);
     req.body.password = passwordHash;
 
-    const result = await new User(req.body).save();
+    const result = await new Admin(req.body).save();
     if (!result) {
       return res.status(403).json({
         success: false,
@@ -331,12 +239,10 @@ exports.create = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
         role: result.role,
-        doctor: result.doctor,
         employee: result.employee,
       },
-      message: "User document save correctly",
+      message: "Admin document save correctly",
     });
   } catch {
     return res.status(500).json({ success: false, message: "there is error" });
@@ -354,9 +260,9 @@ exports.update = async (req, res) => {
     let { email } = req.body;
 
     if (email) {
-      const existingUser = await User.findOne({ email: email });
+      const existingAdmin = await Admin.findOne({ email: email });
 
-      if (existingUser._id != req.params.id)
+      if (existingAdmin._id != req.params.id)
         return res
           .status(400)
           .json({ message: "An account with this email already exists." });
@@ -368,7 +274,7 @@ exports.update = async (req, res) => {
     };
 
     // Find document by id and updates with the required fields
-    const result = await User.findOneAndUpdate(
+    const result = await Admin.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -392,8 +298,7 @@ exports.update = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
-        doctor: result.doctor,
+        role: result.role,
         employee: result.employee,
       },
       message: "we update this document by this id: " + req.params.id,
@@ -424,14 +329,14 @@ exports.updatePassword = async (req, res) => {
     //   return res
     //     .status(400)
     //     .json({ msg: "Enter the same password twice for verification." });
-    var newUser = new User();
-    const passwordHash = newUser.generateHash(password);
+    var newAdmin = new Admin();
+    const passwordHash = newAdmin.generateHash(password);
     let updates = {
       password: passwordHash,
     };
 
     // Find document by id and updates with the required fields
-    const result = await User.findOneAndUpdate(
+    const result = await Admin.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -454,9 +359,7 @@ exports.updatePassword = async (req, res) => {
         name: result.name,
         surname: result.surname,
         photo: result.photo,
-        accountType: result.accountType,
         role: result.role,
-        doctor: result.doctor,
         employee: result.employee,
       },
       message: "we update the password by this id: " + req.params.id,
@@ -477,7 +380,7 @@ exports.delete = async (req, res) => {
       removed: true,
     };
     // Find the document by id and delete it
-    const result = await User.findOneAndUpdate(
+    const result = await Admin.findOneAndUpdate(
       { _id: req.params.id, removed: false },
       { $set: updates },
       {
@@ -509,12 +412,12 @@ exports.delete = async (req, res) => {
 
 exports.status = async (req, res) => {
   try {
-    if (req.query.enabled == "true" || req.query.enabled == "false") {
+    if (req.query.enabled === true || req.query.enabled === false) {
       let updates = {
         enabled: req.query.enabled,
       };
       // Find the document by id and delete it
-      const result = await User.findOneAndUpdate(
+      const result = await Admin.findOneAndUpdate(
         { _id: req.params.id, removed: false },
         { $set: updates },
         {
@@ -543,7 +446,7 @@ exports.status = async (req, res) => {
         .json({
           success: false,
           result: [],
-          message: "couldn't change user status by this request",
+          message: "couldn't change admin status by this request",
         })
         .end();
     }
@@ -584,7 +487,7 @@ exports.search = async (req, res) => {
     for (const field of fieldsArray) {
       fields.$or.push({ [field]: { $regex: new RegExp(req.query.q, "i") } });
     }
-    let result = await User.find(fields)
+    let result = await Admin.find(fields)
       .where("removed", false)
       .sort({ name: "asc" })
       .limit(10);
@@ -620,7 +523,7 @@ exports.filter = async (req, res) => {
         message: "filter not provided correctly",
       });
     }
-    const result = await User.find({ removed: false })
+    const result = await Admin.find({ removed: false })
       .where(req.query.filter)
       .equals(req.query.equal);
     return res.status(200).json({

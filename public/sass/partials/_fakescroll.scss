@@ -56,7 +56,7 @@
 body.fakeScroll--grabbed {
   cursor: -moz-grabbing;
   cursor: -webkit-grabbing;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
+  -moz-admin-select: none;
+  -webkit-admin-select: none;
+  admin-select: none;
 }

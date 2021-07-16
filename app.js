@@ -32,14 +32,14 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Exposes a bunch of methods for validating data. Used heavily on userController.validateRegister
+// Exposes a bunch of methods for validating data. Used heavily on adminController.validateRegister
 // app.use(expressValidator());
 
 // populates req.cookies with any cookies that came along with the request
 app.use(cookieParser());
 
 // Sessions allow us to Contact data on visitors from request to request
-// This keeps users logged in and allows us to send flash messages
+// This keeps admins logged in and allows us to send flash messages
 app.use(
   session({
     secret: process.env.SECRET,
@@ -54,14 +54,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// // The flash middleware let's us use req.flash('error', 'Shit!'), which will then pass that message to the next page the user requests
+// // The flash middleware let's us use req.flash('error', 'Shit!'), which will then pass that message to the next page the admin requests
 app.use(flash());
 
 // pass variables to our templates + all requests
 app.use((req, res, next) => {
   res.locals.h = helpers;
   res.locals.flashes = req.flash();
-  res.locals.user = req.user || null;
+  res.locals.admin = req.admin || null;
   res.locals.currentPath = req.path;
   next();
 });
@@ -85,8 +85,8 @@ app.use(settingsApp);
 
 // After allllll that above middleware, we finally handle our own routes!
 app.use(authRouter);
-
-app.use(isLoggedIn, pageRouter);
+// app.use(isLoggedIn, pageRouter);
+app.use(pageRouter);
 // Here our API Routes
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

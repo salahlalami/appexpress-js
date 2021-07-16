@@ -1,5 +1,5 @@
 {
-  "name": "appcedimed",
+  "name": "appexpress-js",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -95,10 +95,10 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/idurar/appcedimed.git"
+    "url": "git+https://github.com/idurar/appexpress-js.git"
   },
   "bugs": {
-    "url": "https://github.com/idurar/appcedimed/issues"
+    "url": "https://github.com/idurar/appexpress-js/issues"
   },
-  "homepage": "https://github.com/idurar/appcedimed#readme"
+  "homepage": "https://github.com/idurar/appexpress-js#readme"
 }

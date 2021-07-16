@@ -1,11 +1,11 @@
 // const promisify = require("es6-promisify");
 
 const mongoose = require("mongoose");
-const Model = mongoose.model("User");
+const Model = mongoose.model("Admin");
 const crudController = require("./helpersControllers/crudController");
 // const custom = require("./helpersControllers/custom");
 
-let methods = crudController.createCRUDController("User");
+let methods = crudController.createCRUDController("Admin");
 
 delete methods["create"];
 delete methods["update"];
@@ -15,7 +15,7 @@ exports.create = async (req, res) => {
     // Creating a new document in the collection
 
     const exist = await Model.findOne({ email: req.body.email });
-    console.log(`exist User value : ${exist}`);
+    console.log(`exist Admin value : ${exist}`);
     if (exist === null) {
       const result = await new Model(req.body).save();
 
@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
       res.status(400).json({
         success: true,
         result: null,
-        message: `User Exist with this mail : ${req.body.email} `,
+        message: `Admin Exist with this mail : ${req.body.email} `,
       });
     }
   } catch (err) {
@@ -81,7 +81,7 @@ exports.update = async (req, res) => {
       res.status(400).json({
         success: true,
         result: null,
-        message: `User Exist with this mail : ${req.body.email} `,
+        message: `Admin Exist with this mail : ${req.body.email} `,
       });
     }
   } catch (err) {

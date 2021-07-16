@@ -7,7 +7,7 @@ var sayHi = function (options) {
     selector: "#app",
   };
 
-  // Merge user options into defaults
+  // Merge admin options into defaults
   var settings = Object.assign({}, defaults, options);
 
   // Do something...

@@ -39,8 +39,8 @@
 
                     <div class="col-sm-auto">
                         <a class="btn btn-primary" href="javascript:;" data-toggle="modal"
-                            data-target="#inviteUserModal">
-                            <i class="tio-user-add mr-1"></i> Invite users
+                            data-target="#inviteAdminModal">
+                            <i class="tio-admin-add mr-1"></i> Invite admins
                         </a>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                     <!-- Card -->
                     <a class="card card-hover-shadow h-100" href="#">
                         <div class="card-body">
-                            <h6 class="card-subtitle">Total Users</h6>
+                            <h6 class="card-subtitle">Total Admins</h6>
 
                             <div class="row align-items-center gx-2 mb-1">
                                 <div class="col-6">
@@ -348,12 +348,12 @@
 
                         <!-- Body -->
                         <div class="card-body">
-                            <p>See and talk to your users and leads immediately by importing your data into the Front
+                            <p>See and talk to your admins and leads immediately by importing your data into the Front
                                 Dashboard platform.</p>
 
                             <ul class="list-group list-group-flush list-group-no-gutters">
                                 <li class="list-group-item py-3">
-                                    <h5 class="modal-title">Import users from:</h5>
+                                    <h5 class="modal-title">Import admins from:</h5>
                                 </li>
 
                                 <!-- List Group Item -->
@@ -367,7 +367,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col">
                                                     <h5 class="mb-0">Capsule</h5>
-                                                    <span class="d-block font-size-sm">Users</span>
+                                                    <span class="d-block font-size-sm">Admins</span>
                                                 </div>
 
                                                 <div class="col-auto">
@@ -395,7 +395,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col">
                                                     <h5 class="mb-0">Mailchimp</h5>
-                                                    <span class="d-block font-size-sm">Users</span>
+                                                    <span class="d-block font-size-sm">Admins</span>
                                                 </div>
 
                                                 <div class="col-auto">
@@ -423,7 +423,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col">
                                                     <h5 class="mb-0">Webdev</h5>
-                                                    <span class="d-block font-size-sm">Users</span>
+                                                    <span class="d-block font-size-sm">Admins</span>
                                                 </div>
 
                                                 <div class="col-auto">
@@ -579,7 +579,7 @@
                     <div class="row justify-content-between align-items-center flex-grow-1">
                         <div class="col-12 col-md">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="card-header-title">Users</h5>
+                                <h5 class="card-header-title">Admins</h5>
 
                                 <!-- Datatable Info -->
                                 <div id="datatableCounterInfo" style="display: none;">
@@ -651,7 +651,7 @@
                                                 </div>
                                             </div>
                                             <input id="datatableSearch" type="search" class="form-control"
-                                                placeholder="Search users" aria-label="Search users">
+                                                placeholder="Search admins" aria-label="Search admins">
                                         </div>
                                         <!-- End Search -->
                                     </form>
@@ -696,7 +696,7 @@
                                 <th>Type</th>
                                 <th>Email</th>
                                 <th>Signed up</th>
-                                <th>User ID</th>
+                                <th>Admin ID</th>
                             </tr>
                         </thead>
 
@@ -704,12 +704,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck2">
-                                        <label class="custom-control-label" for="usersDataCheck2"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck2">
+                                        <label class="custom-control-label" for="adminsDataCheck2"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img10.jpg"
                                                 alt="Image Description">
@@ -733,12 +733,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck3">
-                                        <label class="custom-control-label" for="usersDataCheck3"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck3">
+                                        <label class="custom-control-label" for="adminsDataCheck3"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-primary avatar-circle mr-2">
                                             <span class="avatar-initials">A</span>
                                         </div>
@@ -759,12 +759,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck4">
-                                        <label class="custom-control-label" for="usersDataCheck4"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck4">
+                                        <label class="custom-control-label" for="adminsDataCheck4"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img3.jpg"
                                                 alt="Image Description">
@@ -786,12 +786,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck5">
-                                        <label class="custom-control-label" for="usersDataCheck5"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck5">
+                                        <label class="custom-control-label" for="adminsDataCheck5"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img5.jpg"
                                                 alt="Image Description">
@@ -813,12 +813,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck6">
-                                        <label class="custom-control-label" for="usersDataCheck6"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck6">
+                                        <label class="custom-control-label" for="adminsDataCheck6"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-dark avatar-circle mr-2">
                                             <span class="avatar-initials">B</span>
                                         </div>
@@ -839,12 +839,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck7">
-                                        <label class="custom-control-label" for="usersDataCheck7"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck7">
+                                        <label class="custom-control-label" for="adminsDataCheck7"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img9.jpg"
                                                 alt="Image Description">
@@ -868,12 +868,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck8">
-                                        <label class="custom-control-label" for="usersDataCheck8"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck8">
+                                        <label class="custom-control-label" for="adminsDataCheck8"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img4.jpg"
                                                 alt="Image Description">
@@ -895,12 +895,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck9">
-                                        <label class="custom-control-label" for="usersDataCheck9"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck9">
+                                        <label class="custom-control-label" for="adminsDataCheck9"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img6.jpg"
                                                 alt="Image Description">
@@ -922,12 +922,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck10">
-                                        <label class="custom-control-label" for="usersDataCheck10"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck10">
+                                        <label class="custom-control-label" for="adminsDataCheck10"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-primary avatar-circle mr-2">
                                             <span class="avatar-initials">R</span>
                                         </div>
@@ -948,12 +948,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck11">
-                                        <label class="custom-control-label" for="usersDataCheck11"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck11">
+                                        <label class="custom-control-label" for="adminsDataCheck11"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-dark avatar-circle mr-2">
                                             <span class="avatar-initials">B</span>
                                         </div>
@@ -974,12 +974,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck12">
-                                        <label class="custom-control-label" for="usersDataCheck12"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck12">
+                                        <label class="custom-control-label" for="adminsDataCheck12"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img8.jpg"
                                                 alt="Image Description">
@@ -1001,12 +1001,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck13">
-                                        <label class="custom-control-label" for="usersDataCheck13"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck13">
+                                        <label class="custom-control-label" for="adminsDataCheck13"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-info avatar-circle mr-2">
                                             <span class="avatar-initials">C</span>
                                         </div>
@@ -1029,12 +1029,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck14">
-                                        <label class="custom-control-label" for="usersDataCheck14"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck14">
+                                        <label class="custom-control-label" for="adminsDataCheck14"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-dark avatar-circle mr-2">
                                             <span class="avatar-initials">L</span>
                                         </div>
@@ -1055,12 +1055,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck15">
-                                        <label class="custom-control-label" for="usersDataCheck15"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck15">
+                                        <label class="custom-control-label" for="adminsDataCheck15"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-circle mr-2">
                                             <img class="avatar-img" src="/dist/assets/img/160x160/img7.jpg"
                                                 alt="Image Description">
@@ -1084,12 +1084,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck16">
-                                        <label class="custom-control-label" for="usersDataCheck16"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck16">
+                                        <label class="custom-control-label" for="adminsDataCheck16"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-danger avatar-circle mr-2">
                                             <span class="avatar-initials">M</span>
                                         </div>
@@ -1110,12 +1110,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck17">
-                                        <label class="custom-control-label" for="usersDataCheck17"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck17">
+                                        <label class="custom-control-label" for="adminsDataCheck17"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-info avatar-circle mr-2">
                                             <span class="avatar-initials">J</span>
                                         </div>
@@ -1136,12 +1136,12 @@
                             <tr>
                                 <td class="table-column-pr-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="usersDataCheck18">
-                                        <label class="custom-control-label" for="usersDataCheck18"></label>
+                                        <input type="checkbox" class="custom-control-input" id="adminsDataCheck18">
+                                        <label class="custom-control-label" for="adminsDataCheck18"></label>
                                     </div>
                                 </td>
                                 <td class="table-column-pl-0">
-                                    <a class="media align-items-center" href="./user-profile.html">
+                                    <a class="media align-items-center" href="./admin-profile.html">
                                         <div class="avatar avatar-sm avatar-soft-primary avatar-circle mr-2">
                                             <span class="avatar-initials">P</span>
                                         </div>
@@ -2049,7 +2049,7 @@
                     <li class="step-item">
                         <div class="step-content-wrapper">
                             <span class="step-icon step-icon-soft-primary">
-                                <i class="tio-user"></i>
+                                <i class="tio-admin"></i>
                             </span>
 
                             <div class="step-content">
@@ -2133,14 +2133,14 @@
     </div>
     <!-- End Welcome Message Modal -->
 
-    <!-- Create a new user Modal -->
-    <div class="modal fade" id="inviteUserModal" tabindex="-1" role="dialog" aria-labelledby="inviteUserModalTitle"
+    <!-- Create a new admin Modal -->
+    <div class="modal fade" id="inviteAdminModal" tabindex="-1" role="dialog" aria-labelledby="inviteAdminModalTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <form class="modal-content">
                 <!-- Header -->
                 <div class="modal-header">
-                    <h4 id="inviteUserModalTitle" class="modal-title">Invite users</h4>
+                    <h4 id="inviteAdminModalTitle" class="modal-title">Invite admins</h4>
 
                     <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal"
                         aria-label="Close">
@@ -2190,7 +2190,7 @@
                     <!-- End Form Group -->
 
                     <div class="form-row">
-                        <h5 class="col modal-title">Invite users</h5>
+                        <h5 class="col modal-title">Invite admins</h5>
 
                         <div class="col-auto">
                             <a class="d-flex align-items-center font-size-sm text-body" href="#">
@@ -2223,11 +2223,11 @@
 
                                         <div class="col-sm">
                                             <!-- Select -->
-                                            <div id="inviteUserSelect1"
+                                            <div id="inviteAdminSelect1"
                                                 class="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                 <select class="js-select2-custom custom-select-sm" size="1"
                                                     style="opacity: 0;" data-hs-select2-options='{
-                                    "dropdownParent": "#inviteUserSelect1",
+                                    "dropdownParent": "#inviteAdminSelect1",
                                     "minimumResultsForSearch": "Infinity",
                                     "customClass": "custom-select custom-select-sm custom-select-borderless pl-0",
                                     "dropdownAutoWidth": true,
@@ -2267,11 +2267,11 @@
 
                                         <div class="col-sm">
                                             <!-- Select -->
-                                            <div id="inviteUserSelect2"
+                                            <div id="inviteAdminSelect2"
                                                 class="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                 <select class="js-select2-custom custom-select-sm" size="1"
                                                     style="opacity: 0;" data-hs-select2-options='{
-                                    "dropdownParent": "#inviteUserSelect2",
+                                    "dropdownParent": "#inviteAdminSelect2",
                                     "minimumResultsForSearch": "Infinity",
                                     "customClass": "custom-select custom-select-sm custom-select-borderless pl-0",
                                     "dropdownAutoWidth": true,
@@ -2313,11 +2313,11 @@
 
                                         <div class="col-sm">
                                             <!-- Select -->
-                                            <div id="inviteUserSelect4"
+                                            <div id="inviteAdminSelect4"
                                                 class="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                 <select class="js-select2-custom custom-select-sm" size="1"
                                                     style="opacity: 0;" data-hs-select2-options='{
-                                    "dropdownParent": "#inviteUserSelect4",
+                                    "dropdownParent": "#inviteAdminSelect4",
                                     "minimumResultsForSearch": "Infinity",
                                     "customClass": "custom-select custom-select-sm custom-select-borderless pl-0",
                                     "dropdownAutoWidth": true,
@@ -2357,11 +2357,11 @@
 
                                         <div class="col-sm">
                                             <!-- Select -->
-                                            <div id="inviteUserSelect3"
+                                            <div id="inviteAdminSelect3"
                                                 class="select2-custom select2-custom-sm-right d-sm-flex justify-content-sm-end">
                                                 <select class="js-select2-custom custom-select-sm" size="1"
                                                     style="opacity: 0;" data-hs-select2-options='{
-                                    "dropdownParent": "#inviteUserSelect3",
+                                    "dropdownParent": "#inviteAdminSelect3",
                                     "minimumResultsForSearch": "Infinity",
                                     "customClass": "custom-select custom-select-sm custom-select-borderless pl-0",
                                     "dropdownAutoWidth": true,
@@ -2392,7 +2392,7 @@
                 <div class="modal-footer justify-content-start">
                     <div class="row align-items-center flex-grow-1 mx-n2">
                         <div class="col-sm-9 mb-2 mb-sm-0">
-                            <input type="hidden" id="inviteUserPublicClipboard"
+                            <input type="hidden" id="inviteAdminPublicClipboard"
                                 value="https://themes.getbootstrap.com/product/front-multipurpose-responsive-template/">
 
                             <p class="modal-footer-text">The public share <a href="#">link settings</a>
@@ -2407,8 +2407,8 @@
                                 data-hs-clipboard-options='{
                     "type": "tooltip",
                     "successText": "Copied!",
-                    "contentTarget": "#inviteUserPublicClipboard",
-                    "container": "#inviteUserModal"
+                    "contentTarget": "#inviteAdminPublicClipboard",
+                    "container": "#inviteAdminModal"
                    }'>
                                 <i class="tio-link mr-1"></i> Copy link</a>
                         </div>
@@ -2418,7 +2418,7 @@
             </form>
         </div>
     </div>
-    <!-- End Create a new user Modal -->
+    <!-- End Create a new admin Modal -->
     <!-- ========== END SECONDARY CONTENTS ========== -->
 
 </body>

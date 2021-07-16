@@ -1,14 +1,14 @@
 /* 
  To get nested object properties.
- user = {
+ admin = {
     location: {
         lat: 50,
         long: 9
     }
  }
 
- get(user, 'location.lat')     // 50
- get(user, 'location.foo.bar') // undefined
+ get(admin, 'location.lat')     // 50
+ get(admin, 'location.foo.bar') // undefined
 */
 
 export function get(obj, key) {
@@ -95,7 +95,7 @@ export function toFormData(form) {
 }
 
 /*
- Format Date to display user
+ Format Date to display admin
 */
 export function formatDate(param) {
   const date = new Date(param);
@@ -109,7 +109,7 @@ export function formatDate(param) {
 }
 
 /*
- Format Datetime to display user
+ Format Datetime to display admin
 */
 export function formatDatetime(param) {
   let time = new Date(param).toLocaleTimeString();

@@ -1,5 +1,5 @@
-const { check } = require('express-validator');
-const User = require("../models/User");
+const { check } = require("express-validator");
+const Admin = require("../models/Admin");
 
 module.exports = [
   check("name").not().isEmpty(),
@@ -8,7 +8,7 @@ module.exports = [
     .isEmpty()
     .isString()
     .custom((value) => {
-      return User.findOne({ email: value, removed: false }).then((c) => {
+      return Admin.findOne({ email: value, removed: false }).then((c) => {
         if (c) {
           return Promise.reject("Email allready exists");
         }

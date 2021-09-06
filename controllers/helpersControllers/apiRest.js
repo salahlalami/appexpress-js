@@ -148,10 +148,11 @@ exports.delete = async (Model, req, res) => {
         message: "Successfully Deleted the document by id: " + req.params.id,
       });
     }
-  } catch {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       result: null,
+      error: err,
       message: "Oops there is an Error",
     });
   }
@@ -198,10 +199,13 @@ exports.list = async (Model, req, res) => {
         message: "Collection is Empty",
       });
     }
-  } catch {
-    return res
-      .status(500)
-      .json({ success: false, result: [], message: "Oops there is an Error" });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      result: [],
+      message: "Oops there is an Error",
+      error: err,
+    });
   }
 };
 
@@ -275,7 +279,7 @@ exports.search = async (Model, req, res) => {
         })
         .end();
     }
-  } catch {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       result: null,
@@ -308,7 +312,7 @@ exports.filter = async (Model, req, res) => {
       message:
         "Successfully found all documents where equal to : " + req.params.equal,
     });
-  } catch {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       result: null,
@@ -356,7 +360,7 @@ exports.status = async (Model, req, res) => {
         })
         .end();
     }
-  } catch {
+  } catch (err) {
     return res.status(500).json({
       success: false,
       result: null,

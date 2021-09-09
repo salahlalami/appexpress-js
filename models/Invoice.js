@@ -12,9 +12,11 @@ const invoiceSchema = new mongoose.Schema({
   },
   year: {
     type: Number,
+    required: true,
   },
   recurring: {
     type: String,
+    default: "0",
   },
   date: {
     type: String,
@@ -54,19 +56,25 @@ const invoiceSchema = new mongoose.Schema({
     },
   ],
   currency: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
+    ref: "Currency",
+    autopopulate: true,
   },
   taxRate: {
     type: Number,
+    default: 0,
   },
   subTotal: {
     type: Number,
+    default: 0,
   },
   taxTotal: {
     type: Number,
+    default: 0,
   },
   total: {
     type: Number,
+    default: 0,
   },
   credit: {
     type: Number,
@@ -84,15 +92,14 @@ const invoiceSchema = new mongoose.Schema({
   ],
   paymentStatus: {
     type: String,
-    trim: true,
-    default: "0",
+    default: "unpaid",
   },
   note: {
     type: String,
   },
   status: {
     type: String,
-    default: "Draft",
+    default: "draft",
   },
   updated: {
     type: Date,

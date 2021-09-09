@@ -69,6 +69,7 @@ methods.create = async (req, res) => {
       return res.status(400).json({
         success: false,
         result: null,
+        error: err,
         message: "Required fields are not supplied",
       });
     } else {
@@ -76,6 +77,7 @@ methods.create = async (req, res) => {
       return res.status(500).json({
         success: false,
         result: null,
+        error: err,
         message: "Oops there is an Error",
       });
     }
@@ -139,6 +141,7 @@ methods.update = async (req, res) => {
       return res.status(400).json({
         success: false,
         result: null,
+        error: err,
         message: "Required fields are not supplied",
       });
     } else {
@@ -146,6 +149,7 @@ methods.update = async (req, res) => {
       return res.status(500).json({
         success: false,
         result: null,
+        error: err,
         message: "Oops there is an Error",
       });
     }

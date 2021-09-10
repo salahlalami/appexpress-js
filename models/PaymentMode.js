@@ -10,6 +10,10 @@ const paymentModeSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  isDefault: {
+    type: Boolean,
+    default: false,
+  },
   name: {
     type: String,
     required: true,

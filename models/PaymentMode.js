@@ -18,6 +18,9 @@ const paymentModeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ref: {
+    type: String,
+  },
   created: {
     type: Date,
     default: Date.now,

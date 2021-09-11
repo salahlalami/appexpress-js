@@ -1,2 +1,2 @@
 const crudController = require("./helpersControllers/crudController");
-module.exports = crudController.createCRUDController("ClientPayment");
+module.exports = crudController.createCRUDController("PaymentClient");

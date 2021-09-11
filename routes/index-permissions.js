@@ -31,7 +31,7 @@ const supplierController = require("../controllers/supplierController");
 const orderFormController = require("../controllers/orderFormController");
 const expenseController = require("../controllers/expenseController");
 const expenseCategoryController = require("../controllers/expenseCategoryController");
-const clientPaymentController = require("../controllers/clientPaymentController");
+const paymentClientController = require("../controllers/paymentClientController");
 
 const uploadController = require("../controllers/uploadController");
 
@@ -74,7 +74,7 @@ router.get("/analysis", appController.analysis);
 router.get("/specialty", appController.specialty);
 router.get("/analysisType", appController.analysisType);
 router.get("/client", appController.client);
-router.get("/clientPayment", appController.clientPayment);
+router.get("/paymentClient", appController.paymentClient);
 router.get("/consultationType", appController.consultationType);
 router.get("/currencyType", appController.currencyType);
 router.get("/expense", appController.expense);
@@ -939,34 +939,34 @@ router.get(
 
 //_________________________________________________________________API for client payments_________________
 router.post(
-  "/api/clientPayment/create",
-  permissionMiddleware("clientPayments-create"),
-  catchErrors(clientPaymentController.create)
+  "/api/paymentClient/create",
+  permissionMiddleware("paymentClients-create"),
+  catchErrors(paymentClientController.create)
 );
 router.get(
-  "/api/clientPayment/read/:id",
-  permissionMiddleware("clientPayments-read"),
-  catchErrors(clientPaymentController.read)
+  "/api/paymentClient/read/:id",
+  permissionMiddleware("paymentClients-read"),
+  catchErrors(paymentClientController.read)
 );
 router.post(
-  "/api/clientPayment/update/:id",
-  permissionMiddleware("clientPayments-update"),
-  catchErrors(clientPaymentController.update)
+  "/api/paymentClient/update/:id",
+  permissionMiddleware("paymentClients-update"),
+  catchErrors(paymentClientController.update)
 );
 router.get(
-  "/api/clientPayment/delete/:id",
-  permissionMiddleware("clientPayments-delete"),
-  catchErrors(clientPaymentController.delete)
+  "/api/paymentClient/delete/:id",
+  permissionMiddleware("paymentClients-delete"),
+  catchErrors(paymentClientController.delete)
 );
 router.get(
-  "/api/clientPayment/get/:page?/:items?",
-  permissionMiddleware("clientPayments-read"),
-  catchErrors(clientPaymentController.getAll)
+  "/api/paymentClient/get/:page?/:items?",
+  permissionMiddleware("paymentClients-read"),
+  catchErrors(paymentClientController.getAll)
 );
 router.get(
-  "/api/clientPayment/search",
-  permissionMiddleware("clientPayments-read"),
-  catchErrors(clientPaymentController.search)
+  "/api/paymentClient/search",
+  permissionMiddleware("paymentClients-read"),
+  catchErrors(paymentClientController.search)
 );
 //_____________________________________________________________________________________________________________________________________________________________________________
 

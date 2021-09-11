@@ -1,6 +1,6 @@
 
 extends layouts/default
-include mixins/_clientPaymentForm
+include mixins/_paymentClientForm
 include components/_dataTable
 include components/_searchItemCrud
 include components/_information
@@ -11,7 +11,7 @@ include components/_infoHeader
 
 
 block panelHeader
-    - const target = 'clientPayment'
+    - const target = 'paymentClient'
     - const fields = 'number'
     - const displayFields = 'number'
     p.panelTitle #{title}
@@ -21,7 +21,7 @@ block panelHeader
 
 block panelBody
     .clearfix
-    .panelContent.component(data-component="view-details" data-page="clientPayment")
+    .panelContent.component(data-component="view-details" data-page="paymentClient")
         panel-body.hidden
             +infoHeader( "Client Payment: ", displayFields)
             .tab-content.is-active
@@ -29,7 +29,7 @@ block panelBody
                     - const listInfo = [{key:'number',text:'Number'},{key:'client',text:'Client'},{key:'invoice',text:'Invoice'},{key:'amount',text:'Amount'},{key:'paymentMode',text:'Payment Mode'}]
                     +information(listInfo)
                 .edit
-                    +clientPaymentForm(target,"update")
+                    +paymentClientForm(target,"update")
                     
 
 block panelFooter                    
@@ -40,7 +40,7 @@ block panelFooter
                 != h.icon('plus-circle') 
             .whiteBg
             .box
-                +clientPaymentForm(target,"create")
+                +paymentClientForm(target,"create")
 
 block content 
   .model.modelSmall

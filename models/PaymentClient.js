@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const clientPaymentSchema = new mongoose.Schema({
+const paymentClientSchema = new mongoose.Schema({
   removed: {
     type: Boolean,
     default: false,
@@ -56,4 +56,4 @@ const clientPaymentSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("ClientPayment", clientPaymentSchema);
+module.exports = mongoose.model("PaymentClient", paymentClientSchema);

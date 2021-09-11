@@ -482,21 +482,21 @@
   {
     "created": "2020-02-19T19:01:35.911Z",
     "_id": { "$oid": "7423842a368b3c1ea850c985" },
-    "name": "clientPayments-read"
+    "name": "paymentClients-read"
   },
   {
     "created": "2020-02-19T19:01:35.911Z",
     "_id": { "$oid": "c15e0563e5743e6652f5df3c" },
-    "name": "clientPayments-update"
+    "name": "paymentClients-update"
   },
   {
     "created": "2020-02-19T19:01:35.911Z",
     "_id": { "$oid": "0d939937a1bebfc29dbef3cf" },
-    "name": "clientPayments-delete"
+    "name": "paymentClients-delete"
   },
   {
     "created": "2020-02-19T19:01:35.911Z",
     "_id": { "$oid": "bbf34c7885da98c151176f99" },
-    "name": "clientPayments-create"
+    "name": "paymentClients-create"
   }
 ]

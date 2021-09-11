@@ -36,7 +36,7 @@ const supplierController = require("../controllers/supplierController");
 const orderFormController = require("../controllers/orderFormController");
 const expenseController = require("../controllers/expenseController");
 const expenseCategoryController = require("../controllers/expenseCategoryController");
-const clientPaymentController = require("../controllers/clientPaymentController");
+const paymentClientController = require("../controllers/paymentClientController");
 const consultationTypeController = require("../controllers/consultationTypeController");
 const consultationRecordingController = require("../controllers/consultationRecordingController");
 
@@ -676,29 +676,29 @@ router
 // //_________________________________________________________________API for client payments_________________
 
 router
-  .route("/clientpayment/create")
-  .post(catchErrors(clientPaymentController.create));
+  .route("/paymentClient/create")
+  .post(catchErrors(paymentClientController.create));
 router
-  .route("/clientpayment/read/:id")
-  .get(catchErrors(clientPaymentController.read));
+  .route("/paymentClient/read/:id")
+  .get(catchErrors(paymentClientController.read));
 router
-  .route("/clientpayment/update/:id")
-  .patch(catchErrors(clientPaymentController.update));
+  .route("/paymentClient/update/:id")
+  .patch(catchErrors(paymentClientController.update));
 router
-  .route("/clientpayment/delete/:id")
-  .delete(catchErrors(clientPaymentController.delete));
+  .route("/paymentClient/delete/:id")
+  .delete(catchErrors(paymentClientController.delete));
 router
-  .route("/clientpayment/search")
-  .get(catchErrors(clientPaymentController.search));
+  .route("/paymentClient/search")
+  .get(catchErrors(paymentClientController.search));
 router
-  .route("/clientpayment/list")
-  .get(catchErrors(clientPaymentController.list));
+  .route("/paymentClient/list")
+  .get(catchErrors(paymentClientController.list));
 router
-  .route("/clientpayment/filter")
-  .get(catchErrors(clientPaymentController.filter));
+  .route("/paymentClient/filter")
+  .get(catchErrors(paymentClientController.filter));
 router
-  .route("/clientpayment/pdf/:id")
-  .get(catchErrors(clientPaymentController.generatePDF));
+  .route("/paymentClient/pdf/:id")
+  .get(catchErrors(paymentClientController.generatePDF));
 
 // //_________________________________________________________________API for consultation type_________________
 

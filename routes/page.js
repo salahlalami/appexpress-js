@@ -27,7 +27,7 @@ router.get("/laboratory", appController.laboratory);
 router.get("/specialty", appController.specialty);
 router.get("/analysisType", appController.analysisType);
 router.get("/client", appController.client);
-router.get("/clientPayment", appController.clientPayment);
+router.get("/paymentClient", appController.paymentClient);
 router.get("/consultationType", appController.consultationType);
 router.get("/currency", appController.currency);
 router.get("/expense", appController.expense);

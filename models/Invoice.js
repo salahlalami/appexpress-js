@@ -84,10 +84,10 @@ const invoiceSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  clientPayment: [
+  paymentClient: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: "ClientPayment",
+      ref: "PaymentClient",
     },
   ],
   paymentStatus: {

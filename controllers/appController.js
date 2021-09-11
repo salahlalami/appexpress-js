@@ -121,8 +121,8 @@ exports.client = (req, res) => {
   });
 };
 
-exports.clientPayment = (req, res) => {
-  res.render("clientPayment", {
+exports.paymentClient = (req, res) => {
+  res.render("paymentClient", {
     title: "client Payement",
   });
 };

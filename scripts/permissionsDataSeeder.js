@@ -148,10 +148,10 @@ let permissionsArray = [
   "categories-delete",
   "categories-create",
 
-  "clientPayments-read",
-  "clientPayments-update",
-  "clientPayments-delete",
-  "clientPayments-create",
+  "paymentClients-read",
+  "paymentClients-update",
+  "paymentClients-delete",
+  "paymentClients-create",
 ];
 
 let doMagic = async () => {

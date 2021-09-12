@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 mongoose.Promise = global.Promise;
 
 const paymentClientSchema = new mongoose.Schema({
@@ -13,15 +14,13 @@ const paymentClientSchema = new mongoose.Schema({
   client: {
     type: mongoose.Schema.ObjectId,
     ref: "Client",
+    autopopulate: true,
     required: true,
-  },
-  year: {
-    type: Date,
-    default: Date.now,
   },
   invoice: {
     type: mongoose.Schema.ObjectId,
     ref: "Invoice",
+    autopopulate: true,
   },
   date: {
     type: Date,
@@ -38,6 +37,7 @@ const paymentClientSchema = new mongoose.Schema({
   paymentMode: {
     type: mongoose.Schema.ObjectId,
     ref: "PaymentMode",
+    autopopulate: true,
   },
   ref: {
     type: String,
@@ -55,5 +55,6 @@ const paymentClientSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-
+paymentClientSchema.plugin(require("mongoose-autopopulate"));
+paymentClientSchema.plugin(AutoIncrement, { inc_field: "number" });
 module.exports = mongoose.model("PaymentClient", paymentClientSchema);

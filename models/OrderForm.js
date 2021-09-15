@@ -15,11 +15,11 @@ const orderFormSchema = new mongoose.Schema({
     required: true,
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
   },
   dateExpired: {
-    type: String,
+    type: Date,
     required: true,
   },
   supplier: {

@@ -19,11 +19,11 @@ const invoiceSchema = new mongoose.Schema({
     default: "0",
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
   },
   expiredDate: {
-    type: String,
+    type: Date,
     required: true,
   },
   client: {

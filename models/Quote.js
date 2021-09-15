@@ -16,16 +16,14 @@ const quoteSchema = new mongoose.Schema({
   },
   year: {
     type: Number,
-  },
-  recurring: {
-    type: String,
+    required: true,
   },
   date: {
-    type: String,
+    type: Date,
     required: true,
   },
   expiredDate: {
-    type: String,
+    type: Date,
     required: true,
   },
   client: {
@@ -57,9 +55,6 @@ const quoteSchema = new mongoose.Schema({
       },
     },
   ],
-  currency: {
-    type: String,
-  },
   taxRate: {
     type: Number,
   },

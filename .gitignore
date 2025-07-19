@@ -6,3 +6,4 @@ package-lock.json
 notes.md
 .variables.env
 
+.env
